@@ -1,5 +1,7 @@
 import type { LinksFunction, MetaFunction } from 'remix';
 import { Meta, Links, LiveReload, Outlet, useCatch, Scripts } from 'remix';
+import Header from './components/Header';
+import GlobalStyles from './styles/GlobalStyles';
 
 export const meta: MetaFunction = () => {
   const description = `Sample Ecommerce Site`;
@@ -22,6 +24,7 @@ function Document({
         <Meta />
         <title>{title}</title>
         <Links />
+        {typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
       <body>
         {children}
@@ -35,6 +38,8 @@ function Document({
 export default function App() {
   return (
     <Document>
+      <GlobalStyles />
+      <Header />
       <Outlet />
     </Document>
   );
