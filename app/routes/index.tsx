@@ -1,21 +1,30 @@
 // import type { MetaFunction } from 'remix';
-import { Link } from 'remix';
+import { Link, LoaderFunction, useLoaderData } from 'remix';
+import sanity from '~/utils/sanity';
+import { PortableText } from '@portabletext/react';
+
+const contentQuery = `
+  *[_id == "homePage" ] {
+  "imageUrl": bgImage1.asset->url,
+  overlayText1
+  }`;
+
+// type LoaderData = {
+
+// }
+export const loader: LoaderFunction = async () => {
+  const data = await sanity.fetch(contentQuery);
+  return data;
+};
 
 export default function Index() {
+  const [data] = useLoaderData();
+  console.log('data', data);
+
   return (
     <div>
-      <div>
-        <h1>
-          Remix <span>Jokes!</span>
-        </h1>
-        <nav>
-          <ul>
-            <li>
-              <Link to='coffee'>Coffee</Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
+      <img src={data.imageUrl} />
+      <PortableText value={data.overlayText1} />
     </div>
   );
 }
