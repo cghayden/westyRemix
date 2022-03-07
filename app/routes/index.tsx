@@ -1,7 +1,7 @@
 // import type { MetaFunction } from 'remix';
 import { Link, LoaderFunction, useLoaderData } from 'remix';
 import sanity from '~/utils/sanity';
-import { PortableText } from '@portabletext/react';
+// import { PortableText } from '@portabletext/react';
 
 const contentQuery = `
   *[_id == "homePage" ] {
@@ -23,8 +23,9 @@ export default function Index() {
 
   return (
     <div>
+      <h1 className='text-xl'>Hoome</h1>
       <img src={data.imageUrl} />
-      <PortableText value={data.overlayText1} />
+      {/* <PortableText value={data.overlayText1} /> */}
     </div>
   );
 }

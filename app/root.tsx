@@ -2,7 +2,11 @@ import type { LinksFunction, MetaFunction } from 'remix';
 import { Meta, Links, LiveReload, Outlet, useCatch, Scripts } from 'remix';
 import Header from './components/Header';
 import GlobalStyles from './styles/GlobalStyles';
+import styles from './styles/tailwind-build.css';
 
+export function links() {
+  return [{ rel: 'stylesheet', href: styles }];
+}
 export const meta: MetaFunction = () => {
   const description = `Sample Ecommerce Site`;
   return {
@@ -17,6 +21,7 @@ function Document({
   children: React.ReactNode;
   title?: string;
 }) {
+  console.log('env', process.env);
   return (
     <html lang='en'>
       <head>
