@@ -496,21 +496,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   border-width: 1px;
 }
 
-.bg-slate-700\/50 {
-  background-color: rgb(51 65 85 / 0.5);
-}
-
 .bg-slate-900\/50 {
   background-color: rgb(15 23 42 / 0.5);
 }
 
 .p-6 {
   padding: 1.5rem;
-}
-
-.text-6xl {
-  font-size: 3.75rem;
-  line-height: 1;
 }
 
 .text-slate-50 {
