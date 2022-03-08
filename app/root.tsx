@@ -21,7 +21,6 @@ function Document({
   children: React.ReactNode;
   title?: string;
 }) {
-  console.log('env', process.env);
   return (
     <html lang='en'>
       <head>

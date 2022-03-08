@@ -1,7 +1,7 @@
 // import type { MetaFunction } from 'remix';
 import { Link, LoaderFunction, useLoaderData } from 'remix';
 import sanity from '~/utils/sanity';
-// import { PortableText } from '@portabletext/react';
+import { PortableText } from '@portabletext/react';
 
 const contentQuery = `
   *[_id == "homePage" ] {
@@ -19,13 +19,16 @@ export const loader: LoaderFunction = async () => {
 
 export default function Index() {
   const [data] = useLoaderData();
-  console.log('data', data);
+  console.log('loader data', data);
 
   return (
-    <div>
-      <h1 className='text-xl'>Hoome</h1>
-      <img src={data.imageUrl} />
-      {/* <PortableText value={data.overlayText1} /> */}
+    <div className='grid'>
+      <img className='row-span-full col-span-full' src={data.imageUrl} />
+      <div className='grid row-span-full col-span-full relative place-items-center  '>
+        <div className='bg-slate-900/50 text-slate-50 p-6'>
+          <PortableText value={data.overlayText1} />
+        </div>
+      </div>
     </div>
   );
 }
