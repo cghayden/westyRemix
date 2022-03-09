@@ -528,8 +528,21 @@ Ensure the default browser behavior of the `hidden` attribute.
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.auto-cols-max {
+  grid-auto-columns: -webkit-max-content;
+  grid-auto-columns: max-content;
+}
+
+.grid-flow-col {
+  grid-auto-flow: column;
+}
+
 .flex-col {
   flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
 }
 
 .place-items-center {
@@ -598,8 +611,17 @@ Ensure the default browser behavior of the `hidden` attribute.
   line-height: 2rem;
 }
 
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
 .font-normal {
   font-weight: 400;
+}
+
+.font-medium {
+  font-weight: 500;
 }
 
 .text-slate-50 {
