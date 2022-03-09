@@ -17,6 +17,7 @@
     "@remix-run/react": "^1.2.2",
     "@remix-run/vercel": "^1.2.2",
     "@sanity/client": "^3.1.0",
+    "dayjs": "^1.10.8",
     "dotenv": "^16.0.0",
     "normalize.css": "^8.0.1",
     "react": "^17.0.2",
@@ -34,6 +35,7 @@
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
     "postcss": "^8.4.8",
+    "sanity-codegen": "^0.9.8",
     "tailwindcss": "^3.0.23",
     "typescript": "^4.5.5"
   },

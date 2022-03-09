@@ -1,6 +1,12 @@
 import { PortableText } from '@portabletext/react';
+import type { LandingPage } from '../../sanityTypes';
 
-export default function HomeHero() {
+export default function HomeHero({
+  heroContent,
+}: {
+  heroContent: LandingPage;
+}) {
+  console.log('hero component prop', heroContent);
   return (
     <div className='grid'>
       hero
