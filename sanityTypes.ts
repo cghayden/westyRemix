@@ -313,13 +313,14 @@ export interface LandingPage extends SanityDocument {
    * An optional background image at of the top of the page
    */
   bgImage1?: BackgroundImage;
+  imageUrl?: string;
 
   /**
    * Main Image Overlay Text (optional) — `bodyPortableText`
    *
    * Optional Text that will overlay the main landing page background image
    */
-  overlayText1?: BodyPortableText;
+  overlayText1?: BodyPortableText[];
 
   /**
    * Transition Text Block 1 (optional) — `bodyPortableText`
@@ -735,6 +736,10 @@ export type CoffeeOrderItem = {
    */
   notes?: string;
 };
+
+export type PortableTextBlock = Array<
+  SanityKeyed<SanityBlock> | SanityKeyed<MainImage>
+>;
 
 export type BodyPortableText = Array<
   SanityKeyed<SanityBlock> | SanityKeyed<MainImage>

@@ -1,22 +1,23 @@
-import { PortableText } from '@portabletext/react';
 import type { LandingPage } from '../../sanityTypes';
+import PortableText from 'react-portable-text';
 
 export default function HomeHero({
   heroContent,
 }: {
   heroContent: LandingPage;
 }) {
-  console.log('hero component prop', heroContent);
   return (
     <div className='grid'>
-      hero
-      {/* hero {data.sample} */}
-      {/* <img className='row-span-full col-span-full' src={data.imageUrl} />
-      <div className='grid row-span-full col-span-full relative place-items-center  '>
-        <div className='bg-slate-900/50 text-slate-50 p-6'>
-          <PortableText value={data.overlayText1} />
+      <img className='row-span-full col-span-full' src={heroContent.imageUrl} />
+      {heroContent.overlayText1 && (
+        <div className='grid row-span-full col-span-full relative place-items-center  '>
+          <div className='bg-slate-900/50 text-slate-50 w-1/2 p-[3%]'>
+            {heroContent.overlayText1.map((blockContent) => (
+              <PortableText content={blockContent} />
+            ))}
+          </div>
         </div>
-      </div> */}
+      )}
     </div>
   );
 }

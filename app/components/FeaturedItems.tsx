@@ -9,7 +9,7 @@ function FeaturedItems({ allCoffee }: { allCoffee: Coffee[] }) {
       </div>
       <div className='flex flex-wrap justify-center'>
         {allCoffee.map((coffee) => (
-          <CoffeeCard coffee={coffee} />
+          <CoffeeCard key={coffee.name} coffee={coffee} />
         ))}
       </div>
     </div>
