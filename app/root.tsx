@@ -1,8 +1,20 @@
-import type { LinksFunction, MetaFunction } from 'remix';
+import {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+  useLoaderData,
+} from 'remix';
 import { Meta, Links, LiveReload, Outlet, useCatch, Scripts } from 'remix';
+import { SiteSettings } from 'sanityTypes';
 import Header from './components/Header';
 import GlobalStyles from './styles/GlobalStyles';
 import styles from './styles/tailwind-build.css';
+import sanity from './utils/sanity';
+
+const siteSettingsQuery = `*[_type == "siteSettings"][0] {
+  backgroundColor,
+  textColor
+} `;
 
 export function links() {
   return [{ rel: 'stylesheet', href: styles }];
@@ -13,6 +25,10 @@ export const meta: MetaFunction = () => {
     description,
   };
 };
+export const loader: LoaderFunction = async () => {
+  const data: SiteSettings = await sanity.fetch(siteSettingsQuery);
+  return data;
+};
 
 function Document({
   children,
@@ -21,6 +37,8 @@ function Document({
   children: React.ReactNode;
   title?: string;
 }) {
+  const data = useLoaderData();
+  console.log('root data', data);
   return (
     <html lang='en'>
       <head>
@@ -30,7 +48,12 @@ function Document({
         <Links />
         {typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
-      <body>
+      <body
+        style={{
+          backgroundColor: `${data.backgroundColor.hex}`,
+          overscrollBehavior: 'none',
+        }}
+      >
         {children}
         <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
