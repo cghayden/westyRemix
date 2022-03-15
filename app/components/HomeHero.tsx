@@ -6,6 +6,7 @@ export default function HomeHero({
 }: {
   heroContent: LandingPage;
 }) {
+  if (!heroContent.imageUrl && !heroContent.overlayText1) return null;
   return (
     <div className='grid'>
       <img className='row-span-full col-span-full' src={heroContent.imageUrl} />
