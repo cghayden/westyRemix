@@ -32,11 +32,7 @@ export default function MobileNav({
         <ul className='flex flex-col text-xl ml-4'>
           {links.map((link) => (
             <li key={link} className='p-3'>
-              <Link
-                onClick={() => toggleShowMobileNav(false)}
-                to={`/
-            ${link}`}
-              >
+              <Link onClick={() => toggleShowMobileNav(false)} to={`./${link}`}>
                 {link}
               </Link>
             </li>
