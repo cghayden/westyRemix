@@ -1,25 +1,26 @@
-import { LoaderFunction, useFetcher, useLoaderData } from 'remix';
+import { LoaderFunction, useLoaderData } from 'remix';
 import sanity from '~/utils/sanity';
+import AllCoffee from '~/components/AllCoffee';
+import { Coffee } from 'sanityTypes';
 
-// const query = `
-// *[_type == "coffee"] {
-//   _id,
-//   name,
-//   stock,
-//   roastlevel,
-//   description
-// }
-// `;
-// export const loader: LoaderFunction = async () => {
-//   const coffee = await sanity.fetch(query);
-//   return coffee;
-// };
+const query = `
+*[_type == "coffee"] {
+  _id,
+  name,
+  stock,
+  roastLevel,
+  roastDate,
+  description
+}
+`;
+export const loader: LoaderFunction = async () => {
+  const coffee = await sanity.fetch(query);
+  return coffee;
+};
 
 function coffeeIndex() {
-  // const data = useLoaderData();
-  const data = useFetcher();
-  console.log('fetcher data', data);
-  return <div>coffee index</div>;
+  const data = useLoaderData();
+  return <AllCoffee allCoffee={data} />;
 }
 
 export default coffeeIndex;

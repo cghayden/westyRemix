@@ -22,15 +22,13 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-portable-text": "^0.4.3",
-    "remix": "^1.2.2",
-    "styled-components": "^5.3.3"
+    "remix": "^1.2.2"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.2.2",
     "@remix-run/serve": "^1.2.2",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
-    "@types/styled-components": "^5.1.24",
     "autoprefixer": "^10.4.2",
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",

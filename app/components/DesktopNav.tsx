@@ -1,7 +1,6 @@
 import { Link } from 'remix';
-import styled from 'styled-components';
 
-const NavStyles = styled.nav`
+const NavStyles = `
   padding: 1rem 0;
   margin-left: auto;
   ul {
@@ -18,7 +17,7 @@ const NavStyles = styled.nav`
 
 export default function Nav() {
   return (
-    <NavStyles className='hideOnMobile'>
+    <nav className='hidden'>
       <ul>
         <li>
           <Link to='/coffee'>coffee</Link>
@@ -36,6 +35,6 @@ export default function Nav() {
           <Link to='/contact'>contact</Link>
         </li>
       </ul>
-    </NavStyles>
+    </nav>
   );
 }

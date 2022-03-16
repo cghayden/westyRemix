@@ -1,9 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
-
 // assign to styled in order for prettier to recognize and format
-const styled = { createGlobalStyle };
-
-const GlobalStyles = styled.createGlobalStyle`
+const GlobalStyles = `
   :root {
     --red: #ff4949;
     --black: #2e2e2e;
@@ -17,7 +13,6 @@ const GlobalStyles = styled.createGlobalStyle`
     --blendText: hsl(145, 10%, 20%);
     --darkGreen: hsl(145, 30%, 30%)
     --navPanelGreen: hsla(120, 25%, 95%, 1);
-    --green: hsla(132, 32%, 60%, 0.8);
     --lightGray: hsla(129, 20%, 93%, 1);
     --stripeBlue: #829fff;
     --redFlame: hsla(15, 61%, 51%, 1);

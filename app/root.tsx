@@ -7,7 +7,6 @@ import {
 import { Meta, Links, LiveReload, Outlet, useCatch, Scripts } from 'remix';
 import { SiteSettings } from 'sanityTypes';
 import Header from './components/Header';
-import GlobalStyles from './styles/GlobalStyles';
 import styles from './styles/tailwind-build.css';
 import sanity from './utils/sanity';
 
@@ -16,15 +15,17 @@ const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   textColor
 } `;
 
-export function links() {
+export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }];
-}
+};
+
 export const meta: MetaFunction = () => {
   const description = `Sample Ecommerce Site`;
   return {
     description,
   };
 };
+
 export const loader: LoaderFunction = async () => {
   const data: SiteSettings = await sanity.fetch(siteSettingsQuery);
   return data;
@@ -38,7 +39,6 @@ function Document({
   title?: string;
 }) {
   const data = useLoaderData();
-  console.log('root data', data);
   return (
     <html lang='en'>
       <head>
@@ -65,7 +65,6 @@ function Document({
 export default function App() {
   return (
     <Document>
-      <GlobalStyles />
       <Header />
       <Outlet />
     </Document>
@@ -91,7 +90,6 @@ export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
   return (
     <Document title='Uh-oh!'>
-      <GlobalStyles />
       <Header />
       <div className='error-container'>
         <h1>App Error</h1>

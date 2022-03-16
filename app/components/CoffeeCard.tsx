@@ -3,8 +3,6 @@ import { Link } from 'remix';
 import type { Coffee } from '../../sanityTypes';
 
 function CoffeeCard({ coffee }: { coffee: Coffee }) {
-  // const { stock } = useCurrentStock(coffee._id);
-
   return (
     <Link to={`coffee/${coffee?.slug?.current}`}>
       <div className='p-4 border-8 border-green-200 bg-green-500 rounded shadow text-green-50 w-[320px] h-[320px] mb-1 flex flex-col justify-between'>
@@ -19,7 +17,7 @@ function CoffeeCard({ coffee }: { coffee: Coffee }) {
           )}
         </div>
         <div className='h-1/6'>
-          <p>3 in stock</p>
+          <p>{coffee.stock} in stock</p>
         </div>
       </div>
     </Link>

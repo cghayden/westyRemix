@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'remix';
-import styled from 'styled-components';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import MenuSvg from '~/icons/MenuSvg';
 
-// import CartButton from './CartButton';
-// import Cart from './Cart';
-
-const HeaderStyles = styled.header`
+const HeaderStyles = `
   display: flex;
   color: var(--black);
   background: var(--white);
@@ -19,7 +15,8 @@ const HeaderStyles = styled.header`
     margin: 0;
   }
 `;
-const LogoStyle = styled.p`
+
+const LogoStyle = `
   font-size: 1.5rem;
   h1 {
     font-weight: 300;
@@ -33,37 +30,39 @@ const LogoStyle = styled.p`
     padding: 0;
   }
 `;
-const ButtonsDiv = styled.div`
+const ButtonsDiv = `
   margin-left: auto;
 `;
+
 function Header() {
   const [showMobileNav, toggleShowMobileNav] = useState(false);
 
   return (
-    <HeaderStyles>
-      <LogoStyle>
+    <header className='flex text-slate-900 bg-slate-50 items-center p-4'>
+      <p className='text-2xl'>
         <Link to='/'>westy coffee</Link>
-      </LogoStyle>
-      <ButtonsDiv className='hideOnDesktop'>
-        <button
-          type='button'
-          className='hide-gtLarge btn-icon'
-          aria-label='show navigation menu'
-          onClick={() => {
-            toggleShowMobileNav((showMobileNav) => !showMobileNav);
-          }}
-        >
-          <MenuSvg />
-        </button>
-      </ButtonsDiv>
-      <DesktopNav />
+      </p>
       <MobileNav
         showMobileNav={showMobileNav}
         toggleShowMobileNav={toggleShowMobileNav}
       />
+      <div className='ml-auto'>
+        <button
+          type='button'
+          // className='btn-icon'
+          aria-label='show navigation menu'
+          onClick={() => {
+            toggleShowMobileNav(true);
+          }}
+        >
+          <MenuSvg />
+        </button>
+      </div>
+      <DesktopNav />
+
       {/* <CartButton /> */}
       {/* <Cart /> */}
-    </HeaderStyles>
+    </header>
   );
 }
 
