@@ -5,7 +5,7 @@ import type { Coffee } from '../../sanityTypes';
 function CoffeeCard({ coffee }: { coffee: Coffee }) {
   return (
     <Link to={`coffee/${coffee?.slug?.current}`}>
-      <div className='p-4 border-8 border-green-200 bg-green-500 rounded shadow text-green-50 w-[320px] h-[320px] mb-1 flex flex-col justify-between'>
+      <div className='p-4 border-8 border-green-200 bg-green-500 rounded shadow text-green-50 w-[300px] h-[300px] mb-1 flex flex-col justify-between'>
         <div className='h-1/6 grid place-items-center'>
           <h2 className='text-2xl font-normal'>{coffee.name}</h2>
         </div>
