@@ -14,7 +14,8 @@ const contentQuery = `{
     name, 
     roastLevel,
     description,
-    roastDate
+    roastDate,
+    stock
   }
 }`;
 
