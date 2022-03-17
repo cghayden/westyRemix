@@ -35,9 +35,9 @@ export const loader: LoaderFunction = async () => {
 export default function Index() {
   const data = useLoaderData<LoaderData>();
   return (
-    <div>
+    <main>
       <HomeHero heroContent={data.heroContent} />
       <FeaturedItems allCoffee={data.coffee} />
-    </div>
+    </main>
   );
 }
