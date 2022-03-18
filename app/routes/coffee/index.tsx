@@ -1,7 +1,6 @@
 import { LoaderFunction, useLoaderData } from 'remix';
 import sanity from '~/utils/sanity';
 import AllCoffee from '~/components/AllCoffee';
-import { Coffee } from 'sanityTypes';
 
 const query = `
 *[_type == "coffee"] {
@@ -10,9 +9,11 @@ const query = `
   stock,
   roastLevel,
   roastDate,
-  description
+  description,
+slug{current}
 }
 `;
+
 export const loader: LoaderFunction = async () => {
   const coffee = await sanity.fetch(query);
   return coffee;
@@ -20,6 +21,7 @@ export const loader: LoaderFunction = async () => {
 
 function coffeeIndex() {
   const data = useLoaderData();
+  console.log('all coffee data', data);
   return <AllCoffee allCoffee={data} />;
 }
 

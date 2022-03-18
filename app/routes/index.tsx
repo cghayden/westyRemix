@@ -15,7 +15,7 @@ const contentQuery = `{
     roastLevel,
     description,
     roastDate,
-    stock
+    stock, slug{current}
   }
 }`;
 
