@@ -35,7 +35,6 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export default function CoffeeRoute() {
   const data = useLoaderData<LoaderData>();
-
   return (
     <main className='bg-slate-50 h-screen'>
       <h2 className='text-3xl text-center'>{data.coffee.name}</h2>

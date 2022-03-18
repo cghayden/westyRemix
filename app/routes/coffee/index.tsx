@@ -21,7 +21,6 @@ export const loader: LoaderFunction = async () => {
 
 function coffeeIndex() {
   const data = useLoaderData();
-  console.log('all coffee data', data);
   return <AllCoffee allCoffee={data} />;
 }
 
