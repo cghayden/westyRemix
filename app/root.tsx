@@ -49,7 +49,7 @@ function Document({
       </head>
       <body
         style={{
-          backgroundColor: `${data.backgroundColor.hex}`,
+          backgroundColor: `${data?.backgroundColor.hex}`,
           overscrollBehavior: 'none',
         }}
       >
