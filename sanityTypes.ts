@@ -162,6 +162,13 @@ export interface Coffee extends SanityDocument {
   };
 }
 
+export interface SanityImageType {
+  _type: 'image';
+  asset: SanityReference<SanityImageAsset>;
+  crop?: SanityImageCrop;
+  hotspot?: SanityImageHotspot;
+}
+
 /**
  * Blog Posts
  *
