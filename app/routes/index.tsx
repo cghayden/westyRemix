@@ -1,5 +1,5 @@
 import { LoaderFunction, useLoaderData } from 'remix';
-import sanity from '~/utils/sanity';
+import sanity from '~/lib/sanity/sanity';
 import type { Coffee, LandingPage } from '../../sanityTypes';
 
 import HomeHero from '~/components/HomeHero';

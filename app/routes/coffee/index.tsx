@@ -1,5 +1,5 @@
 import { LoaderFunction, useLoaderData } from 'remix';
-import sanity from '~/utils/sanity';
+import sanity from '~/lib/sanity/sanity';
 import AllCoffee from '~/components/AllCoffee';
 
 const query = `

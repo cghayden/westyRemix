@@ -1,51 +1,78 @@
 import { useLoaderData, useParams, useCatch, Form } from 'remix';
 import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix';
-import sanity from '~/utils/sanity';
+import sanity from '~/lib/sanity/sanity';
+import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
 import type { Coffee, SanityImageType } from '../../../sanityTypes';
 import { PortableText } from '@portabletext/react';
 import imageUrlBuilder from '@sanity/image-url';
 
 type LoaderData = {
-  coffee: Coffee;
-  imageUrl: string;
+  initialData: Coffee[];
+  preview: boolean;
 };
 
 //Route params are passed to your loader.
-export const loader: LoaderFunction = async ({ params }) => {
-  const slug = params.coffeeSlug;
-  const singleCoffeeQuery = `*[slug.current == "${slug}"]`;
-  const [coffee] = await sanity.fetch(singleCoffeeQuery);
-  if (!coffee) {
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const requestUrl = new URL(request?.url);
+  console.log('requestUrl', requestUrl);
+  const preview =
+    requestUrl?.searchParams?.get('preview') ===
+    process.env.SANITY_PREVIEW_SECRET;
+
+  // Query for _all_ documents with this slug
+  // There could be two: Draft and Published!
+
+  //in this query, '$' character before 'slug' denotes that slug will is a string template, provided in second argument of the fetch function call
+  const singleCoffeeQuery = `*[_type == "coffee" && slug.current == $slug]`;
+  const initialData = await sanity.fetch(singleCoffeeQuery, {
+    slug: params.coffeeSlug,
+  });
+  if (!initialData) {
     throw new Response('Oh no - that Coffee was not found!', {
       status: 404,
       statusText: 'That coffee was not found',
     });
   }
+  console.log('initialData', initialData);
 
-  // configure image
-  const imageBuilder = imageUrlBuilder(sanity);
-  function urlFor(source: SanityImageType) {
-    return imageBuilder.image(source);
-  }
-  const url = urlFor(coffee.image).url();
+  // configure images
+  // const imageBuilder = imageUrlBuilder(sanity);
+  // function urlFor(source: SanityImageType) {
+  //   return imageBuilder.image(source);
+  // }
+  // const url = urlFor(coffeeData.image).url();
 
-  const data: LoaderData = { coffee, imageUrl: url };
+  const data: LoaderData = { initialData, preview };
+
   return data;
 };
 
 export default function CoffeeRoute() {
-  const data = useLoaderData<LoaderData>();
+  let { initialData, preview } = useLoaderData<LoaderData>();
+
+  //  A helper function checks the returned documents
+  // To show Draft if in preview mode, otherwise Published
+  const coffee = filterDataToSingleItem(initialData, preview);
+
   return (
     <main className='bg-slate-50 h-screen'>
-      <h2 className='text-3xl text-center'>{data.coffee.name}</h2>
-      <p>{data.coffee.roastLevel}</p>
-      {data.coffee.flavorProfile && <p>{data.coffee.flavorProfile}</p>}
-      <p>{data.coffee.roastDate}</p>
-      {/* null check on description long to appease TS */}
-      {data.coffee.descriptionLong && (
-        <PortableText value={data.coffee.descriptionLong} />
+      <p>single coffee page</p>
+      {preview ? <div>Preview Mode Enabled</div> : null}
+
+      <h2 className='text-3xl text-center'>{coffee.name}</h2>
+      <p>{coffee.roastLevel}</p>
+      {/* 
+      {coffeeData.coffee.flavorProfile && (
+        <p>{coffeeData.coffee.flavorProfile}</p>
       )}
-      <img src={data.imageUrl} />
+      <p>{coffeeData.coffee.roastDate}</p> */}
+      {/* null check on description long to appease TS */}
+      {coffee.descriptionLong && (
+        <PortableText value={coffee.descriptionLong} />
+      )}
+      {/* 
+      <img src={coffeeData.imageUrl} /> 
+      */}
     </main>
   );
 }

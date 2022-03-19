@@ -8,7 +8,7 @@ import { Meta, Links, LiveReload, Outlet, useCatch, Scripts } from 'remix';
 import { SiteSettings } from 'sanityTypes';
 import Header from './components/Header';
 import styles from './styles/tailwind-build.css';
-import sanity from './utils/sanity';
+import sanity from './lib/sanity/sanity';
 
 const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   backgroundColor,
