@@ -22,7 +22,7 @@ export default function Preview({
   useEffect(() => setData(previewData), [previewData]);
 
   return (
-    <div className='pointer-events-none fixed inset-0 z-50 flex items-end justify-end p-6 md:justify-start'>
+    <div className='pointer-events-none fixed inset-0 z-50 flex items-start justify-center p-2'>
       <div className='flex items-center gap-x-2 rounded bg-pink-500 p-1 font-bold text-white shadow-lg'>
         <span className='inline-block p-2'>Preview Mode</span>
       </div>

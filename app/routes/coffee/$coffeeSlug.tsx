@@ -72,7 +72,7 @@ export default function CoffeeRoute() {
   return (
     <main className='bg-slate-50 h-screen'>
       <p>single coffee page</p>
-      {preview && <div>Preview Mode Enabled</div>}
+      {/* {preview && <div>Preview Mode Enabled</div>} */}
       {preview && (
         <Preview
           data={data}

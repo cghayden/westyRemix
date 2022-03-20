@@ -9,13 +9,6 @@ interface SubscriptionOptions<R = any> {
   initialData?: R;
 }
 
-// const config = {
-//   apiVersion: '2021-03-25',
-//   // Find these in your ./studio/sanity.json file
-//   dataset: 'production',
-//   projectId: 't9guxb1x',
-//   useCdn: false,
-// };
 export function usePreviewSubscription(
   query: string,
   subscriptionOptions: SubscriptionOptions
@@ -45,21 +38,17 @@ export function usePreviewSubscription(
 
         // Optional token, if you want to receive drafts, or read data from private datasets
         // NOTE: Does _not_ work in browsers (yet)
-
+        //token: token
         documentLimit: 1000,
       });
 
-      store.subscribe(
-        query,
-        params ?? {}, // Params
-        (err: any, result: any) => {
-          if (err) {
-            console.error('Oh no, an error:', err);
-            return;
-          }
-          setData(result);
+      store.subscribe(query, params ?? {}, (err: any, result: any) => {
+        if (err) {
+          console.error('Oh no, an error:', err);
+          return;
         }
-      );
+        setData(result);
+      });
     }
 
     if (enabled) {
