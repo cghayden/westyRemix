@@ -5,16 +5,21 @@ import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
 import type { Coffee, SanityImageType } from '../../../sanityTypes';
 import { PortableText } from '@portabletext/react';
 import imageUrlBuilder from '@sanity/image-url';
+import { useState } from 'react';
+import Preview from '~/components/Preview';
+import { getClient } from '~/lib/sanity/getClient';
 
 type LoaderData = {
   initialData: Coffee[];
   preview: boolean;
+  singleCoffeeQuery?: string | null;
+  queryParams?: { slug: string | undefined } | null;
 };
 
 //Route params are passed to your loader.
 export const loader: LoaderFunction = async ({ request, params }) => {
   const requestUrl = new URL(request?.url);
-  console.log('requestUrl', requestUrl);
+  // console.log('requestUrl', requestUrl);
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET;
@@ -24,16 +29,17 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   //in this query, '$' character before 'slug' denotes that slug will is a string template, provided in second argument of the fetch function call
   const singleCoffeeQuery = `*[_type == "coffee" && slug.current == $slug]`;
-  const initialData = await sanity.fetch(singleCoffeeQuery, {
-    slug: params.coffeeSlug,
-  });
+  const queryParams = { slug: params.coffeeSlug };
+  const initialData = await getClient(preview).fetch(
+    singleCoffeeQuery,
+    queryParams
+  );
   if (!initialData) {
     throw new Response('Oh no - that Coffee was not found!', {
       status: 404,
       statusText: 'That coffee was not found',
     });
   }
-  console.log('initialData', initialData);
 
   // configure images
   // const imageBuilder = imageUrlBuilder(sanity);
@@ -42,32 +48,50 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // }
   // const url = urlFor(coffeeData.image).url();
 
-  const data: LoaderData = { initialData, preview };
+  const data: LoaderData = {
+    initialData,
+    preview,
+    singleCoffeeQuery: preview ? singleCoffeeQuery : null,
+    queryParams: preview ? queryParams : null,
+  };
 
   return data;
 };
 
 export default function CoffeeRoute() {
-  let { initialData, preview } = useLoaderData<LoaderData>();
+  let { initialData, preview, singleCoffeeQuery, queryParams } =
+    useLoaderData<LoaderData>();
+
+  // If `preview` mode is active, its component update this state for us
+  const [data, setData] = useState(initialData);
 
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
-  const coffee = filterDataToSingleItem(initialData, preview);
+  const coffee = filterDataToSingleItem(data, preview);
 
   return (
     <main className='bg-slate-50 h-screen'>
       <p>single coffee page</p>
-      {preview ? <div>Preview Mode Enabled</div> : null}
+      {preview && <div>Preview Mode Enabled</div>}
+      {preview && (
+        <Preview
+          data={data}
+          setData={setData}
+          query={singleCoffeeQuery}
+          queryParams={queryParams}
+        />
+      )}
+      {/* When working with draft content, optional chain _everything_ */}
 
-      <h2 className='text-3xl text-center'>{coffee.name}</h2>
-      <p>{coffee.roastLevel}</p>
+      {coffee?.name && <h2 className='text-3xl text-center'>{coffee.name}</h2>}
+      {coffee?.roastLevel && <p>{coffee.roastLevel}</p>}
       {/* 
       {coffeeData.coffee.flavorProfile && (
         <p>{coffeeData.coffee.flavorProfile}</p>
       )}
       <p>{coffeeData.coffee.roastDate}</p> */}
       {/* null check on description long to appease TS */}
-      {coffee.descriptionLong && (
+      {coffee?.descriptionLong && (
         <PortableText value={coffee.descriptionLong} />
       )}
       {/* 
