@@ -3,7 +3,7 @@ import sanity from '~/lib/sanity/sanity';
 import AllCoffee from '~/components/AllCoffee';
 
 const query = `
-*[_type == "coffee"] {
+*[_type == "coffee" && !(_id in path('drafts.**'))] {
   _id,
   name,
   stock,

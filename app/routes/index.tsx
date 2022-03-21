@@ -10,7 +10,7 @@ const contentQuery = `{
   "imageUrl": bgImage1.asset->url,
   overlayText1
   }[0],
-  "coffee": *[_type == "coffee"] {
+  "coffee": *[_type == "coffee" && !(_id in path('drafts.**'))] {
     name, 
     roastLevel,
     description,
@@ -35,6 +35,7 @@ export const loader: LoaderFunction = async () => {
 
 export default function Index() {
   const data = useLoaderData<LoaderData>();
+  console.log('data', data);
   return (
     <main>
       <HomeHero heroContent={data.heroContent} />
