@@ -6,7 +6,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "npm run build:css && cross-env NODE_ENV=production remix build",
-    "build:css": "tailwindcss -m -i ./styles/tailwind.css -o app/styles/app.css",
+    "build:css": "tailwindcss -m -i app/styles/tailwind.css -o app/styles/tailwind-build.css",
     "dev": "concurrently \"npm run dev:css\" \"npm run dev:remix\"",
     "dev:css": "tailwindcss -i app/styles/tailwind.css -o app/styles/tailwind-build.css --watch",
     "dev:remix": "node -r dotenv/config node_modules/.bin/remix dev",
