@@ -19,7 +19,6 @@ type LoaderData = {
 //Route params are passed to your loader.
 export const loader: LoaderFunction = async ({ request, params }) => {
   const requestUrl = new URL(request?.url);
-  // console.log('requestUrl', requestUrl);
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET;

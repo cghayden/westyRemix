@@ -1,4 +1,4 @@
-import { LoaderFunction, useLoaderData } from 'remix';
+import { LoaderFunction, useLoaderData, useMatches } from 'remix';
 import sanity from '~/lib/sanity/sanity';
 import type { Coffee, LandingPage } from '../../sanityTypes';
 
@@ -22,24 +22,32 @@ const contentQuery = `{
 interface LoaderData {
   coffee: Coffee[];
   heroContent: LandingPage;
+  referringPath: string;
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  const requestUrl = new URL(request?.url);
+  const referringPath = requestUrl.pathname;
+
   const content = await sanity.fetch(contentQuery);
   const data: LoaderData = {
     coffee: content.coffee,
     heroContent: content.heroContent,
+    referringPath: referringPath,
   };
   return data;
 };
 
 export default function Index() {
   const data = useLoaderData<LoaderData>();
-  console.log('data', data);
+
   return (
     <main>
       <HomeHero heroContent={data.heroContent} />
-      <FeaturedItems allCoffee={data.coffee} />
+      <FeaturedItems
+        allCoffee={data.coffee}
+        referringPath={data.referringPath + 'coffee/'}
+      />
     </main>
   );
 }

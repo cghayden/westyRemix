@@ -7,7 +7,6 @@ export default function HomeHero({
 }: {
   heroContent: LandingPage;
 }) {
-  console.log('heroContent', heroContent);
   const blockContent = heroContent.overlayText1;
   if (!heroContent.imageUrl && !heroContent.overlayText1) return null;
   return (
