@@ -3,11 +3,12 @@ import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix';
 import sanity from '~/lib/sanity/sanity';
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
 import type { Coffee, SanityImageType } from '../../../sanityTypes';
-import { PortableText } from '@portabletext/react';
+// import { PortableText } from '@portabletext/react';
 import imageUrlBuilder from '@sanity/image-url';
 import { useState } from 'react';
 import Preview from '~/components/Preview';
 import { getClient } from '~/lib/sanity/getClient';
+import { PortableText, urlFor } from '~/lib/sanity/helpers';
 
 type LoaderData = {
   initialData: Coffee[];
@@ -19,7 +20,6 @@ type LoaderData = {
 //Route params are passed to your loader.
 export const loader: LoaderFunction = async ({ request, params }) => {
   const requestUrl = new URL(request?.url);
-  // console.log('requestUrl', requestUrl);
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET;
@@ -68,11 +68,10 @@ export default function CoffeeRoute() {
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
   const coffee = filterDataToSingleItem(data, preview);
+  console.log('coffee', coffee);
 
   return (
-    <main className='bg-slate-50 h-screen'>
-      <p>single coffee page</p>
-      {/* {preview && <div>Preview Mode Enabled</div>} */}
+    <main className='h-screen'>
       {preview && (
         <Preview
           data={data}
@@ -82,21 +81,87 @@ export default function CoffeeRoute() {
         />
       )}
       {/* When working with draft content, optional chain _everything_ */}
-
-      {coffee?.name && <h2 className='text-3xl text-center'>{coffee.name}</h2>}
-      {coffee?.roastLevel && <p>{coffee.roastLevel}</p>}
-      {/* 
-      {coffeeData.coffee.flavorProfile && (
-        <p>{coffeeData.coffee.flavorProfile}</p>
-      )}
-      <p>{coffeeData.coffee.roastDate}</p> */}
-      {/* null check on description long to appease TS */}
-      {coffee?.descriptionLong && (
-        <PortableText value={coffee.descriptionLong} />
-      )}
-      {/* 
-      <img src={coffeeData.imageUrl} /> 
-      */}
+      <div className='w-5/6 bg-slate-50 mx-auto max-w-[800px] p-4 mt-4 rounded shadow'>
+        {coffee?.name && (
+          <h2 className='text-3xl text-center'>{coffee.name}</h2>
+        )}
+        {coffee?.roastLevel && (
+          <p className='text-center'>{coffee.roastLevel} roast</p>
+        )}
+        {coffee?.image && (
+          <img
+            loading='lazy'
+            src={urlFor(coffee.image).width(400).height(200)}
+            width='400'
+            height='200'
+            alt={coffee?.name ?? ``}
+            className='m-auto py-7'
+          />
+        )}
+        {/* null check on description long to appease TS */}
+        {coffee?.descriptionLong && (
+          <PortableText value={coffee.descriptionLong} />
+        )}
+        <div className='flex flex-wrap gap-4 justify-center'>
+          <dl className='w-[300px] pr-5'>
+            {coffee?.roastDate && (
+              <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <>
+                  <dt className='justify-self-start text-lg mr-3'>roasted</dt>
+                  <dd>{coffee.roastDate}</dd>
+                </>
+              </div>
+            )}
+            {coffee?.grade && (
+              <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <>
+                  <dt className='justify-self-start text-lg mr-3'>grade</dt>
+                  <dd>{coffee.grade}</dd>
+                </>
+              </div>
+            )}
+            {coffee?.region && (
+              <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <>
+                  <dt className='justify-self-start text-lg mr-3'>region</dt>
+                  <dd>{coffee.region}</dd>
+                </>
+              </div>
+            )}
+            {coffee?.cultivar && (
+              <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <>
+                  <dt className='justify-self-start text-lg mr-3'>cultivar</dt>
+                  <dd>{coffee.cultivar}</dd>
+                </>
+              </div>
+            )}
+            {coffee?.elevation && (
+              <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <>
+                  <dt className='justify-self-start text-lg mr-3'>elevation</dt>
+                  <dd>{coffee.elevation}</dd>
+                </>
+              </div>
+            )}
+            {coffee?.process && (
+              <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <>
+                  <dt className='justify-self-start text-lg mr-3'>process</dt>
+                  <dd>{coffee.process}</dd>
+                </>
+              </div>
+            )}
+          </dl>
+          {coffee?.stock > 0 ? (
+            <form className='w-[300px] h-[400px] bg-slate-400 p-2'>
+              <p>add to cart</p>
+            </form>
+          ) : (
+            <p>out of stock</p>
+          )}
+        </div>
+      </div>
     </main>
   );
 }
@@ -108,7 +173,7 @@ export function CatchBoundary() {
     case 404: {
       return (
         <div className='error-container'>
-          Huh? What the heck is {params.jokeId}?
+          Huh? What the heck is {params.coffeeSlug}?
         </div>
       );
     }
@@ -120,7 +185,7 @@ export function CatchBoundary() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
-  const { jokeId: coffeeSlug } = useParams();
+  const { coffeeSlug } = useParams();
   return (
     <div className='error-container'>{`There was an error loading coffee ${coffeeSlug}. Sorry.`}</div>
   );
