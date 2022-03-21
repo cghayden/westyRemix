@@ -67,11 +67,10 @@ export default function CoffeeRoute() {
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
   const coffee = filterDataToSingleItem(data, preview);
+  console.log('coffee', coffee);
 
   return (
-    <main className='bg-slate-50 h-screen'>
-      <p>single coffee page</p>
-      {/* {preview && <div>Preview Mode Enabled</div>} */}
+    <main className='h-screen'>
       {preview && (
         <Preview
           data={data}
@@ -81,21 +80,24 @@ export default function CoffeeRoute() {
         />
       )}
       {/* When working with draft content, optional chain _everything_ */}
-
-      {coffee?.name && <h2 className='text-3xl text-center'>{coffee.name}</h2>}
-      {coffee?.roastLevel && <p>{coffee.roastLevel}</p>}
-      {/* 
-      {coffeeData.coffee.flavorProfile && (
-        <p>{coffeeData.coffee.flavorProfile}</p>
-      )}
-      <p>{coffeeData.coffee.roastDate}</p> */}
-      {/* null check on description long to appease TS */}
-      {coffee?.descriptionLong && (
-        <PortableText value={coffee.descriptionLong} />
-      )}
-      {/* 
-      <img src={coffeeData.imageUrl} /> 
-      */}
+      <div className='w-5/6 bg-slate-50 mx-auto max-w-[800px] p-4 rounded shadow'>
+        {coffee?.name && (
+          <h2 className='text-3xl text-center'>{coffee.name}</h2>
+        )}
+        {coffee?.roastLevel && <p>{coffee.roastLevel}</p>}
+        {/*
+        {coffeeData.coffee.flavorProfile && (
+          <p>{coffeeData.coffee.flavorProfile}</p>
+        )}
+        <p>{coffeeData.coffee.roastDate}</p> */}
+        {/* null check on description long to appease TS */}
+        {coffee?.descriptionLong && (
+          <PortableText value={coffee.descriptionLong} />
+        )}
+        {/*
+        <img src={coffeeData.imageUrl} />
+        */}
+      </div>
     </main>
   );
 }
@@ -107,7 +109,7 @@ export function CatchBoundary() {
     case 404: {
       return (
         <div className='error-container'>
-          Huh? What the heck is {params.jokeId}?
+          Huh? What the heck is {params.coffeeSlug}?
         </div>
       );
     }
@@ -119,7 +121,7 @@ export function CatchBoundary() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
-  const { jokeId: coffeeSlug } = useParams();
+  const { coffeeSlug } = useParams();
   return (
     <div className='error-container'>{`There was an error loading coffee ${coffeeSlug}. Sorry.`}</div>
   );

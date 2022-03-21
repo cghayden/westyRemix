@@ -511,6 +511,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-row: 1 / -1;
 }
 
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -595,8 +600,20 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 50%;
 }
 
+.w-5\/6 {
+  width: 83.333333%;
+}
+
 .max-w-md {
   max-width: 28rem;
+}
+
+.max-w-\[800\] {
+  max-width: 800;
+}
+
+.max-w-\[800px\] {
+  max-width: 800px;
 }
 
 .flex-grow {

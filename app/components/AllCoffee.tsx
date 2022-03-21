@@ -9,7 +9,7 @@ function FeaturedItems({
   referringPath: string;
 }) {
   return (
-    <div className='px-4 py-2 w-full flex flex-col items-center'>
+    <main className='px-4 py-2 w-full flex flex-col items-center'>
       <div className='py-3'>
         <h2 className='text-2xl font-medium'>Our Coffees</h2>
       </div>
@@ -22,7 +22,7 @@ function FeaturedItems({
           />
         ))}
       </div>
-    </div>
+    </main>
   );
 }
 
