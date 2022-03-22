@@ -1,14 +1,12 @@
-import { useLoaderData, useParams, useCatch, Form } from 'remix';
+import { useLoaderData, useParams, useCatch } from 'remix';
 import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix';
-import sanity from '~/lib/sanity/sanity';
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
-import type { Coffee, SanityImageType } from '../../../sanityTypes';
-// import { PortableText } from '@portabletext/react';
-import imageUrlBuilder from '@sanity/image-url';
+import type { Coffee } from '../../../sanityTypes';
 import { useState } from 'react';
 import Preview from '~/components/Preview';
 import { getClient } from '~/lib/sanity/getClient';
 import { PortableText, urlFor } from '~/lib/sanity/helpers';
+import AddToCartForm from '~/components/AddToCartForm';
 
 type LoaderData = {
   initialData: Coffee[];
@@ -41,13 +39,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     });
   }
 
-  // configure images
-  // const imageBuilder = imageUrlBuilder(sanity);
-  // function urlFor(source: SanityImageType) {
-  //   return imageBuilder.image(source);
-  // }
-  // const url = urlFor(coffeeData.image).url();
-
   const data: LoaderData = {
     initialData,
     preview,
@@ -68,7 +59,6 @@ export default function CoffeeRoute() {
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
   const coffee = filterDataToSingleItem(data, preview);
-  console.log('coffee', coffee);
 
   return (
     <main className='h-screen'>
@@ -100,7 +90,6 @@ export default function CoffeeRoute() {
             className='m-auto py-7'
           />
         )}
-        {/* null check on description long to appease TS */}
         {coffee?.descriptionLong && (
           <PortableText value={coffee.descriptionLong} />
         )}
@@ -157,10 +146,8 @@ export default function CoffeeRoute() {
               </div>
             )}
           </dl>
-          {coffee?.stock > 0 ? (
-            <form className='w-[300px] h-[400px] bg-slate-400 p-2'>
-              <p>add to cart</p>
-            </form>
+          {coffee?.stock && coffee?.stock > 0 ? (
+            <AddToCartForm coffee={coffee} />
           ) : (
             <p>out of stock</p>
           )}
