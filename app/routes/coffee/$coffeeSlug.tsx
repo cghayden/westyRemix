@@ -83,7 +83,9 @@ export default function CoffeeRoute() {
       {/* When working with draft content, optional chain _everything_ */}
       <div className='w-5/6 bg-slate-50 mx-auto max-w-[800px] p-4 mt-4 rounded shadow'>
         {coffee?.name && (
-          <h2 className='text-3xl text-center'>{coffee.name}</h2>
+          <h2 className='text-3xl text-center font-HindSiliguri'>
+            {coffee.name}
+          </h2>
         )}
         {coffee?.roastLevel && (
           <p className='text-center'>{coffee.roastLevel} roast</p>
@@ -107,7 +109,9 @@ export default function CoffeeRoute() {
             {coffee?.roastDate && (
               <div className='flex py-2 ml-3 flex-row items-baseline'>
                 <>
-                  <dt className='justify-self-start text-lg mr-3'>roasted</dt>
+                  <dt className=' font-ZenKaku justify-self-start text-lg mr-3'>
+                    roasted
+                  </dt>
                   <dd>{coffee.roastDate}</dd>
                 </>
               </div>
