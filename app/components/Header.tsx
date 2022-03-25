@@ -3,40 +3,13 @@ import { Link } from 'remix';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import MenuSvg from '~/icons/MenuSvg';
-import CartButton from './CartButton';
-
-const HeaderStyles = `
-  display: flex;
-  color: var(--black);
-  background: var(--white);
-  align-items: center;
-  padding: 1rem;
-  p {
-    color: inherit;
-    margin: 0;
-  }
-`;
-
-const LogoStyle = `
-  font-size: 1.5rem;
-  h1 {
-    font-weight: 300;
-    padding: 0;
-    margin: 0;
-    font-size: 1.5rem;
-    color: inherit;
-  }
-  a {
-    font-size: 1.5rem;
-    padding: 0;
-  }
-`;
-const ButtonsDiv = `
-  margin-left: auto;
-`;
+// import CartButton from './CartButton';
+import Cart from './Cart';
+import CoffeeCupIcon from '~/icons/CoffeeCupIcon';
 
 function Header() {
   const [showMobileNav, toggleShowMobileNav] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
     <header className='flex text-slate-900 bg-slate-50 items-center p-4'>
@@ -47,7 +20,7 @@ function Header() {
         showMobileNav={showMobileNav}
         toggleShowMobileNav={toggleShowMobileNav}
       />
-      <div className='ml-auto'>
+      <div className='ml-auto flex'>
         <button
           className='grid place-items-center'
           type='button'
@@ -58,12 +31,19 @@ function Header() {
         >
           <MenuSvg />
         </button>
-        <CartButton />
+        <button
+          type='button'
+          title='Your Cart'
+          aria-label='open your shopping cart'
+          onClick={() => setIsCartOpen(true)}
+          className='ml-4 mr-2'
+        >
+          <CoffeeCupIcon w={'26'} h={'26'} />
+        </button>{' '}
       </div>
       <DesktopNav />
 
-      {/* <CartButton /> */}
-      {/* <Cart /> */}
+      <Cart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
     </header>
   );
 }
