@@ -3,6 +3,7 @@ import { Link } from 'remix';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import MenuSvg from '~/icons/MenuSvg';
+import CartButton from './CartButton';
 
 const HeaderStyles = `
   display: flex;
@@ -48,8 +49,8 @@ function Header() {
       />
       <div className='ml-auto'>
         <button
+          className='grid place-items-center'
           type='button'
-          // className='btn-icon'
           aria-label='show navigation menu'
           onClick={() => {
             toggleShowMobileNav(true);
@@ -57,6 +58,7 @@ function Header() {
         >
           <MenuSvg />
         </button>
+        <CartButton />
       </div>
       <DesktopNav />
 
