@@ -9,6 +9,7 @@ import { SiteSettings } from 'sanityTypes';
 import Header from './components/Header';
 import styles from './styles/tailwind-build.css';
 import sanity from './lib/sanity/sanity';
+// import { CartStateProvider } from './components/CartContext';
 
 const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   backgroundColor,
@@ -47,6 +48,7 @@ function Document({
         <title>{title}</title>
         <Links />
       </head>
+      {/* <CartStateProvider> */}
       <body
         style={{
           backgroundColor: `${data?.backgroundColor.hex}`,
@@ -57,6 +59,7 @@ function Document({
         <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
       </body>
+      {/* </CartStateProvider> */}
     </html>
   );
 }

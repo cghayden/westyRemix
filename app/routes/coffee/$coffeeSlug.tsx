@@ -7,6 +7,7 @@ import Preview from '~/components/Preview';
 import { getClient } from '~/lib/sanity/getClient';
 import { PortableText, urlFor } from '~/lib/sanity/helpers';
 import AddToCartForm from '~/components/AddToCartForm';
+import { CartStateProvider } from '~/components/CartContext';
 
 type LoaderData = {
   initialData: Coffee[];
@@ -147,7 +148,9 @@ export default function CoffeeRoute() {
             )}
           </dl>
           {coffee?.stock && coffee?.stock > 0 ? (
-            <AddToCartForm coffee={coffee} />
+            <CartStateProvider>
+              <AddToCartForm coffee={coffee} />
+            </CartStateProvider>
           ) : (
             <p>out of stock</p>
           )}
