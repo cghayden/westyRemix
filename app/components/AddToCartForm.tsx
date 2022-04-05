@@ -7,7 +7,7 @@ import { useCart } from './CartContext';
 
 export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const { cartContents } = useCart();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState<number>(1);
 
   console.log('cartContents from form', cartContents);
   return (
@@ -20,7 +20,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             <button
               type='button'
               disabled={quantity === 1}
-              onClick={() => setQuantity((q) => q - 1)}
+              onClick={() => setQuantity(quantity - 1)}
             >
               <MinusSvg />
             </button>
@@ -28,11 +28,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             <button
               type='button'
               disabled={quantity === coffee.stock}
-              onClick={() =>
-                setQuantity((q) => {
-                  return q + 1;
-                })
-              }
+              onClick={() => setQuantity(quantity + 1)}
             >
               <PlusSvg w={'18'} h={'18'} />
             </button>
