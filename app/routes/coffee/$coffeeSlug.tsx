@@ -7,7 +7,7 @@ import Preview from '~/components/Preview';
 import { getClient } from '~/lib/sanity/getClient';
 import { PortableText, urlFor } from '~/lib/sanity/helpers';
 import AddToCartForm from '~/components/AddToCartForm';
-import { CartProvider } from '../../context/CartContext';
+import { CartProvider } from '~/context/useCart';
 
 type LoaderData = {
   initialData: Coffee[];
@@ -147,13 +147,23 @@ export default function CoffeeRoute() {
               </div>
             )}
           </dl>
-          {coffee?.stock && coffee?.stock > 0 ? (
-            <CartProvider>
+          <CartProvider
+            initialCart={[
+              {
+                coffeeName: 'test cart coffee',
+                coffeeId: `test123`,
+                quantity: 2,
+                grind: 'ground',
+                variant_id: `variant123`,
+              },
+            ]}
+          >
+            {coffee?.stock && coffee?.stock > 0 ? (
               <AddToCartForm coffee={coffee} />
-            </CartProvider>
-          ) : (
-            <p>out of stock</p>
-          )}
+            ) : (
+              <p>out of stock</p>
+            )}
+          </CartProvider>
         </div>
       </div>
     </main>
