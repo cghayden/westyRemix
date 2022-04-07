@@ -61,9 +61,20 @@ export const CartProvider = ({
   );
 };
 
-export const useCartItems = (): CartItem[] => {
+export const useCartItems = (): ReturnType<typeof formatCart> => {
   const { cartItems } = useContext(CartContext);
-  return cartItems;
+  const formatCart = (
+    cartItems: CartItem[]
+  ): Record<CartItem['variant_id'], CartItem> => {
+    return cartItems.reduce((acc, currentItem) => {
+      const { variant_id } = currentItem;
+      return {
+        ...acc,
+        [variant_id]: currentItem,
+      };
+    }, {});
+  };
+  return formatCart(cartItems);
 };
 
 export const useAddToCart = (): UseCartManagerResult['addCartItem'] => {
