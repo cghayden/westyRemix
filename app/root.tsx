@@ -55,19 +55,7 @@ function Document({
           overscrollBehavior: 'none',
         }}
       >
-        <CartProvider
-          initialCart={[
-            {
-              coffeeName: 'test cart coffee',
-              coffeeId: `test123`,
-              quantity: 2,
-              grind: 'ground',
-              variant_id: `variant123`,
-            },
-          ]}
-        >
-          {children}
-        </CartProvider>
+        <CartProvider initialCart={[]}>{children}</CartProvider>
         <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
       </body>

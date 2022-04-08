@@ -24,14 +24,29 @@ function useCartManager(initialCart: CartItem[]): {
   return { cartItems, addCartItem };
 }
 
-const myCartReducerFunction = (state: CartItem[], action: ActionType) => {
+const myCartReducerFunction = (
+  cartItemsState: CartItem[],
+  action: ActionType
+) => {
   switch (action.type) {
     case 'ADD_TO_CART':
       console.log('add to cart');
-      return [...state, action.cartItem];
+      const cartItemIndex = cartItemsState.findIndex(
+        (cartItem) =>
+          cartItem.coffeeName === action.cartItem.coffeeName &&
+          cartItem.grind === action.cartItem.grind
+      );
+      if (cartItemIndex === -1) {
+        return [...cartItemsState, action.cartItem];
+      }
+      if (cartItemIndex > -1) {
+        const updatedCart = [...cartItemsState];
+        cartItemsState[cartItemIndex].quantity += action.cartItem.quantity;
+        return updatedCart;
+      }
     case 'REMOVE_FROM_CART':
       console.log('REMOVE_FROM_CART');
-      return state.filter(
+      return cartItemsState.filter(
         (currentCartItem) =>
           currentCartItem.variant_id !== action.cartItem.variant_id
       );
@@ -61,20 +76,9 @@ export const CartProvider = ({
   );
 };
 
-export const useCartItems = (): ReturnType<typeof formatCart> => {
+export const useCartItems = (): CartItem[] => {
   const { cartItems } = useContext(CartContext);
-  const formatCart = (
-    cartItems: CartItem[]
-  ): Record<CartItem['variant_id'], CartItem> => {
-    return cartItems.reduce((acc, currentItem) => {
-      const { variant_id } = currentItem;
-      return {
-        ...acc,
-        [variant_id]: currentItem,
-      };
-    }, {});
-  };
-  return formatCart(cartItems);
+  return cartItems;
 };
 
 export const useAddToCart = (): UseCartManagerResult['addCartItem'] => {
