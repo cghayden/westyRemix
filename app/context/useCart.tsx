@@ -6,50 +6,55 @@ type UseCartManagerResult = ReturnType<typeof useCartManager>;
 export const CartContext = createContext<UseCartManagerResult>({
   cartItems: [],
   addCartItem: () => {},
+  removeCartItem: () => {},
 });
 
 type ActionType =
-  | { type: 'ADD_TO_CART'; cartItem: CartItem }
+  | { type: 'CHANGE_CART_QUANTITY'; cartItem: CartItem }
   | { type: 'REMOVE_FROM_CART'; cartItem: CartItem };
 // | { type: 'UPDATE_PRICE'; payload: State };
 
 function useCartManager(initialCart: CartItem[]): {
   cartItems: CartItem[];
   addCartItem: (cartItem: CartItem) => void;
+  removeCartItem: (cartItem: CartItem) => void;
 } {
   const [cartItems, dispatch] = useReducer(myCartReducerFunction, initialCart);
   const addCartItem = useCallback((cartItem: CartItem) => {
-    dispatch({ type: 'ADD_TO_CART', cartItem });
+    dispatch({ type: 'CHANGE_CART_QUANTITY', cartItem });
   }, []);
-  return { cartItems, addCartItem };
+  const removeCartItem = useCallback((cartItem: CartItem) => {
+    dispatch({ type: 'REMOVE_FROM_CART', cartItem });
+  }, []);
+  return { cartItems, addCartItem, removeCartItem };
 }
 
 const myCartReducerFunction = (
   cartItemsState: CartItem[],
   action: ActionType
 ) => {
+  const cartItemIndex = cartItemsState.findIndex(
+    (cartItem) =>
+      cartItem.coffeeName === action.cartItem.coffeeName &&
+      cartItem.grind === action.cartItem.grind
+  );
   switch (action.type) {
-    case 'ADD_TO_CART':
-      console.log('add to cart');
-      const cartItemIndex = cartItemsState.findIndex(
-        (cartItem) =>
-          cartItem.coffeeName === action.cartItem.coffeeName &&
-          cartItem.grind === action.cartItem.grind
-      );
+    case 'CHANGE_CART_QUANTITY':
+      console.log('add/reduce #  in cart');
       if (cartItemIndex === -1) {
         return [...cartItemsState, action.cartItem];
       }
       if (cartItemIndex > -1) {
         const updatedCart = [...cartItemsState];
+        //quantity will be positive to increase, or -1 to decrease number in cart
         cartItemsState[cartItemIndex].quantity += action.cartItem.quantity;
         return updatedCart;
       }
     case 'REMOVE_FROM_CART':
       console.log('REMOVE_FROM_CART');
-      return cartItemsState.filter(
-        (currentCartItem) =>
-          currentCartItem.variant_id !== action.cartItem.variant_id
-      );
+      const cartCopy = [...cartItemsState];
+      cartCopy.splice(cartItemIndex, 1);
+      return cartCopy;
     // case 'UPDATE_PRICE':
     //   console.log('UPDATE_PRICE', payload);
 
@@ -84,4 +89,8 @@ export const useCartItems = (): CartItem[] => {
 export const useAddToCart = (): UseCartManagerResult['addCartItem'] => {
   const { addCartItem } = useContext(CartContext);
   return addCartItem;
+};
+export const useRemoveFromCart = (): UseCartManagerResult['removeCartItem'] => {
+  const { removeCartItem } = useContext(CartContext);
+  return removeCartItem;
 };

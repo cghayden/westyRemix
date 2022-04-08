@@ -1,15 +1,20 @@
 import { CartItem } from 'myTypes';
 import { useState } from 'react';
 import { Form } from 'remix';
-import { CartProvider, useAddToCart, useCartItems } from '~/context/useCart';
+import {
+  useAddToCart,
+  useCartItems,
+  useRemoveFromCart,
+} from '~/context/useCart';
 import MinusSvg from '~/icons/MinusSvg';
 import PlusSvg from '~/icons/PlusSvg';
 import type { Coffee } from '../../sanityTypes';
 export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const [grind, setGrind] = useState<CartItem['grind']>('whole');
   const [quantity, setQuantity] = useState<number>(1);
-  const addToCart = useAddToCart();
   const cartItems = useCartItems();
+  const addToCart = useAddToCart();
+  const removeFromCart = useRemoveFromCart();
   console.log('cartItems', cartItems);
   return (
     <>
@@ -29,7 +34,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
         className='w-[300px] h-[400px] bg-slate-400 p-2'
       >
         <fieldset>
-          <p>add {coffee.name} to cart</p>
+          <p> in cart</p>
           <div className='flex place-content-center my-4'>
             <label className='mr-5'>quantity:</label>
             <div className='flex flex-col'>
@@ -52,6 +57,21 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
               </div>
               <button className='text-xl bg-slate-50' type='submit'>
                 Add {quantity} to Cart
+              </button>
+              <button
+                className='text-xl bg-slate-50'
+                type='button'
+                onClick={() =>
+                  removeFromCart({
+                    coffeeName: `${coffee.name}`,
+                    coffeeId: `${coffee._id}`,
+                    quantity,
+                    grind,
+                    variant_id: `${coffee._id + grind}`,
+                  })
+                }
+              >
+                remove from Cart
               </button>
             </div>
           </div>
