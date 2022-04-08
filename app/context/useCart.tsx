@@ -1,5 +1,11 @@
 import { CartItem } from 'myTypes';
-import { createContext, useCallback, useContext, useReducer } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useReducer,
+  useState,
+} from 'react';
 
 type UseCartManagerResult = ReturnType<typeof useCartManager>;
 
@@ -7,6 +13,8 @@ export const CartContext = createContext<UseCartManagerResult>({
   cartItems: [],
   addCartItem: () => {},
   removeCartItem: () => {},
+  isCartOpen: false,
+  toggleIsCartOpen: () => {},
 });
 
 type ActionType =
@@ -18,7 +26,10 @@ function useCartManager(initialCart: CartItem[]): {
   cartItems: CartItem[];
   addCartItem: (cartItem: CartItem) => void;
   removeCartItem: (cartItem: CartItem) => void;
+  isCartOpen: boolean;
+  toggleIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
 } {
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, dispatch] = useReducer(myCartReducerFunction, initialCart);
   const addCartItem = useCallback((cartItem: CartItem) => {
     dispatch({ type: 'CHANGE_CART_QUANTITY', cartItem });
@@ -26,7 +37,13 @@ function useCartManager(initialCart: CartItem[]): {
   const removeCartItem = useCallback((cartItem: CartItem) => {
     dispatch({ type: 'REMOVE_FROM_CART', cartItem });
   }, []);
-  return { cartItems, addCartItem, removeCartItem };
+  return {
+    cartItems,
+    addCartItem,
+    removeCartItem,
+    isCartOpen,
+    toggleIsCartOpen: setIsCartOpen,
+  };
 }
 
 const myCartReducerFunction = (
@@ -79,6 +96,11 @@ export const CartProvider = ({
       {children}
     </CartContext.Provider>
   );
+};
+
+export const useCartUtils = () => {
+  const { isCartOpen, toggleIsCartOpen } = useContext(CartContext);
+  return { isCartOpen, toggleIsCartOpen };
 };
 
 export const useCartItems = (): CartItem[] => {

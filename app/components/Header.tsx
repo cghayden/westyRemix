@@ -6,10 +6,11 @@ import MenuSvg from '~/icons/MenuSvg';
 // import CartButton from './CartButton';
 import Cart from './Cart';
 import CoffeeCupIcon from '~/icons/CoffeeCupIcon';
+import { useCartUtils } from '~/context/useCart';
 
 function Header() {
   const [showMobileNav, toggleShowMobileNav] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isCartOpen, toggleIsCartOpen } = useCartUtils();
 
   return (
     <header className='flex text-slate-900 bg-slate-50 items-center p-4'>
@@ -35,7 +36,7 @@ function Header() {
           type='button'
           title='Your Cart'
           aria-label='open your shopping cart'
-          onClick={() => setIsCartOpen(true)}
+          onClick={() => toggleIsCartOpen(true)}
           className='ml-4 mr-2'
         >
           <CoffeeCupIcon w={'26'} h={'26'} />
@@ -43,7 +44,7 @@ function Header() {
       </div>
       <DesktopNav />
 
-      <Cart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
+      <Cart />
     </header>
   );
 }
