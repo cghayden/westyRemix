@@ -10,12 +10,17 @@ import MinusSvg from '~/icons/MinusSvg';
 import PlusSvg from '~/icons/PlusSvg';
 import type { Coffee } from '../../sanityTypes';
 export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
-  const [grind, setGrind] = useState<CartItem['grind']>('whole');
+  const [grind, setGrind] = useState('whole');
   const [quantity, setQuantity] = useState<number>(1);
   const cartItems = useCartItems();
   const addToCart = useAddToCart();
-  const removeFromCart = useRemoveFromCart();
   console.log('cartItems', cartItems);
+
+  const handleGrindChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('e', e);
+    setGrind(e.target.value);
+  };
+
   return (
     <>
       <Form
@@ -34,7 +39,35 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
         className='w-[300px] h-[400px] bg-slate-400 p-2'
       >
         <fieldset>
-          <p> in cart</p>
+          <button className='text-xl bg-slate-50' type='submit'>
+            Add {quantity} to Cart
+          </button>
+
+          <div className='grindRadio'>
+            <label htmlFor='whole' className=''>
+              <input
+                type='radio'
+                id='whole'
+                name='grind'
+                value={'whole'}
+                checked={grind === 'whole'}
+                onChange={handleGrindChange}
+              />
+              Whole Bean
+            </label>
+            <label htmlFor='ground' className=''>
+              <input
+                type='radio'
+                id='ground'
+                name='grind'
+                value={'ground'}
+                checked={grind === 'ground'}
+                onChange={handleGrindChange}
+              />
+              Ground
+            </label>
+          </div>
+
           <div className='flex place-content-center my-4'>
             <label className='mr-5'>quantity:</label>
             <div className='flex flex-col'>
@@ -55,24 +88,6 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
                   <PlusSvg w={'18'} h={'18'} />
                 </button>
               </div>
-              <button className='text-xl bg-slate-50' type='submit'>
-                Add {quantity} to Cart
-              </button>
-              <button
-                className='text-xl bg-slate-50'
-                type='button'
-                onClick={() =>
-                  removeFromCart({
-                    coffeeName: `${coffee.name}`,
-                    coffeeId: `${coffee._id}`,
-                    quantity,
-                    grind,
-                    variant_id: `${coffee._id + grind}`,
-                  })
-                }
-              >
-                remove from Cart
-              </button>
             </div>
           </div>
         </fieldset>
