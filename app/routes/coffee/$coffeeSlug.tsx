@@ -147,23 +147,12 @@ export default function CoffeeRoute() {
               </div>
             )}
           </dl>
-          <CartProvider
-            initialCart={[
-              {
-                coffeeName: 'test cart coffee',
-                coffeeId: `test123`,
-                quantity: 2,
-                grind: 'ground',
-                variant_id: `variant123`,
-              },
-            ]}
-          >
-            {coffee?.stock && coffee?.stock > 0 ? (
-              <AddToCartForm coffee={coffee} />
-            ) : (
-              <p>out of stock</p>
-            )}
-          </CartProvider>
+
+          {coffee?.stock && coffee?.stock > 0 ? (
+            <AddToCartForm coffee={coffee} />
+          ) : (
+            <p>out of stock</p>
+          )}
         </div>
       </div>
     </main>

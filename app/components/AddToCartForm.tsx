@@ -23,7 +23,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             coffeeId: `${coffee._id}`,
             quantity,
             grind,
-            variant_id: `${coffee.name + grind}`,
+            variant_id: `${coffee._id + grind}`,
           });
         }}
         className='w-[300px] h-[400px] bg-slate-400 p-2'
@@ -59,13 +59,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
       </Form>
       <div>
         <p>current cart:</p>
-        <p>
-          {cartItems.map((item) => (
-            <p key={item.variant_id}>
-              {item.quantity} {item.coffeeName}
-            </p>
-          ))}
-        </p>
+        {JSON.stringify(cartItems)}
       </div>
     </>
   );
