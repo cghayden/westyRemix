@@ -1,7 +1,7 @@
 export interface CartItem {
   coffeeId: string;
   quantity: number;
-  grind: 'whole' | 'ground';
+  grind: string;
   variant_id: string;
   coffeeName: string;
 }
