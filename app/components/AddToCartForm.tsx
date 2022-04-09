@@ -4,6 +4,7 @@ import { Form } from 'remix';
 import {
   useAddToCart,
   useCartItems,
+  useCartUtils,
   useRemoveFromCart,
 } from '~/context/useCart';
 import MinusSvg from '~/icons/MinusSvg';
@@ -14,10 +15,9 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const [quantity, setQuantity] = useState<number>(1);
   const cartItems = useCartItems();
   const addToCart = useAddToCart();
-  console.log('cartItems', cartItems);
+  const { toggleIsCartOpen } = useCartUtils();
 
   const handleGrindChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('e', e);
     setGrind(e.target.value);
   };
 
@@ -27,7 +27,6 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
         action='POST'
         onSubmit={(e) => {
           e.preventDefault();
-          console.log('addToCart');
           addToCart({
             coffeeName: `${coffee.name}`,
             coffeeId: `${coffee._id}`,
@@ -35,6 +34,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             grind,
             variant_id: `${coffee._id + grind}`,
           });
+          toggleIsCartOpen(true);
         }}
         className='w-[300px] h-[400px] bg-slate-400 p-2'
       >

@@ -57,7 +57,6 @@ const myCartReducerFunction = (
   );
   switch (action.type) {
     case 'CHANGE_CART_QUANTITY':
-      console.log('add/reduce #  in cart');
       if (cartItemIndex === -1) {
         return [...cartItemsState, action.cartItem];
       }
