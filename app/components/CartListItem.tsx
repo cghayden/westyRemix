@@ -1,5 +1,8 @@
 import { CartItem } from 'myTypes';
-import { useChangeCartItemQuantity } from '~/context/useCart';
+import {
+  useChangeCartItemQuantity,
+  useRemoveFromCart,
+} from '~/context/useCart';
 import MinusSvg from '~/icons/MinusSvg';
 import PlusSvg from '~/icons/PlusSvg';
 import TrashIcon from '~/icons/TrashIcon';
@@ -7,6 +10,7 @@ import formatMoney from '~/lib/formatMoney';
 
 export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
   const changeCartItemQuantity = useChangeCartItemQuantity();
+  const removeFromCart = useRemoveFromCart();
   return (
     <li className='p-4 border-b-2 border-slate-900'>
       <div className='mx-auto md:w-2/3'>
@@ -14,7 +18,7 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
         <div className='flex justify-between items-center'>
           <h3 className='text-2xl'>{cartItem.coffeeName}</h3>
           <div>
-            <button>
+            <button onClick={() => removeFromCart(cartItem)}>
               <TrashIcon />
             </button>
           </div>
