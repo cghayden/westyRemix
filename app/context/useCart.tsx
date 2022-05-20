@@ -29,7 +29,7 @@ function useCartManager(initialCart: CartItem[]): {
   isCartOpen: boolean;
   toggleIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
 } {
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(true);
   const [cartItems, dispatch] = useReducer(myCartReducerFunction, initialCart);
   const addCartItem = useCallback((cartItem: CartItem) => {
     dispatch({ type: 'CHANGE_CART_QUANTITY', cartItem });

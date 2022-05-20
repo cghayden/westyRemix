@@ -1,15 +1,10 @@
-import { CartItem } from 'myTypes';
 import { useState } from 'react';
 import { Form } from 'remix';
-import {
-  useAddToCart,
-  useCartItems,
-  useCartUtils,
-  useRemoveFromCart,
-} from '~/context/useCart';
+import { useAddToCart, useCartItems, useCartUtils } from '~/context/useCart';
 import MinusSvg from '~/icons/MinusSvg';
 import PlusSvg from '~/icons/PlusSvg';
 import type { Coffee } from '../../sanityTypes';
+
 export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const [grind, setGrind] = useState('whole');
   const [quantity, setQuantity] = useState<number>(1);
@@ -33,6 +28,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             quantity,
             grind,
             variant_id: `${coffee._id + grind}`,
+            price: coffee.price,
           });
           toggleIsCartOpen(true);
         }}

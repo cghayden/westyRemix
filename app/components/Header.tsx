@@ -3,14 +3,13 @@ import { Link } from 'remix';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import MenuSvg from '~/icons/MenuSvg';
-// import CartButton from './CartButton';
 import Cart from './Cart';
 import CoffeeCupIcon from '~/icons/CoffeeCupIcon';
 import { useCartUtils } from '~/context/useCart';
 
 function Header() {
   const [showMobileNav, toggleShowMobileNav] = useState(false);
-  const { isCartOpen, toggleIsCartOpen } = useCartUtils();
+  const { toggleIsCartOpen } = useCartUtils();
 
   return (
     <header className='flex text-slate-900 bg-slate-50 items-center p-4'>

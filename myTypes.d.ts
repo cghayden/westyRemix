@@ -4,4 +4,5 @@ export interface CartItem {
   grind: string;
   variant_id: string;
   coffeeName: string;
+  price: number;
 }
