@@ -1,12 +1,12 @@
 import { CartItem } from 'myTypes';
-import { useAddToCart } from '~/context/useCart';
+import { useAlterCartItemQuantity } from '~/context/useCart';
 import MinusSvg from '~/icons/MinusSvg';
 import PlusSvg from '~/icons/PlusSvg';
 import TrashIcon from '~/icons/TrashIcon';
 import formatMoney from '~/lib/formatMoney';
 
 export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
-  const addToCart = useAddToCart();
+  const alterCartItemQuantity = useAlterCartItemQuantity();
   return (
     <li className='p-4 border-b-2 border-slate-900'>
       <div className='mx-auto md:w-2/3'>
@@ -31,7 +31,7 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
             <button
               disabled={cartItem.quantity < 1}
               onClick={() =>
-                addToCart({
+                alterCartItemQuantity({
                   coffeeName: cartItem.coffeeName,
                   coffeeId: cartItem.coffeeId,
                   quantity: -1,
@@ -46,7 +46,7 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
             <p className='mx-4'>{cartItem.quantity}</p>
             <button
               onClick={() =>
-                addToCart({
+                alterCartItemQuantity({
                   coffeeName: cartItem.coffeeName,
                   coffeeId: cartItem.coffeeId,
                   quantity: 1,
