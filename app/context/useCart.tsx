@@ -11,7 +11,7 @@ type UseCartManagerResult = ReturnType<typeof useCartManager>;
 
 export const CartContext = createContext<UseCartManagerResult>({
   cartItems: [],
-  alterCartItemQuantity: () => {},
+  changeCartItemQuantity: () => {},
   removeCartItem: () => {},
   isCartOpen: false,
   toggleIsCartOpen: () => {},
@@ -24,14 +24,14 @@ type ActionType =
 
 function useCartManager(initialCart: CartItem[]): {
   cartItems: CartItem[];
-  alterCartItemQuantity: (cartItem: CartItem) => void;
+  changeCartItemQuantity: (cartItem: CartItem) => void;
   removeCartItem: (cartItem: CartItem) => void;
   isCartOpen: boolean;
   toggleIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
 } {
   const [isCartOpen, setIsCartOpen] = useState(true);
   const [cartItems, dispatch] = useReducer(myCartReducerFunction, initialCart);
-  const alterCartItemQuantity = useCallback((cartItem: CartItem) => {
+  const changeCartItemQuantity = useCallback((cartItem: CartItem) => {
     dispatch({ type: 'CHANGE_CART_QUANTITY', cartItem });
   }, []);
   const removeCartItem = useCallback((cartItem: CartItem) => {
@@ -39,7 +39,7 @@ function useCartManager(initialCart: CartItem[]): {
   }, []);
   return {
     cartItems,
-    alterCartItemQuantity,
+    changeCartItemQuantity,
     removeCartItem,
     isCartOpen,
     toggleIsCartOpen: setIsCartOpen,
@@ -107,10 +107,10 @@ export const useCartItems = (): CartItem[] => {
   return cartItems;
 };
 
-export const useAlterCartItemQuantity =
-  (): UseCartManagerResult['alterCartItemQuantity'] => {
-    const { alterCartItemQuantity } = useContext(CartContext);
-    return alterCartItemQuantity;
+export const useChangeCartItemQuantity =
+  (): UseCartManagerResult['changeCartItemQuantity'] => {
+    const { changeCartItemQuantity } = useContext(CartContext);
+    return changeCartItemQuantity;
   };
 export const useRemoveFromCart = (): UseCartManagerResult['removeCartItem'] => {
   const { removeCartItem } = useContext(CartContext);

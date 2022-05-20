@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form } from 'remix';
 import {
-  useAlterCartItemQuantity,
+  useChangeCartItemQuantity,
   useCartItems,
   useCartUtils,
 } from '~/context/useCart';
@@ -13,7 +13,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const [grind, setGrind] = useState('whole');
   const [quantity, setQuantity] = useState<number>(1);
   const cartItems = useCartItems();
-  const alterCartItemQuantity = useAlterCartItemQuantity();
+  const changeCartItemQuantity = useChangeCartItemQuantity();
   const { toggleIsCartOpen } = useCartUtils();
 
   const handleGrindChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +26,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
         action='POST'
         onSubmit={(e) => {
           e.preventDefault();
-          alterCartItemQuantity({
+          changeCartItemQuantity({
             coffeeName: `${coffee.name}`,
             coffeeId: `${coffee._id}`,
             quantity,
