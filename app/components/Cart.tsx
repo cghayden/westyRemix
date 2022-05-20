@@ -31,7 +31,7 @@ export default function Cart() {
       <div>
         Cart:
         {cartItems.map((cartItem, i) => (
-          <div key={cartItem.coffeeId}>
+          <div key={cartItem.variant_id}>
             <p className='text-2xl font-bold underline'>CartItem {i}</p>
             {Object.keys(cartItem).map((cartItemKey, i) => (
               <p className='text-xl' key={i}>

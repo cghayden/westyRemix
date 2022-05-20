@@ -1,10 +1,12 @@
 import { CartItem } from 'myTypes';
+import { useAddToCart } from '~/context/useCart';
 import MinusSvg from '~/icons/MinusSvg';
 import PlusSvg from '~/icons/PlusSvg';
 import TrashIcon from '~/icons/TrashIcon';
 import formatMoney from '~/lib/formatMoney';
 
 export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
+  const addToCart = useAddToCart();
   return (
     <li className='p-4 border-b-2 border-slate-900'>
       <div className='mx-auto md:w-2/3'>
@@ -30,11 +32,22 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
               <MinusSvg />{' '}
             </button>
             <p className='mx-4'>{cartItem.quantity}</p>
-            <button>
+            <button
+              onClick={() =>
+                addToCart({
+                  coffeeName: cartItem.coffeeName,
+                  coffeeId: cartItem.coffeeId,
+                  quantity: 1,
+                  grind: cartItem.grind,
+                  variant_id: cartItem.variant_id,
+                  price: cartItem.price,
+                })
+              }
+            >
               <PlusSvg w={'18'} h={'18'} />
             </button>
           </div>
-          <p className=''>
+          <p>
             {/* <span>{`${cartItem.quantity}`}</span>
             <span>&times; </span> */}
             <span>{`$${formatMoney(cartItem.price)} ea.`} </span>
