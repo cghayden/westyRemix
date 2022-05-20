@@ -28,7 +28,19 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
         {/* // flex row 3 - quantity changer (left) , total q & $ (right) */}
         <div className='flex justify-between'>
           <div className='flex justify-evenly mr-8'>
-            <button>
+            <button
+              disabled={cartItem.quantity < 1}
+              onClick={() =>
+                addToCart({
+                  coffeeName: cartItem.coffeeName,
+                  coffeeId: cartItem.coffeeId,
+                  quantity: -1,
+                  grind: cartItem.grind,
+                  variant_id: cartItem.variant_id,
+                  price: cartItem.price,
+                })
+              }
+            >
               <MinusSvg />{' '}
             </button>
             <p className='mx-4'>{cartItem.quantity}</p>
