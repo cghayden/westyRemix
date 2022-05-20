@@ -2,6 +2,7 @@ import { CartItem } from 'myTypes';
 import MinusSvg from '~/icons/MinusSvg';
 import PlusSvg from '~/icons/PlusSvg';
 import TrashIcon from '~/icons/TrashIcon';
+import formatMoney from '~/lib/formatMoney';
 
 export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
   return (
@@ -36,9 +37,11 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
           <p className=''>
             {/* <span>{`${cartItem.quantity}`}</span>
             <span>&times; </span> */}
-            <span>{`$${cartItem.price} ea.`} </span>
+            <span>{`$${formatMoney(cartItem.price)} ea.`} </span>
             <span className='px-2'>=</span>
-            <span className='text-xl'>$2x.xx</span>
+            <span className='text-xl'>
+              {`$${formatMoney(cartItem.price * cartItem.quantity)} `}
+            </span>
           </p>
         </div>
       </div>
