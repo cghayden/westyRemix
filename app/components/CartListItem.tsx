@@ -24,44 +24,50 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
           </div>
         </div>
         {/* // flex row 2 - description */}
-        <div className='flex py-2'>
+        <div className='flex pb-1'>
           <p className=''>{`${
             cartItem.grind === 'whole' ? 'whole bean' : 'ground'
           }`}</p>
         </div>
         {/* // flex row 3 - quantity changer (left) , total q & $ (right) */}
         <div className='flex justify-between'>
-          <div className='flex justify-evenly mr-8'>
-            <button
-              disabled={cartItem.quantity < 1}
-              onClick={() =>
-                changeCartItemQuantity({
-                  coffeeName: cartItem.coffeeName,
-                  coffeeId: cartItem.coffeeId,
-                  quantity: -1,
-                  grind: cartItem.grind,
-                  variant_id: cartItem.variant_id,
-                  price: cartItem.price,
-                })
-              }
-            >
-              <MinusSvg />{' '}
-            </button>
-            <p className='mx-4'>{cartItem.quantity}</p>
-            <button
-              onClick={() =>
-                changeCartItemQuantity({
-                  coffeeName: cartItem.coffeeName,
-                  coffeeId: cartItem.coffeeId,
-                  quantity: 1,
-                  grind: cartItem.grind,
-                  variant_id: cartItem.variant_id,
-                  price: cartItem.price,
-                })
-              }
-            >
-              <PlusSvg w={'18'} h={'18'} />
-            </button>
+          <div className='rounded-full flex justify-evenly mr-8 bg-green-600 h-12 w-[150px] items-center'>
+            <p>
+              <button
+                className='-mt-1 text-green-50'
+                disabled={cartItem.quantity < 1}
+                onClick={() =>
+                  changeCartItemQuantity({
+                    coffeeName: cartItem.coffeeName,
+                    coffeeId: cartItem.coffeeId,
+                    quantity: -1,
+                    grind: cartItem.grind,
+                    variant_id: cartItem.variant_id,
+                    price: cartItem.price,
+                  })
+                }
+              >
+                <span className='text-3xl'>-</span>
+              </button>
+            </p>
+            <p className='mx-4 text-2xl text-green-50'>{cartItem.quantity}</p>
+            <p>
+              <button
+                className='-mt-1 text-green-50'
+                onClick={() =>
+                  changeCartItemQuantity({
+                    coffeeName: cartItem.coffeeName,
+                    coffeeId: cartItem.coffeeId,
+                    quantity: 1,
+                    grind: cartItem.grind,
+                    variant_id: cartItem.variant_id,
+                    price: cartItem.price,
+                  })
+                }
+              >
+                <span className='text-3xl'>+</span>
+              </button>
+            </p>
           </div>
           <p>
             {/* <span>{`${cartItem.quantity}`}</span>
