@@ -5,12 +5,12 @@ import MobileNav from './MobileNav';
 import MenuSvg from '~/icons/MenuSvg';
 import Cart from './Cart';
 import CoffeeCupIcon from '~/icons/CoffeeCupIcon';
-import { useCartItems, useCartUtils } from '~/context/useCart';
+import CartCount from './CartCount';
+import { useCartUtils } from '~/context/useCart';
 
 function Header() {
   const [showMobileNav, toggleShowMobileNav] = useState(false);
   const { toggleIsCartOpen } = useCartUtils();
-  const cartItems = useCartItems();
 
   return (
     <header className='flex text-slate-900 bg-slate-50 items-center p-4'>
@@ -42,9 +42,7 @@ function Header() {
           <div className='row-span-full col-span-full'>
             <CoffeeCupIcon w={'32'} h={'32'} />
           </div>
-          <div className='bg-red-500 text-red-50 p-[1px] leading-5 min-w-[18px] h-[18px] mr-[5px] mt-2 text-sm row-span-full col-span-full rounded-full'>
-            <p className='-mt-[2px]'>3</p>
-          </div>
+          <CartCount />
         </button>{' '}
       </div>
       <DesktopNav />
