@@ -10,7 +10,6 @@ import Header from './components/Header';
 import styles from './styles/tailwind-build.css';
 import sanity from './lib/sanity/sanity';
 import { CartProvider } from './context/useCart';
-// import { CartStateProvider } from './components/CartContext';
 
 const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   backgroundColor,

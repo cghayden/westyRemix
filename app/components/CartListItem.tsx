@@ -36,7 +36,13 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
               <button
                 className='-mt-1 text-green-50'
                 disabled={cartItem.quantity < 1}
-                onClick={() =>
+                onClick={() => {
+                  if (cartItem.quantity == 1) {
+                    if (confirm(`remove ${cartItem.coffeeName} from cart?`)) {
+                      removeFromCart(cartItem);
+                      return;
+                    }
+                  }
                   changeCartItemQuantity({
                     coffeeName: cartItem.coffeeName,
                     coffeeId: cartItem.coffeeId,
@@ -44,8 +50,8 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
                     grind: cartItem.grind,
                     variant_id: cartItem.variant_id,
                     price: cartItem.price,
-                  })
-                }
+                  });
+                }}
               >
                 <span className='text-2xl'>-</span>
               </button>
