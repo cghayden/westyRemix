@@ -27,6 +27,17 @@ export default function Cart() {
           ))}
         </ul>
       </div>
+      <div className='flex flex-col p-4 text-right '>
+        <p className='text-xl text-slate-600'>
+          Subtotal: <span className='ml-2'>$50.00</span>
+        </p>
+        <p className='text-xl text-slate-600'>
+          Shipping: <span className='ml-2'>$10.00</span>
+        </p>
+        <p className='text-2xl py-1'>
+          Total: <span className='ml-2'>$60.00</span>
+        </p>
+      </div>
       <div>
         Cart:
         {cartItems.map((cartItem, i) => (
