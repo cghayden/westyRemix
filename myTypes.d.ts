@@ -6,3 +6,9 @@ export interface CartItem {
   coffeeName: string;
   price: number;
 }
+
+export interface Cart {
+  contents: CartItem[];
+  total: number;
+  shipping: boolean; // fixed price shipping
+}
