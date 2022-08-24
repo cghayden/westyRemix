@@ -3,6 +3,7 @@ import { useCartItems, useCartUtils } from '~/context/useCart';
 import calcTotalPrice from '~/lib/calcTotal';
 import formatMoney from '~/lib/formatMoney';
 import CartListItem from './CartListItem';
+import CartSummary from './CartSummary';
 
 export default function Cart() {
   const { isCartOpen, toggleIsCartOpen } = useCartUtils();
@@ -25,25 +26,7 @@ export default function Cart() {
           &times;
         </button>
       </header>
-      <div>
-        <ul>
-          {cartItems.map((cartItem) => (
-            <CartListItem key={cartItem.coffeeId} cartItem={cartItem} />
-          ))}
-        </ul>
-      </div>
-      <div className='flex flex-col p-4 text-right '>
-        <p className='text-xl text-slate-600'>
-          Subtotal: <span className='ml-2'>{`$${formatMoney(subtotal)}`}</span>
-        </p>
-        <p className='text-xl text-slate-600'>
-          Shipping: <span className='ml-2'>{`$${formatMoney(shipping)}`}</span>
-        </p>
-        <p className='text-2xl py-1'>
-          Total:{' '}
-          <span className='ml-2'>{`$${formatMoney(subtotal + shipping)}`}</span>
-        </p>
-      </div>
+      <CartSummary />
       <div className='flex justify-evenly'>
         <Link
           className='bg-slate-600 text-slate-50 px-6 py-3 rounded'
@@ -72,6 +55,7 @@ export default function Cart() {
                 <span>
                   {cartItemKey}:{'  '}
                 </span>
+                {/* @ts-ignore */}
                 <span>{cartItem[cartItemKey]}</span>
               </p>
             ))}

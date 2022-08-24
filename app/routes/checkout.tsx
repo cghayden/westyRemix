@@ -1,3 +1,9 @@
+import CartSummary from '~/components/CartSummary';
+
 export default function CheckoutPage() {
-  return <div>Checkout Page</div>;
+  return (
+    <div>
+      <CartSummary />
+    </div>
+  );
 }
