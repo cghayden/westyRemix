@@ -12,6 +12,7 @@ const query = `
   roastDate,
   description,
 slug{current}
+price
 }
 `;
 
@@ -30,6 +31,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 function coffeeIndex() {
   const data = useLoaderData();
+  console.log('data', data);
 
   return (
     <AllCoffee

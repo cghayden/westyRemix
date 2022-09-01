@@ -49,14 +49,14 @@ export interface Coffee extends SanityDocument {
    *
    * Name of the coffee
    */
-  name?: string;
+  name: string;
 
   /**
    * URL (slug) — `slug`
    *
    * The slug provides a unique URL on the website for this item.  Choose "Generate" to change the default value from a number to a url based on the name of the item.
    */
-  slug?: { _type: 'slug'; current: string };
+  slug: { _type: 'slug'; current: string };
 
   /**
    * Stock — `number`
@@ -147,7 +147,7 @@ export interface Coffee extends SanityDocument {
    *
    * Price of the coffee in cents
    */
-  price?: number;
+  price: number;
 
   /**
    * Image — `image`

@@ -1,14 +1,13 @@
-import { useLoaderData, useParams, useCatch, Form } from 'remix';
+import { useLoaderData, useParams, useCatch } from 'remix';
 import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix';
-import sanity from '~/lib/sanity/sanity';
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
-import type { Coffee, SanityImageType } from '../../../sanityTypes';
-// import { PortableText } from '@portabletext/react';
-import imageUrlBuilder from '@sanity/image-url';
+import type { Coffee } from '../../../sanityTypes';
 import { useState } from 'react';
 import Preview from '~/components/Preview';
 import { getClient } from '~/lib/sanity/getClient';
 import { PortableText, urlFor } from '~/lib/sanity/helpers';
+import AddToCartForm from '~/components/AddToCartForm';
+import { CartProvider } from '~/context/useCart';
 
 type LoaderData = {
   initialData: Coffee[];
@@ -41,13 +40,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     });
   }
 
-  // configure images
-  // const imageBuilder = imageUrlBuilder(sanity);
-  // function urlFor(source: SanityImageType) {
-  //   return imageBuilder.image(source);
-  // }
-  // const url = urlFor(coffeeData.image).url();
-
   const data: LoaderData = {
     initialData,
     preview,
@@ -68,7 +60,6 @@ export default function CoffeeRoute() {
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
   const coffee = filterDataToSingleItem(data, preview);
-  console.log('coffee', coffee);
 
   return (
     <main className='h-screen'>
@@ -83,7 +74,9 @@ export default function CoffeeRoute() {
       {/* When working with draft content, optional chain _everything_ */}
       <div className='w-5/6 bg-slate-50 mx-auto max-w-[800px] p-4 mt-4 rounded shadow'>
         {coffee?.name && (
-          <h2 className='text-3xl text-center'>{coffee.name}</h2>
+          <h2 className='text-3xl text-center font-HindSiliguri'>
+            {coffee.name}
+          </h2>
         )}
         {coffee?.roastLevel && (
           <p className='text-center'>{coffee.roastLevel} roast</p>
@@ -98,7 +91,6 @@ export default function CoffeeRoute() {
             className='m-auto py-7'
           />
         )}
-        {/* null check on description long to appease TS */}
         {coffee?.descriptionLong && (
           <PortableText value={coffee.descriptionLong} />
         )}
@@ -107,7 +99,9 @@ export default function CoffeeRoute() {
             {coffee?.roastDate && (
               <div className='flex py-2 ml-3 flex-row items-baseline'>
                 <>
-                  <dt className='justify-self-start text-lg mr-3'>roasted</dt>
+                  <dt className=' font-ZenKaku justify-self-start text-lg mr-3'>
+                    roasted
+                  </dt>
                   <dd>{coffee.roastDate}</dd>
                 </>
               </div>
@@ -153,10 +147,9 @@ export default function CoffeeRoute() {
               </div>
             )}
           </dl>
-          {coffee?.stock > 0 ? (
-            <form className='w-[300px] h-[400px] bg-slate-400 p-2'>
-              <p>add to cart</p>
-            </form>
+
+          {coffee?.stock && coffee?.stock > 0 ? (
+            <AddToCartForm coffee={coffee} />
           ) : (
             <p>out of stock</p>
           )}

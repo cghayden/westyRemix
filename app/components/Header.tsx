@@ -3,39 +3,14 @@ import { Link } from 'remix';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import MenuSvg from '~/icons/MenuSvg';
-
-const HeaderStyles = `
-  display: flex;
-  color: var(--black);
-  background: var(--white);
-  align-items: center;
-  padding: 1rem;
-  p {
-    color: inherit;
-    margin: 0;
-  }
-`;
-
-const LogoStyle = `
-  font-size: 1.5rem;
-  h1 {
-    font-weight: 300;
-    padding: 0;
-    margin: 0;
-    font-size: 1.5rem;
-    color: inherit;
-  }
-  a {
-    font-size: 1.5rem;
-    padding: 0;
-  }
-`;
-const ButtonsDiv = `
-  margin-left: auto;
-`;
+import Cart from './Cart';
+import CoffeeCupIcon from '~/icons/CoffeeCupIcon';
+import CartCount from './CartCount';
+import { useCartUtils } from '~/context/useCart';
 
 function Header() {
   const [showMobileNav, toggleShowMobileNav] = useState(false);
+  const { toggleIsCartOpen } = useCartUtils();
 
   return (
     <header className='flex text-slate-900 bg-slate-50 items-center p-4'>
@@ -46,10 +21,10 @@ function Header() {
         showMobileNav={showMobileNav}
         toggleShowMobileNav={toggleShowMobileNav}
       />
-      <div className='ml-auto'>
+      <div className='ml-auto flex'>
         <button
+          className='grid place-items-center'
           type='button'
-          // className='btn-icon'
           aria-label='show navigation menu'
           onClick={() => {
             toggleShowMobileNav(true);
@@ -57,11 +32,22 @@ function Header() {
         >
           <MenuSvg />
         </button>
+        <button
+          type='button'
+          title='Your Cart'
+          aria-label='open your shopping cart'
+          onClick={() => toggleIsCartOpen(true)}
+          className='ml-4 mr-2 grid grid-cols-1 grid-rows-1 place-items-center text-center'
+        >
+          <div className='row-span-full col-span-full'>
+            <CoffeeCupIcon w={'32'} h={'32'} />
+          </div>
+          <CartCount />
+        </button>{' '}
       </div>
       <DesktopNav />
 
-      {/* <CartButton /> */}
-      {/* <Cart /> */}
+      <Cart />
     </header>
   );
 }
