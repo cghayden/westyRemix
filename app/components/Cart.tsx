@@ -9,7 +9,6 @@ export default function Cart() {
   const { isCartOpen, toggleIsCartOpen } = useCartUtils();
   const cartItems = useCartItems();
   const subtotal = calcTotalPrice(cartItems);
-  const shipping = subtotal < 4999 ? 1000 : 0;
   return (
     <div
       className={`p-2 fixed bg-slate-50 h-screen w-11/12 max-w-[650px] min-w-[310px] top-0 right-0 z-40 transition-all duration-300 overflow-scroll
@@ -40,7 +39,7 @@ export default function Cart() {
           className='bg-amber-800 text-amber-50 px-6 py-3 rounded'
           role='link'
           onClick={() => toggleIsCartOpen(false)}
-          to='/checkout'
+          to='/cart'
         >
           checkout
         </Link>
