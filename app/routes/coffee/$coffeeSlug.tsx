@@ -1,5 +1,4 @@
-import { useLoaderData, useParams, useCatch } from 'remix';
-import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix';
+import type { LoaderFunction } from '@remix-run/node';
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
 import type { Coffee } from '../../../sanityTypes';
 import { useState } from 'react';
@@ -8,6 +7,7 @@ import { getClient } from '~/lib/sanity/getClient';
 import { PortableText, urlFor } from '~/lib/sanity/helpers';
 import AddToCartForm from '~/components/AddToCartForm';
 import { CartProvider } from '~/context/useCart';
+import { useCatch, useLoaderData, useParams } from '@remix-run/react';
 
 type LoaderData = {
   initialData: Coffee[];

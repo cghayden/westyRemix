@@ -1,15 +1,22 @@
-import {
-  LinksFunction,
-  LoaderFunction,
-  MetaFunction,
-  useLoaderData,
-} from 'remix';
-import { Meta, Links, LiveReload, Outlet, useCatch, Scripts } from 'remix';
 import { SiteSettings } from 'sanityTypes';
 import Header from './components/Header';
 import styles from './styles/tailwind-build.css';
 import sanity from './lib/sanity/sanity';
 import { CartProvider } from './context/useCart';
+import {
+  LinksFunction,
+  MetaFunction,
+} from '@remix-run/react/dist/routeModules';
+import type { LoaderFunction } from '@remix-run/node';
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  useCatch,
+  useLoaderData,
+} from '@remix-run/react';
 
 const siteSettingsQuery = `*[_type == "siteSettings"][0] {
   backgroundColor,

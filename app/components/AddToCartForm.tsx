@@ -1,5 +1,5 @@
+import { Form } from '@remix-run/react';
 import { useState } from 'react';
-import { Form } from 'remix';
 import {
   useChangeCartItemQuantity,
   useCartItems,
