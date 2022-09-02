@@ -1,3 +1,5 @@
+import { PaymentElement } from '@stripe/react-stripe-js';
+import { Form } from '@remix-run/react';
 import { useState } from 'react';
 import { useCartItems } from '~/context/useCart';
 import PlaySvg from '~/icons/PlaySvg';
@@ -44,6 +46,13 @@ export default function CheckoutPage() {
           ) : null}
         </p>
       </div>
+      <Form>
+        Checkout Form
+        <PaymentElement />
+        <div>
+          <button>Pay</button>
+        </div>
+      </Form>
     </>
   );
 }
