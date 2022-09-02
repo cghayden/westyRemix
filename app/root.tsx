@@ -1,10 +1,5 @@
-import {
-  LinksFunction,
-  LoaderFunction,
-  MetaFunction,
-  useLoaderData,
-} from 'remix';
-import { Meta, Links, LiveReload, Outlet, useCatch, Scripts } from 'remix';
+import { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { Links, LiveReload, Meta, Outlet, Scripts, useCatch, useLoaderData } from "@remix-run/react";
 import { SiteSettings } from 'sanityTypes';
 import Header from './components/Header';
 import styles from './styles/tailwind-build.css';

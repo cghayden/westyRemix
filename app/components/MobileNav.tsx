@@ -1,4 +1,4 @@
-import { Link } from 'remix';
+import { Link } from "@remix-run/react";
 import InstagramSvg from '~/icons/InstagramSvg';
 import XSvg from '~/icons/XSvg';
 

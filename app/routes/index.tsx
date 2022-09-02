@@ -1,4 +1,5 @@
-import { LoaderFunction, useLoaderData, useMatches } from 'remix';
+import { LoaderFunction } from "@remix-run/node";
+import { useLoaderData, useMatches } from "@remix-run/react";
 import sanity from '~/lib/sanity/sanity';
 import type { Coffee, LandingPage } from '../../sanityTypes';
 
