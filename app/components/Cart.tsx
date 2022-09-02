@@ -1,4 +1,4 @@
-import { Link } from 'remix';
+import { Link } from "@remix-run/react";
 import { useCartItems, useCartUtils } from '~/context/useCart';
 import calcTotalPrice from '~/lib/calcTotal';
 import formatMoney from '~/lib/formatMoney';

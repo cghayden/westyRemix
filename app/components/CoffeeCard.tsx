@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { Link } from 'remix';
+import { Link } from "@remix-run/react";
 import type { Coffee } from '../../sanityTypes';
 
 // this card is a link that routes to the specific page for that coffee.  The link is used on the home page ('/') AND on the all coffees page ('/coffee), each of which have a different base url, so the correct url href passed to Link is constructed at the same component as the loader, where the requesting url is obtained, and in the case of the home page, a relative '/coffee' is prepended to the slug, whereas at the /coffee index, just a '/' is prepended

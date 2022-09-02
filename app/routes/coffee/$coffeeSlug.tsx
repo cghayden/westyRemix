@@ -1,5 +1,5 @@
-import { useLoaderData, useParams, useCatch } from 'remix';
-import type { ActionFunction, LoaderFunction, MetaFunction } from 'remix';
+import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { useCatch, useLoaderData, useParams } from "@remix-run/react";
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
 import type { Coffee } from '../../../sanityTypes';
 import { useState } from 'react';

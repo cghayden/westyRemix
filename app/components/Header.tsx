@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'remix';
+import { Link } from "@remix-run/react";
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 import MenuSvg from '~/icons/MenuSvg';
