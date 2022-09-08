@@ -1,13 +1,32 @@
-import { PaymentElement } from '@stripe/react-stripe-js';
-import { Form } from '@remix-run/react';
+import {
+  PaymentElement,
+  useElements,
+  useStripe,
+} from '@stripe/react-stripe-js';
+import { Form, useSubmit } from '@remix-run/react';
 import { useState } from 'react';
 import { useCartItems } from '~/context/useCart';
 import PlaySvg from '~/icons/PlaySvg';
 import formatMoney from '~/lib/formatMoney';
 
 export default function CheckoutPage() {
-  const cartItems = useCartItems();
   const [showSummary, toggleShowSummary] = useState(false);
+  const cart = useCartItems();
+  console.log('cart', cart);
+
+  const elements = useElements();
+  const stripe = useStripe();
+  const submit = useSubmit();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: 'http://localhost:3000/checkout/success',
+      },
+    });
+  };
   return (
     <>
       <div className='flex p-2 w-full items-center '>
@@ -46,7 +65,7 @@ export default function CheckoutPage() {
           ) : null}
         </p>
       </div>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         Checkout Form
         <PaymentElement />
         <div>

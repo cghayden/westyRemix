@@ -5,8 +5,8 @@ import { Outlet, useLoaderData } from '@remix-run/react';
 import { Elements } from '@stripe/react-stripe-js';
 import { createPaymentIntent } from '~/lib/stripePaymentIntent';
 
-/*@ts-ignore*/
 const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
+
 export const loader = async () => {
   return await createPaymentIntent();
 };
