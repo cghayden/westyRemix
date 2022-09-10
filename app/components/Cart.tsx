@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link } from '@remix-run/react';
 import { useCartItems, useCartUtils } from '~/context/useCart';
 import calcTotalPrice from '~/lib/calcTotal';
 import formatMoney from '~/lib/formatMoney';
@@ -39,7 +39,7 @@ export default function Cart() {
           className='bg-amber-800 text-amber-50 px-6 py-3 rounded'
           role='link'
           onClick={() => toggleIsCartOpen(false)}
-          to='/cart'
+          to='/reviewCart'
         >
           checkout
         </Link>
