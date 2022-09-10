@@ -18,15 +18,16 @@ export default function CheckoutPage() {
   const stripe = useStripe();
   const submit = useSubmit();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: 'http://localhost:3000/checkout/success',
-      },
-    });
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  // await
+  //   await stripe.confirmPayment({
+  //     elements,
+  //     confirmParams: {
+  //       return_url: 'http://localhost:3000/checkout/success',
+  //     },
+  //   });
+  // };
   return (
     <>
       <div className='flex p-2 w-full items-center '>
