@@ -1,19 +1,19 @@
-import { Link } from "@remix-run/react";
+import { Form, Link } from '@remix-run/react';
 import CartSummary from '~/components/CartSummary';
+import { useCartItems } from '~/context/useCart';
 
 export default function CheckoutPage() {
+  const cartItems = useCartItems();
   return (
     <div>
       <h2 className='text-center text-xl p-1'>Review Your Cart</h2>
       <CartSummary />
       <div className='text-center'>
-        <Link
-          className='bg-amber-800 text-amber-50 px-6 py-3 rounded'
-          role='link'
-          to='/checkout'
-        >
-          looks good! proceed to payment...
-        </Link>
+        <Form method='post' action='/checkout'>
+          <button type='submit' name='cart' value={JSON.stringify(cartItems)}>
+            looks good!
+          </button>
+        </Form>
       </div>
     </div>
   );
