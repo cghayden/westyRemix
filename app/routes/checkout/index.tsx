@@ -66,7 +66,7 @@ export default function CheckoutPage() {
           ) : null}
         </p>
       </div>
-      <Form onSubmit={handleSubmit}>
+      <Form>
         Checkout Form
         <PaymentElement />
         <div>
