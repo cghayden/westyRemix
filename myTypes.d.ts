@@ -3,7 +3,7 @@ export interface CartItem {
   quantity: number;
   grind: string;
   variant_id: string;
-  coffeeName: string;
+  name: string;
   price: number;
 }
 

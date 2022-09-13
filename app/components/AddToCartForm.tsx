@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form } from "@remix-run/react";
+import { Form } from '@remix-run/react';
 import {
   useChangeCartItemQuantity,
   useCartItems,
@@ -27,7 +27,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
         onSubmit={(e) => {
           e.preventDefault();
           changeCartItemQuantity({
-            coffeeName: `${coffee.name}`,
+            name: `${coffee.name}`,
             coffeeId: `${coffee._id}`,
             quantity,
             grind,

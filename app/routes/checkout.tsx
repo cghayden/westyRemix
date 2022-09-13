@@ -27,9 +27,7 @@ export const action = async ({ request }: ActionArgs) => {
   );
   const cart = JSON.parse(res);
   //make array of names of coffee in cart
-  const coffeeInCart: string[] = cart.map(
-    (coffee: CartItem) => coffee.coffeeName
-  );
+  const coffeeInCart: string[] = cart.map((coffee: CartItem) => coffee.name);
   // console.log('coffeeInCart', coffeeInCart);
   // const cat: string = `["Arya's Blend"]`;
   const sanityQuery = `*[_type == "coffee" && name in ${JSON.stringify(
@@ -77,9 +75,9 @@ export default function StripeElementsProvider() {
           {showSummary ? (
             <ul className='text-center '>
               {cartItems.map((cartItem) => (
-                <li className='px-3' key={cartItem.coffeeName}>
+                <li className='px-3' key={cartItem.name}>
                   <p className='flex'>
-                    {`${cartItem.quantity} ${cartItem.coffeeName}, ${cartItem.grind}: `}
+                    {`${cartItem.quantity} ${cartItem.name}, ${cartItem.grind}: `}
                     <span className='ml-auto'>
                       {`$${formatMoney(cartItem.price * cartItem.quantity)}`}
                     </span>
