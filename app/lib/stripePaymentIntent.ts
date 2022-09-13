@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY, {
   apiVersion: '2022-08-01',
 });
 
-const calculateOrderTotal = (cart: CartItem[]): number => {
+const calculateOrderTotal = (): number => {
   // get cart  items
   // get shipping
   // await call to sanity to get current prices and check stock
@@ -16,8 +16,8 @@ const calculateOrderTotal = (cart: CartItem[]): number => {
   return 100000;
 };
 
-export async function createPaymentIntent(cart: CartItem[]) {
-  const total = calculateOrderTotal(cart);
+export async function createPaymentIntent() {
+  const total = calculateOrderTotal();
   return await stripe.paymentIntents.create({
     amount: total,
     currency: 'usd',

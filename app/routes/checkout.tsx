@@ -4,24 +4,47 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Form, useActionData } from '@remix-run/react';
 import { Elements, PaymentElement } from '@stripe/react-stripe-js';
 import { createPaymentIntent } from '~/lib/stripePaymentIntent';
-import { ActionArgs } from '@remix-run/node';
+import { ActionArgs, json } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 import { useCartItems } from '~/context/useCart';
 import { useState } from 'react';
 import PlaySvg from '~/icons/PlaySvg';
 import formatMoney from '~/lib/formatMoney';
+import type { CartItem } from '../../myTypes';
+
+import sanityClient from '~/lib/sanity/sanity';
+import { coffee } from '~/lib/seedData';
+import { Coffee } from 'sanityTypes';
 
 const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
 
 export const action = async ({ request }: ActionArgs) => {
   const body = await request.formData();
-  const cart = body.get('cart');
+  const res = body.get('cart');
   invariant(
-    typeof cart === 'string',
+    typeof res === 'string',
     'cart not submitted properly; must be a string'
   );
+  const cart = JSON.parse(res);
+  //make array of names of coffee in cart
+  const coffeeInCart: string[] = cart.map(
+    (coffee: CartItem) => coffee.coffeeName
+  );
+  // console.log('coffeeInCart', coffeeInCart);
+  // const cat: string = `["Arya's Blend"]`;
+  const sanityQuery = `*[_type == "coffee" && name in ${JSON.stringify(
+    coffeeInCart
+  )} && !(_id in path("drafts.**"))]
+  `;
+  const currentCoffeePrices: Coffee[] = await sanityClient.fetch(sanityQuery);
+  const coffeePrices = currentCoffeePrices.map((coffee) => [
+    coffee.name,
+    coffee.price,
+  ]);
+  const coffeePriceObj = Object.fromEntries(coffeePrices);
+  console.log('coffeePriceObj', coffeePriceObj);
 
-  return await createPaymentIntent(JSON.parse(cart));
+  return await createPaymentIntent();
 };
 
 export default function StripeElementsProvider() {
