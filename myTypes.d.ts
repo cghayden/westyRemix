@@ -7,6 +7,11 @@ export interface CartItem {
   price: number;
 }
 
+export interface KeyedCartItem {
+  quantity: number;
+  price: number;
+}
+
 export interface Cart {
   contents: CartItem[];
   total: number;

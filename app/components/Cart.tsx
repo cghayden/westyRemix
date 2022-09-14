@@ -1,14 +1,10 @@
 import { Link } from '@remix-run/react';
 import { useCartItems, useCartUtils } from '~/context/useCart';
-import calcTotalPrice from '~/lib/calcTotal';
-import formatMoney from '~/lib/formatMoney';
-import CartListItem from './CartListItem';
 import CartSummary from './CartSummary';
 
 export default function Cart() {
   const { isCartOpen, toggleIsCartOpen } = useCartUtils();
   const cartItems = useCartItems();
-  const subtotal = calcTotalPrice(cartItems);
   return (
     <div
       className={`p-2 fixed bg-slate-50 h-screen w-11/12 max-w-[650px] min-w-[310px] top-0 right-0 z-40 transition-all duration-300 overflow-scroll

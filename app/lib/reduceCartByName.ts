@@ -1,7 +1,6 @@
-import { CartItem } from 'myTypes';
+import { CartItem, KeyedCartItem } from 'myTypes';
 
 export default function reduceCartByName(cart: CartItem[]) {
-  console.log('cart in reducer', cart);
   const keyedCart = cart.reduce((acc, cartItem) => {
     let key: string = cartItem.name;
     if (acc[key]) {
@@ -15,6 +14,6 @@ export default function reduceCartByName(cart: CartItem[]) {
           price: cartItem.price,
         },
       };
-  }, {} as Record<string, CartItem>);
+  }, {} as Record<string, KeyedCartItem>);
   return keyedCart;
 }
