@@ -3,12 +3,12 @@
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement } from '@stripe/react-stripe-js';
 import { Form, useActionData } from '@remix-run/react';
-import { ActionArgs } from '@remix-run/node';
+import { ActionArgs, redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 import { createPaymentIntent } from '~/lib/stripePaymentIntent';
 import sanityClient from '~/lib/sanity/sanity';
 import reduceCartByName from '~/lib/reduceCartByName';
-import type { KeyedCartItem } from '../../myTypes';
+import type { CartItem } from '../../myTypes';
 import { Coffee } from 'sanityTypes';
 import calcVerifiedTotal from '~/lib/calcVerifiedTotal';
 
@@ -27,27 +27,64 @@ export const action = async ({ request }: ActionArgs) => {
   const cart = JSON.parse(res);
 
   //create an OBJ of cart Items keyed by price and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
-  const cartObjKeyedByName: Record<string, KeyedCartItem> =
-    reduceCartByName(cart);
+  const cartKeyedByName = reduceCartByName(cart);
 
   // create array of coffeeNames that need to be queried in Sanity
-  const coffeeInCart: string[] = Object.keys(cartObjKeyedByName);
+  const coffeeInCart: string[] = Object.keys(cartKeyedByName);
 
   // query Sanity to verify prices and stock
   const sanityQuery = `*[_type == "coffee" && name in ${JSON.stringify(
     coffeeInCart
   )} && !(_id in path("drafts.**"))] {name, price, stock}
     `;
-  const currentCoffeePrices: Coffee[] = await sanityClient.fetch(sanityQuery);
+  const sanityResponse: Coffee[] = await sanityClient.fetch(sanityQuery);
+  console.log('currentCoffeePrices', sanityResponse);
+  // is product still in db?
+  const availableCoffee = sanityResponse.map((item) => item.name);
 
-  //set retrieved prices onto cartobjKeyedByName
-  currentCoffeePrices.forEach((coffee) => {
+  //set retrieved prices and stock onto cartKeyedByName
+  sanityResponse.forEach((coffee) => {
     let key: string = coffee.name;
-    cartObjKeyedByName[key].price = coffee.price;
+    cartKeyedByName[key].price = coffee.price;
+    cartKeyedByName[key].inStock = coffee.stock;
   });
 
+  // does available stock satisfy what is in the cart?
+  //separate function to check response availability against order
+
+  function checkAvailability(
+    cartKeyedByName: Record<string, CartItem>,
+    availableCoffee: string[]
+  ) {
+    const warningMessages = [];
+    for (const itemName in cartKeyedByName) {
+      if (
+        cartKeyedByName[itemName].inStock < cartKeyedByName[itemName].quantity
+      ) {
+        warningMessages.push(
+          `There are only ${cartKeyedByName[itemName].inStock} ${itemName} in stock`
+        );
+        cartKeyedByName[itemName].insufficientStock = true;
+      }
+      if (!availableCoffee.includes(cartKeyedByName[itemName].name)) {
+        warningMessages.push(`${itemName} is no longer available`);
+        cartKeyedByName[itemName].unavailable = true;
+      }
+    }
+    return warningMessages;
+  }
+
+  const warningMessages = checkAvailability(cartKeyedByName, availableCoffee);
   //calculate total with shipping based on verified prices
-  const total = calcVerifiedTotal(cartObjKeyedByName);
+
+  // if any insufficientStock or unavailable, return to reviewCart page with message to client in url query string
+  if (warningMessages.length > 0) {
+    return redirect(
+      `reviewCart/?warnings=${warningMessages.join('&warnings=')}`
+    );
+  }
+
+  const total = calcVerifiedTotal(cartKeyedByName);
   return await createPaymentIntent(total);
 };
 
