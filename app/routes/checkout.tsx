@@ -11,6 +11,7 @@ import reduceCartByName from '~/lib/reduceCartByName';
 import type { CartItem } from '../../myTypes';
 import { Coffee } from 'sanityTypes';
 import calcVerifiedTotal from '~/lib/calcVerifiedTotal';
+import checkAvailability from '~/lib/checkAvailability';
 
 //TODO - what if item is out of stock or deleted when sanity queries cart coffees?
 
@@ -38,7 +39,6 @@ export const action = async ({ request }: ActionArgs) => {
   )} && !(_id in path("drafts.**"))] {name, price, stock}
     `;
   const sanityResponse: Coffee[] = await sanityClient.fetch(sanityQuery);
-  console.log('currentCoffeePrices', sanityResponse);
   // is product still in db?
   const availableCoffee = sanityResponse.map((item) => item.name);
 
@@ -48,32 +48,10 @@ export const action = async ({ request }: ActionArgs) => {
     cartKeyedByName[key].price = coffee.price;
     cartKeyedByName[key].inStock = coffee.stock;
   });
+  console.log('cartKeyedByName', cartKeyedByName);
 
   // does available stock satisfy what is in the cart?
   //separate function to check response availability against order
-
-  function checkAvailability(
-    cartKeyedByName: Record<string, CartItem>,
-    availableCoffee: string[]
-  ) {
-    const warningMessages = [];
-    for (const itemName in cartKeyedByName) {
-      if (
-        cartKeyedByName[itemName].inStock < cartKeyedByName[itemName].quantity
-      ) {
-        warningMessages.push(
-          `There are only ${cartKeyedByName[itemName].inStock} ${itemName} in stock`
-        );
-        cartKeyedByName[itemName].insufficientStock = true;
-      }
-      if (!availableCoffee.includes(cartKeyedByName[itemName].name)) {
-        warningMessages.push(`${itemName} is no longer available`);
-        cartKeyedByName[itemName].unavailable = true;
-      }
-    }
-    return warningMessages;
-  }
-
   const warningMessages = checkAvailability(cartKeyedByName, availableCoffee);
   //calculate total with shipping based on verified prices
 

@@ -3,6 +3,7 @@ import { CartItem, KeyedCartItem } from 'myTypes';
 export default function reduceCartByName(cart: CartItem[]) {
   const keyedCart = cart.reduce((acc, cartItem) => {
     let key: string = cartItem.name;
+    // const quantity = cartItem.quantity;
     if (acc[key]) {
       acc[key].quantity = acc[key].quantity + cartItem.quantity;
       return acc;
@@ -10,10 +11,9 @@ export default function reduceCartByName(cart: CartItem[]) {
       return {
         ...acc,
         [key]: {
-          quantity: cartItem.quantity,
-          price: cartItem.price,
+          ...cartItem,
         },
       };
-  }, {} as Record<string, KeyedCartItem>);
+  }, {} as Record<string, CartItem>);
   return keyedCart;
 }
