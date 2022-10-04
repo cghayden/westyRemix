@@ -1,5 +1,5 @@
 import { useCartItems, useCartUtils } from '~/context/useCart';
-import calcTotalPrice from '~/lib/calcTotal';
+import calcTotalPrice from '~/lib/calcCartTotal';
 import formatMoney from '~/lib/formatMoney';
 import CartListItem from './CartListItem';
 

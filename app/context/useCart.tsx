@@ -52,7 +52,7 @@ const myCartReducerFunction = (
 ) => {
   const cartItemIndex = cartItemsState.findIndex(
     (cartItem) =>
-      cartItem.coffeeName === action.cartItem.coffeeName &&
+      cartItem.name === action.cartItem.name &&
       cartItem.grind === action.cartItem.grind
   );
   switch (action.type) {

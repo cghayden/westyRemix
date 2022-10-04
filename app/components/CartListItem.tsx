@@ -13,7 +13,7 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
     <li className='p-4 border-b-2'>
       <div className='mx-auto md:w-2/3'>
         <div className='flex justify-between items-center'>
-          <h3 className='text-xl'>{cartItem.coffeeName}</h3>
+          <h3 className='text-xl'>{cartItem.name}</h3>
           {/* <div>
             <button onClick={() => removeFromCart(cartItem)}>
               <TrashIcon />
@@ -38,13 +38,13 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
                 disabled={cartItem.quantity < 1}
                 onClick={() => {
                   if (cartItem.quantity == 1) {
-                    if (confirm(`remove ${cartItem.coffeeName} from cart?`)) {
+                    if (confirm(`remove ${cartItem.name} from cart?`)) {
                       removeFromCart(cartItem);
                       return;
                     }
                   }
                   changeCartItemQuantity({
-                    coffeeName: cartItem.coffeeName,
+                    name: cartItem.name,
                     coffeeId: cartItem.coffeeId,
                     quantity: -1,
                     grind: cartItem.grind,
@@ -62,7 +62,7 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
                 className='-mt-1 text-green-50'
                 onClick={() =>
                   changeCartItemQuantity({
-                    coffeeName: cartItem.coffeeName,
+                    name: cartItem.name,
                     coffeeId: cartItem.coffeeId,
                     quantity: 1,
                     grind: cartItem.grind,

@@ -1,4 +1,3 @@
-import { CartItem } from 'myTypes';
 import Stripe from 'stripe';
 
 // The docs do not show the config being required, because it's optional when using vanilla javascript. When using typescript it's required because the types are pinned to a specific API version.
@@ -8,16 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY, {
   apiVersion: '2022-08-01',
 });
 
-const calculateOrderTotal = (cart: CartItem[]): number => {
-  // get cart  items
-  // get shipping
-  // await call to sanity to get current prices and check stock
-  // calc total + shipping (keep free shipping if price changes result in total below 50?=y)
-  return 100000;
-};
-
-export async function createPaymentIntent(cart: CartItem[]) {
-  const total = calculateOrderTotal(cart);
+export async function createPaymentIntent(total: number) {
   return await stripe.paymentIntents.create({
     amount: total,
     currency: 'usd',

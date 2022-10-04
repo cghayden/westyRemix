@@ -63,7 +63,7 @@ export interface Coffee extends SanityDocument {
    *
    * Number of pounds in stock
    */
-  stock?: number;
+  stock: number;
 
   /**
    * Roast Level — `string`
