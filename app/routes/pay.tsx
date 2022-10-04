@@ -1,10 +1,15 @@
-import { ActionArgs, LoaderArgs } from '@remix-run/node';
-import { Outlet, useActionData, useLoaderData } from '@remix-run/react';
+import { ActionArgs, redirect } from '@remix-run/node';
+import { Outlet, useActionData } from '@remix-run/react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import invariant from 'tiny-invariant';
 import { createPaymentIntent } from '~/lib/stripePaymentIntent';
 const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
+import reduceCartByName from '~/lib/reduceCartByName';
+import { Coffee } from 'sanityTypes';
+import sanityClient from '~/lib/sanity/sanity';
+import checkAvailability from '~/lib/checkAvailability';
+import calcVerifiedTotal from '~/lib/calcVerifiedTotal';
 
 export const action = async ({ request }: ActionArgs) => {
   const body = await request.formData();
@@ -14,23 +19,40 @@ export const action = async ({ request }: ActionArgs) => {
     'cart not submitted properly; must be a string'
   );
   const cart = JSON.parse(res);
-  console.log('cart', cart);
-  return await createPaymentIntent(7777);
+  //create an OBJ of cart Items keyed by price and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
+  const cartKeyedByName = reduceCartByName(cart);
+  console.log('cartKeyedByName', cartKeyedByName);
+
+  // create array of coffeeNames that need to be queried in Sanity
+  const coffeeInCart: string[] = Object.keys(cartKeyedByName);
+
+  // query Sanity to verify prices and stock
+  const sanityQuery = `*[_type == "coffee" && name in ${JSON.stringify(
+    coffeeInCart
+  )} && !(_id in path("drafts.**"))] {name, price, stock}
+    `;
+  const sanityResponse: Coffee[] = await sanityClient.fetch(sanityQuery);
+  // is product still in db?
+  const availableCoffee = sanityResponse.map((item) => item.name);
+  console.log('availableCoffee', availableCoffee);
+  // does available stock satisfy what is in the cart?
+  //separate function to check response availability against order
+  const warningMessages = checkAvailability(cartKeyedByName, availableCoffee);
+  //calculate total with shipping based on verified prices
+
+  // if any insufficientStock or unavailable, return to reviewCart page with message to client in url query string
+  if (warningMessages.length > 0) {
+    return redirect(
+      `reviewCart/?warnings=${warningMessages.join('&warnings=')}`
+    );
+  }
+
+  const total = calcVerifiedTotal(cartKeyedByName);
+  return await createPaymentIntent(total);
 };
-
-// export const loader = async ({ request }: LoaderArgs) => {
-//   const body = await request.formData();
-//   const res = body.get('cart');
-//   const cart = JSON.parse(res);
-//   console.log('cart', cart);
-//   const url = new URL(request.url);
-
-//   return await createPaymentIntent(7777);
-// };
 
 export default function Pay() {
   const paymentIntent = useActionData();
-  console.log('paymentIntent', paymentIntent);
   return (
     <div>
       <h1>Pay</h1>
