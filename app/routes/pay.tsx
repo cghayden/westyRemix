@@ -32,11 +32,17 @@ export const action = async ({ request }: ActionArgs) => {
   )} && !(_id in path("drafts.**"))] {name, price, stock}
     `;
   const sanityResponse: Coffee[] = await sanityClient.fetch(sanityQuery);
-  // is product still in db?
+  // is product still in db?, and if so, does available stock satisfy what is quantity in the cart?
+
   const availableCoffee = sanityResponse.map((item) => item.name);
-  console.log('availableCoffee', availableCoffee);
-  // does available stock satisfy what is in the cart?
+  // set current prices and inStock onto each CartItem
+  sanityResponse.forEach((coffee) => {
+    let key: string = coffee.name;
+    cartKeyedByName[key].price = coffee.price;
+    cartKeyedByName[key].inStock = coffee.stock;
+  });
   //separate function to check response availability against order
+
   const warningMessages = checkAvailability(cartKeyedByName, availableCoffee);
   //calculate total with shipping based on verified prices
 

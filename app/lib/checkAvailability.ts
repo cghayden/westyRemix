@@ -12,11 +12,11 @@ export default function checkAvailability(
       warningMessages.push(
         `There are only ${cartKeyedByName[itemName].inStock} ${itemName} in stock`
       );
-      cartKeyedByName[itemName].insufficientStock = true;
+      // cartKeyedByName[itemName].insufficientStock = true;
     }
     if (!availableCoffee.includes(cartKeyedByName[itemName].name)) {
       warningMessages.push(`${itemName} is no longer available`);
-      cartKeyedByName[itemName].unavailable = true;
+      // cartKeyedByName[itemName].unavailable = true;
     }
   }
   return warningMessages;
