@@ -15,7 +15,7 @@ export default function CheckoutPage() {
       <h2 className='text-center text-xl p-1'>Review Your Cart</h2>
       <CartSummary />
       <div className='text-center'>
-        <Form method='post' action='/checkout'>
+        <Form method='post' action='/pay'>
           {warnings && (
             <div>
               <ul>
