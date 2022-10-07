@@ -33,6 +33,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             grind,
             variant_id: `${coffee._id + grind}`,
             price: coffee.price,
+            inStock: coffee.stock,
           });
           toggleIsCartOpen(true);
         }}

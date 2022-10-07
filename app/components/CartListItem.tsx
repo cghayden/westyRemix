@@ -7,6 +7,7 @@ import TrashIcon from '~/icons/TrashIcon';
 import formatMoney from '~/lib/formatMoney';
 
 export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
+  console.log('cartItem in cli', cartItem);
   const changeCartItemQuantity = useChangeCartItemQuantity();
   const removeFromCart = useRemoveFromCart();
   return (
@@ -50,6 +51,7 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
                     grind: cartItem.grind,
                     variant_id: cartItem.variant_id,
                     price: cartItem.price,
+                    inStock: cartItem.inStock,
                   });
                 }}
               >
@@ -59,6 +61,7 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
             <p className='mx-4 text-xl text-green-50'>{cartItem.quantity}</p>
             <p>
               <button
+                disabled={cartItem.quantity === cartItem.inStock}
                 className='-mt-1 text-green-50'
                 onClick={() =>
                   changeCartItemQuantity({
@@ -68,6 +71,7 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
                     grind: cartItem.grind,
                     variant_id: cartItem.variant_id,
                     price: cartItem.price,
+                    inStock: cartItem.inStock,
                   })
                 }
               >
