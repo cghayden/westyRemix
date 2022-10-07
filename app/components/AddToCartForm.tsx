@@ -9,6 +9,7 @@ import MinusSvg from '~/icons/MinusSvg';
 import PlusSvg from '~/icons/PlusSvg';
 import type { Coffee } from '../../sanityTypes';
 import getTotalQuantityInCart from '~/lib/getTotalQuantityInCart';
+import StockAlert from './StockAlert';
 
 export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const [grind, setGrind] = useState('whole');
@@ -21,8 +22,6 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
     setGrind(e.target.value);
   };
   const totalCartQuantity = getTotalQuantityInCart(coffee._id, cartItems);
-  console.log('totalQ from AddToCartForm', totalCartQuantity);
-  console.log('desiredQuantity', desiredQuantity);
 
   return (
     <>
@@ -102,6 +101,15 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
               </div>
             </div>
           </div>
+          {totalCartQuantity > 0 && (
+            <p>
+              {totalCartQuantity} {coffee.name} in your cart
+            </p>
+          )}
+          {totalCartQuantity + desiredQuantity === coffee.stock ||
+          totalCartQuantity + desiredQuantity > coffee.stock ? (
+            <p>there are only {coffee.stock} in stock</p>
+          ) : null}
         </fieldset>
       </Form>
       <div>
