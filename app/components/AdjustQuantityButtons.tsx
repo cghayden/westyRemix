@@ -35,7 +35,7 @@ export default function AdjustQuantityButtons({
                   }
                   return;
                 }
-                setAlert(null);
+
                 changeCartItemQuantity({
                   name: cartItem.name,
                   coffeeId: cartItem.coffeeId,
@@ -57,6 +57,9 @@ export default function AdjustQuantityButtons({
               onClick={() => {
                 if (totalQ === cartItem.inStock || cartItem.inStock < totalQ) {
                   setAlert(`There are only ${cartItem.inStock} available`);
+                  setTimeout(() => {
+                    setAlert(null);
+                  }, 2000);
                 } else {
                   changeCartItemQuantity({
                     name: cartItem.name,
