@@ -49,7 +49,7 @@ export default function AdjustQuantityButtons({
         <p className='mx-4 text-xl text-green-50'>{cartItem.quantity}</p>
         <p>
           <button
-            disabled={totalQ === cartItem.inStock}
+            disabled={totalQ === cartItem.inStock || cartItem.inStock < totalQ}
             className='-mt-1 text-green-50'
             onClick={() =>
               changeCartItemQuantity({

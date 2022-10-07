@@ -8,10 +8,11 @@ import {
 import MinusSvg from '~/icons/MinusSvg';
 import PlusSvg from '~/icons/PlusSvg';
 import type { Coffee } from '../../sanityTypes';
+import getTotalQuantityInCart from '~/lib/getTotalQuantityInCart';
 
 export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const [grind, setGrind] = useState('whole');
-  const [quantity, setQuantity] = useState<number>(1);
+  const [desiredQuantity, setDesiredQuantity] = useState<number>(1);
   const cartItems = useCartItems();
   const changeCartItemQuantity = useChangeCartItemQuantity();
   const { toggleIsCartOpen } = useCartUtils();
@@ -19,6 +20,9 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const handleGrindChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGrind(e.target.value);
   };
+  const totalCartQuantity = getTotalQuantityInCart(coffee._id, cartItems);
+  console.log('totalQ from AddToCartForm', totalCartQuantity);
+  console.log('desiredQuantity', desiredQuantity);
 
   return (
     <>
@@ -29,7 +33,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
           changeCartItemQuantity({
             name: `${coffee.name}`,
             coffeeId: `${coffee._id}`,
-            quantity,
+            quantity: desiredQuantity,
             grind,
             variant_id: `${coffee._id + grind}`,
             price: coffee.price,
@@ -40,8 +44,12 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
         className='w-[300px] h-[400px] bg-slate-400 p-2'
       >
         <fieldset>
-          <button className='text-xl bg-slate-50' type='submit'>
-            Add {quantity} to Cart
+          <button
+            disabled={totalCartQuantity + desiredQuantity > coffee.stock}
+            className='text-xl bg-slate-50'
+            type='submit'
+          >
+            Add {desiredQuantity} to Cart
           </button>
 
           <div className='grindRadio'>
@@ -75,16 +83,19 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
               <div className='flex'>
                 <button
                   type='button'
-                  disabled={quantity === 1}
-                  onClick={() => setQuantity(quantity - 1)}
+                  disabled={desiredQuantity === 1}
+                  onClick={() => setDesiredQuantity(desiredQuantity - 1)}
                 >
                   <MinusSvg />
                 </button>
-                <p className='mx-5 text-xl'>{quantity}</p>
+                <p className='mx-5 text-xl'>{desiredQuantity}</p>
                 <button
                   type='button'
-                  disabled={quantity === coffee.stock}
-                  onClick={() => setQuantity(quantity + 1)}
+                  disabled={
+                    totalCartQuantity + desiredQuantity === coffee.stock ||
+                    totalCartQuantity + desiredQuantity > coffee.stock
+                  }
+                  onClick={() => setDesiredQuantity(desiredQuantity + 1)}
                 >
                   <PlusSvg w={'18'} h={'18'} />
                 </button>

@@ -1,16 +1,9 @@
 import { CartItem } from 'myTypes';
-import {
-  useChangeCartItemQuantity,
-  useRemoveFromCart,
-} from '~/context/useCart';
 import TrashIcon from '~/icons/TrashIcon';
 import formatMoney from '~/lib/formatMoney';
 import AdjustQuantityButtons from './AdjustQuantityButtons';
 
 export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
-  console.log('cartItem in cli', cartItem);
-  const changeCartItemQuantity = useChangeCartItemQuantity();
-  const removeFromCart = useRemoveFromCart();
   return (
     <li className='p-4 border-b-2'>
       <div className='mx-auto md:w-2/3'>
