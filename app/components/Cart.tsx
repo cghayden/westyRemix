@@ -23,14 +23,14 @@ export default function Cart() {
       </header>
       <CartSummary />
       <div className='flex justify-evenly'>
-        <Link
+        <button
           className='bg-slate-600 text-slate-50 px-6 py-3 rounded'
-          role='link'
+          // role='link'
           onClick={() => toggleIsCartOpen(false)}
-          to='/'
+          // to='/'
         >
           keep shopping
-        </Link>
+        </button>
         <Link
           className='bg-amber-800 text-amber-50 px-6 py-3 rounded'
           role='link'

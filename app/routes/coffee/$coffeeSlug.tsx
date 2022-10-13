@@ -1,5 +1,5 @@
-import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
-import { useCatch, useLoaderData, useParams } from "@remix-run/react";
+import type { LoaderFunction } from '@remix-run/node';
+import { useCatch, useLoaderData, useParams } from '@remix-run/react';
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
 import type { Coffee } from '../../../sanityTypes';
 import { useState } from 'react';
@@ -7,7 +7,6 @@ import Preview from '~/components/Preview';
 import { getClient } from '~/lib/sanity/getClient';
 import { PortableText, urlFor } from '~/lib/sanity/helpers';
 import AddToCartForm from '~/components/AddToCartForm';
-import { CartProvider } from '~/context/useCart';
 
 type LoaderData = {
   initialData: Coffee[];
@@ -72,11 +71,9 @@ export default function CoffeeRoute() {
         />
       )}
       {/* When working with draft content, optional chain _everything_ */}
-      <div className='w-5/6 bg-slate-50 mx-auto max-w-[800px] p-4 mt-4 rounded shadow'>
+      <div className='label__desc+formContainer mx-auto max-w-[800px] mt-4'>
         {coffee?.name && (
-          <h2 className='text-3xl text-center font-HindSiliguri'>
-            {coffee.name}
-          </h2>
+          <h2 className='p-4 text-3xl text-center'>{coffee.name}</h2>
         )}
         {coffee?.roastLevel && (
           <p className='text-center'>{coffee.roastLevel} roast</p>
@@ -91,68 +88,77 @@ export default function CoffeeRoute() {
             className='m-auto py-7'
           />
         )}
-        {coffee?.descriptionLong && (
-          <PortableText value={coffee.descriptionLong} />
-        )}
-        <div className='flex flex-wrap gap-4 justify-center'>
-          <dl className='w-[300px] pr-5'>
-            {coffee?.roastDate && (
-              <div className='flex py-2 ml-3 flex-row items-baseline'>
-                <>
-                  <dt className=' font-ZenKaku justify-self-start text-lg mr-3'>
-                    roasted
-                  </dt>
-                  <dd>{coffee.roastDate}</dd>
-                </>
-              </div>
-            )}
-            {coffee?.grade && (
-              <div className='flex py-2 ml-3 flex-row items-baseline'>
-                <>
-                  <dt className='justify-self-start text-lg mr-3'>grade</dt>
-                  <dd>{coffee.grade}</dd>
-                </>
-              </div>
-            )}
-            {coffee?.region && (
-              <div className='flex py-2 ml-3 flex-row items-baseline'>
-                <>
-                  <dt className='justify-self-start text-lg mr-3'>region</dt>
-                  <dd>{coffee.region}</dd>
-                </>
-              </div>
-            )}
-            {coffee?.cultivar && (
-              <div className='flex py-2 ml-3 flex-row items-baseline'>
-                <>
-                  <dt className='justify-self-start text-lg mr-3'>cultivar</dt>
-                  <dd>{coffee.cultivar}</dd>
-                </>
-              </div>
-            )}
-            {coffee?.elevation && (
-              <div className='flex py-2 ml-3 flex-row items-baseline'>
-                <>
-                  <dt className='justify-self-start text-lg mr-3'>elevation</dt>
-                  <dd>{coffee.elevation}</dd>
-                </>
-              </div>
-            )}
-            {coffee?.process && (
-              <div className='flex py-2 ml-3 flex-row items-baseline'>
-                <>
-                  <dt className='justify-self-start text-lg mr-3'>process</dt>
-                  <dd>{coffee.process}</dd>
-                </>
-              </div>
-            )}
-          </dl>
-
-          {coffee?.stock && coffee?.stock > 0 ? (
-            <AddToCartForm coffee={coffee} />
-          ) : (
-            <p>out of stock</p>
+        <div className='divide-y divide-solid'>
+          {coffee?.descriptionLong && (
+            <div className='label__longDescription p-4 text-justify max-w-xl mx-auto'>
+              <PortableText value={coffee.descriptionLong} />
+            </div>
           )}
+          <div className='label__detailListAndForm grid place-items-center place-content-center grid-cols-autoFit2 w-full max-w-[700px] mx-auto'>
+            {/* grid-repeat(auto-fit, minmax(250px, 50%) */}
+            <dl className='label__coffeeDetailsList p-3 self-start'>
+              {coffee?.roastDate && (
+                <div className='flex flex-row items-baseline'>
+                  <>
+                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                      roasted
+                    </dt>
+                    <dd className='text-amber-800'>{coffee.roastDate}</dd>
+                  </>
+                </div>
+              )}
+              {coffee?.grade && (
+                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                  <>
+                    <dt className='justify-self-start text-lg mr-3'>grade</dt>
+                    <dd>{coffee.grade}</dd>
+                  </>
+                </div>
+              )}
+              {coffee?.region && (
+                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                  <>
+                    <dt className='justify-self-start text-lg mr-3'>region</dt>
+                    <dd>{coffee.region}</dd>
+                  </>
+                </div>
+              )}
+              {coffee?.cultivar && (
+                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                  <>
+                    <dt className='justify-self-start text-lg mr-3'>
+                      cultivar
+                    </dt>
+                    <dd>{coffee.cultivar}</dd>
+                  </>
+                </div>
+              )}
+              {coffee?.elevation && (
+                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                  <>
+                    <dt className='justify-self-start text-lg mr-3'>
+                      elevation
+                    </dt>
+                    <dd>{coffee.elevation}</dd>
+                  </>
+                </div>
+              )}
+              {coffee?.process && (
+                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                  <>
+                    <dt className='justify-self-start text-lg mr-3'>process</dt>
+                    <dd>{coffee.process}</dd>
+                  </>
+                </div>
+              )}
+            </dl>
+
+            {coffee?.stock && coffee?.stock > 0 ? (
+              <AddToCartForm coffee={coffee} />
+            ) : (
+              <p>out of stock</p>
+            )}
+          </div>
         </div>
       </div>
     </main>
