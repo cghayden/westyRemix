@@ -5,6 +5,9 @@ module.exports = {
       fontFamily: {
         HindSiliguri: ['Hind Siliguri'],
       },
+      gridTemplateColumns: {
+        autoFit2: 'repeat(auto-fit, minmax(225px, 1fr))',
+      },
     },
   },
   plugins: [],

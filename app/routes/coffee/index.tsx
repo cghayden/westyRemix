@@ -1,5 +1,5 @@
-import { LoaderFunction } from "@remix-run/node";
-import { useLoaderData, useMatches } from "@remix-run/react";
+import { LoaderFunction } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import sanity from '~/lib/sanity/sanity';
 import AllCoffee from '~/components/AllCoffee';
 import { Coffee } from 'sanityTypes';
@@ -12,7 +12,7 @@ const query = `
   roastLevel,
   roastDate,
   description,
-slug{current}
+slug{current},
 price
 }
 `;
@@ -25,20 +25,21 @@ interface LoaderData {
 export const loader: LoaderFunction = async ({ request }) => {
   const requestUrl = new URL(request?.url);
   const referringPath = requestUrl.pathname;
-  const coffee = await sanity.fetch(query);
+  const coffee = await sanity.fetch(query).catch((err) => console.log(err));
   const data: LoaderData = { coffee, referringPath };
   return data;
 };
 
 function coffeeIndex() {
   const data = useLoaderData();
-  console.log('data', data);
 
   return (
-    <AllCoffee
-      allCoffee={data.coffee}
-      referringPath={data.referringPath + '/'}
-    />
+    <div>
+      <AllCoffee
+        allCoffee={data.coffee}
+        referringPath={data.referringPath + '/'}
+      />
+    </div>
   );
 }
 
