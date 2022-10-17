@@ -90,8 +90,11 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
         </div>
         <div>
           <button
-            disabled={totalCartQuantity + desiredQuantity > coffee.stock}
-            className='text-lg bg-slate-600 text-slate-50 rounded-full px-5 py-2 mt-2'
+            disabled={
+              totalCartQuantity === coffee.stock ||
+              totalCartQuantity + desiredQuantity > coffee.stock
+            }
+            className='text-lg bg-slate-600 text-slate-50 rounded-full px-5 py-2 mt-2 disabled:bg-slate-300 disabled:text-slate:100'
             onClick={(e) => {
               e.preventDefault();
               setDesiredQuantity(1);

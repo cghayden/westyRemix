@@ -108,46 +108,52 @@ export default function CoffeeRoute() {
                 </div>
               )}
               {coffee?.grade && (
-                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='justify-self-start text-lg mr-3'>grade</dt>
-                    <dd>{coffee.grade}</dd>
+                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                      grade
+                    </dt>
+                    <dd className='text-amber-800'>{coffee.grade}</dd>
                   </>
                 </div>
               )}
               {coffee?.region && (
-                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='justify-self-start text-lg mr-3'>region</dt>
-                    <dd>{coffee.region}</dd>
+                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                      region
+                    </dt>
+                    <dd className='text-amber-800'>{coffee.region}</dd>
                   </>
                 </div>
               )}
               {coffee?.cultivar && (
-                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='justify-self-start text-lg mr-3'>
+                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
                       cultivar
                     </dt>
-                    <dd>{coffee.cultivar}</dd>
+                    <dd className='text-amber-800'>{coffee.cultivar}</dd>
                   </>
                 </div>
               )}
               {coffee?.elevation && (
-                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='justify-self-start text-lg mr-3'>
+                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
                       elevation
                     </dt>
-                    <dd>{coffee.elevation}</dd>
+                    <dd className='text-amber-800'>{coffee.elevation}</dd>
                   </>
                 </div>
               )}
               {coffee?.process && (
-                <div className='flex py-2 ml-3 flex-row items-baseline'>
+                <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='justify-self-start text-lg mr-3'>process</dt>
-                    <dd>{coffee.process}</dd>
+                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                      process
+                    </dt>
+                    <dd className='text-amber-800'>{coffee.process}</dd>
                   </>
                 </div>
               )}
