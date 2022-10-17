@@ -11,11 +11,27 @@ export interface CartItem {
   unavailable?: boolean;
 }
 
-export interface KeyedCartItem {
-  quantity: number;
-  price: number;
-  inStock: number;
+export interface Address {
+  name: string;
+  line1: string;
+  line2: string;
+  city: string;
+  state: string;
+  postal_code: string;
 }
+
+export interface BillingDetails {
+  name: string;
+  shipping?: Address;
+  email: string;
+  phone: string;
+  deliveryMethod: string;
+}
+// export interface KeyedCartItem {
+//   quantity: number;
+//   price: number;
+//   inStock: number;
+// }
 
 // export interface Cart {
 //   contents: CartItem[];
