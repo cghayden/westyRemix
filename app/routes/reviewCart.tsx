@@ -1,4 +1,4 @@
-import { Form, Link, useSearchParams } from '@remix-run/react';
+import { Form, useSearchParams } from '@remix-run/react';
 import CartSummary from '~/components/CartSummary';
 import { useCartItems } from '~/context/useCart';
 
@@ -6,7 +6,6 @@ export default function CheckoutPage() {
   const cartItems = useCartItems();
   const [searchParams] = useSearchParams();
   const warnings = searchParams.getAll('warnings');
-  console.log('warnings', warnings);
 
   // review cart, and on confirmation, send cart to '/checkout' action via form submission
   // if the action finds errors of price or stock, it will redirect back to this page with warnings in the url query string

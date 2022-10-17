@@ -54,7 +54,7 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   const total = calcVerifiedTotal(cartKeyedByName);
-  return await createPaymentIntent(total);
+  return await createPaymentIntent(total, JSON.stringify(cart));
 };
 
 export default function Pay() {
