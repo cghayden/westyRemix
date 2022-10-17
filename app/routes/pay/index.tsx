@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Form } from '@remix-run/react';
 import {
   PaymentElement,
@@ -5,8 +6,7 @@ import {
   useStripe,
 } from '@stripe/react-stripe-js';
 import { BillingDetails } from 'myTypes';
-import { useState } from 'react';
-
+import ShippingDetailsInputs from '~/components/ShippingDetailsInputs';
 export default function Index() {
   const elements = useElements();
   const stripe = useStripe();
@@ -15,29 +15,24 @@ export default function Index() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return null;
-    stripe
-      .confirmPayment({
-        elements,
-        confirmParams: {
-          return_url: 'http://localhost:3000/success',
-          shipping: {
-            address: {
-              line1: '63 Alden St',
-              city: 'Foxboro',
-              state: 'MA',
-              postal_code: '02035',
-            },
-            name: 'Corey Hayden',
+
+    stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: 'http://localhost:3000/success',
+        shipping: {
+          address: {
+            line1: billingDetails?.shipping?.line1,
+            line2: billingDetails?.shipping?.line2,
+            city: billingDetails?.shipping?.city,
+            state: billingDetails?.shipping?.state,
+            postal_code: billingDetails.shipping?.postal_code,
           },
-          receipt_email: 'cghayden@gmail.com',
+          name: 'Corey Hayden',
         },
-      })
-      .then(function (result) {
-        if (result.error) {
-          //show error message in UI
-          console.log(result.error);
-        }
-      });
+        receipt_email: 'cghayden@gmail.com',
+      },
+    });
   };
   return (
     <Form onSubmit={handleSubmit} method='post'>
@@ -116,11 +111,11 @@ export default function Index() {
             >
               <legend className='form-heading'>ship to:</legend>
               <fieldset className='FormGroup'>
-                <p>shipping deets inputs</p>
-                {/* <ShippingAddressInput
-                    billingDetails={billingDetails}
-                    setShippingDetails={setShippingDetails}
-                  /> */}
+                <p>shipping details inputs</p>
+                <ShippingDetailsInputs
+                  billingDetails={billingDetails}
+                  setBillingDetails={setBillingDetails}
+                />
               </fieldset>
             </div>
           )}

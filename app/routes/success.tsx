@@ -1,7 +1,6 @@
 import { LoaderArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { CartItem } from 'myTypes';
-import Stripe from 'stripe';
 import { retrievePaymentIntent } from '~/lib/stripePaymentIntent';
 
 export const loader = async ({ request }: LoaderArgs) => {

@@ -60,8 +60,7 @@ export const action = async ({ request }: ActionArgs) => {
 export default function Pay() {
   const paymentIntent = useActionData<typeof action>();
   return (
-    <div>
-      <h1>Pay</h1>
+    <div className='p-4'>
       <Elements
         stripe={stripePromise}
         options={{ clientSecret: paymentIntent.client_secret }}
