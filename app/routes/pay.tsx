@@ -58,7 +58,7 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 export default function Pay() {
-  const paymentIntent = useActionData();
+  const paymentIntent = useActionData<typeof action>();
   return (
     <div>
       <h1>Pay</h1>
