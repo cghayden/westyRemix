@@ -7,6 +7,20 @@ import {
 } from '@stripe/react-stripe-js';
 import { BillingDetails } from 'myTypes';
 import ShippingDetailsInputs from '~/components/ShippingDetailsInputs';
+import ContentContainer from '~/components/styledContainers/ContentContainer';
+import CollapsibleCartSummary from '~/components/CollapsibleCartSummary';
+import FieldsetGroup from '~/components/styledContainers/FieldsetGroup';
+import InputRow from '~/components/styledContainers/InputRow';
+import StoreFrontIcon from '~/icons/StoreFrontIcon';
+import ShippingTruckIcon from '~/icons/ShippingTruckIcon';
+
+import styles from '~/styles/formStyles.css';
+// styles is now something like /build/global-AE33KB2.css
+
+export function links() {
+  return [{ rel: 'stylesheet', href: styles }];
+}
+
 export default function Index() {
   const elements = useElements();
   const stripe = useStripe();
@@ -35,13 +49,15 @@ export default function Index() {
     });
   };
   return (
-    <Form onSubmit={handleSubmit} method='post'>
-      <fieldset>
-        <div className='FormRow radioStack'>
-          <div className='label__radio-wrapper flex'>
+    <ContentContainer>
+      <CollapsibleCartSummary />
+      <Form onSubmit={handleSubmit} method='post'>
+        <FieldsetGroup>
+          {/* <div className='FormRow radioStack'> */}
+          <InputRow>
             <div className='label__radio__input pr-3'>
               <input
-                // className='appearance-none'
+                className='input-radio'
                 type='radio'
                 value='pickup'
                 // active={billingDetails?.deliveryMethod === 'pickup'}
@@ -61,13 +77,16 @@ export default function Index() {
               // active={billingDetails.deliveryMethod === 'Pickup' ? darkBlue : gray}
               htmlFor='checkout_id_delivery-pickup'
             >
-              <span>free pickup</span>
+              <span>
+                <StoreFrontIcon />
+                free pickup
+              </span>
             </label>
-          </div>
-          <div className='label__radio-wrapper flex'>
+          </InputRow>
+          <InputRow>
             <div className='label__radio__input pr-3'>
               <input
-                // className='appearance-none'
+                className='input-radio'
                 type='radio'
                 value='shipping'
                 // active={billingDetails?.deliveryMethod === 'pickup'}
@@ -87,59 +106,64 @@ export default function Index() {
               // active={billingDetails.deliveryMethod === 'Pickup' ? darkBlue : gray}
               htmlFor='checkout_id_delivery-pickup'
             >
-              <span>shipping</span>
+              <span>
+                <ShippingTruckIcon />
+                shipping
+              </span>
             </label>
-          </div>
-        </div>
-        <button>confirm payment</button>
-      </fieldset>
-      {billingDetails.deliveryMethod && (
-        <div
-        // initial={{ opacity: 0, height: 0 }}
-        // animate={{ opacity: 1, height: 'auto' }}
-        // exit={{ opacity: 0, height: 0 }}
-        // transition={{ duration: 0.5 }}
-        // style={{ overflow: 'hidden' }}
-        >
-          {billingDetails.deliveryMethod === 'shipping' && (
-            <div
-            // key={'shipping'}
-            // initial={{ opacity: 0 }}
-            // animate={{ opacity: 1 }}
-            // exit={{ opacity: 0 }}
-            // transition={{ duration: 0.5 }}
-            >
-              <legend className='form-heading'>ship to:</legend>
-              <fieldset className='FormGroup'>
-                <p>shipping details inputs</p>
-                <ShippingDetailsInputs
-                  billingDetails={billingDetails}
-                  setBillingDetails={setBillingDetails}
-                />
-              </fieldset>
-            </div>
-          )}
-          {billingDetails.deliveryMethod === 'pickup' && (
-            <div
-            // key={'pickup'}
-            // initial={{ opacity: 0 }}
-            // animate={{ opacity: 1 }}
-            // exit={{ opacity: 0 }}
-            // transition={{ duration: 0.5 }}
-            >
-              <legend className='form-heading'>pickup location</legend>
-              <fieldset className='FormGroup'>
-                <p>pickup deets inputs</p>
-                {/* <PickupChoiceInput
+          </InputRow>
+          {/* </div> */}
+        </FieldsetGroup>
+        {billingDetails.deliveryMethod && (
+          <div
+          // initial={{ opacity: 0, height: 0 }}
+          // animate={{ opacity: 1, height: 'auto' }}
+          // exit={{ opacity: 0, height: 0 }}
+          // transition={{ duration: 0.5 }}
+          // style={{ overflow: 'hidden' }}
+          >
+            {billingDetails.deliveryMethod === 'shipping' && (
+              <div
+              // key={'shipping'}
+              // initial={{ opacity: 0 }}
+              // animate={{ opacity: 1 }}
+              // exit={{ opacity: 0 }}
+              // transition={{ duration: 0.5 }}
+              >
+                <legend className='form-heading'>ship to:</legend>
+                <FieldsetGroup>
+                  <ShippingDetailsInputs
                     billingDetails={billingDetails}
-                    setShippingDetails={setShippingDetails}
-                  /> */}
-              </fieldset>
-            </div>
-          )}
-        </div>
-      )}
-      <PaymentElement />
-    </Form>
+                    setBillingDetails={setBillingDetails}
+                  />
+                </FieldsetGroup>
+              </div>
+            )}
+            {billingDetails.deliveryMethod === 'pickup' && (
+              <div
+              // key={'pickup'}
+              // initial={{ opacity: 0 }}
+              // animate={{ opacity: 1 }}
+              // exit={{ opacity: 0 }}
+              // transition={{ duration: 0.5 }}
+              >
+                <legend className='form-heading'>pickup location</legend>
+                <FieldsetGroup className='FormGroup'>
+                  <p>pickup deets inputs</p>
+                  {/* <PickupChoiceInput
+                      billingDetails={billingDetails}
+                      setShippingDetails={setShippingDetails}
+                    /> */}
+                </FieldsetGroup>
+              </div>
+            )}
+          </div>
+        )}
+        <PaymentElement />
+        <button className='bg-amber-700 text-amber-50 px-4 py-3'>
+          confirm payment
+        </button>
+      </Form>
+    </ContentContainer>
   );
 }
