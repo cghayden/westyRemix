@@ -15,6 +15,7 @@ import StoreFrontIcon from '~/icons/StoreFrontIcon';
 import ShippingTruckIcon from '~/icons/ShippingTruckIcon';
 
 import styles from '~/styles/formStyles.css';
+import PickupChoiceInputs from '~/components/PickupChoiceInputs';
 // styles is now something like /build/global-AE33KB2.css
 
 export function links() {
@@ -55,7 +56,6 @@ export default function Index() {
       <CollapsibleCartSummary />
       <Form onSubmit={handleSubmit} method='post'>
         <FieldsetGroup>
-          {/* <div className='FormRow radioStack'> */}
           <InputRow>
             <div className='label__radio__input pr-3'>
               <input
@@ -79,7 +79,7 @@ export default function Index() {
               className={`flex flex-col cursor-pointer ${
                 billingDetails.deliveryMethod === 'pickup'
                   ? 'text-blue-800'
-                  : 'text-gray-400'
+                  : 'text-gray-700'
               }`}
               htmlFor='checkout_id_delivery_pickup'
             >
@@ -113,7 +113,7 @@ export default function Index() {
               className={`flex flex-col cursor-pointer ${
                 billingDetails.deliveryMethod === 'shipping'
                   ? 'text-blue-800'
-                  : 'text-gray-400'
+                  : 'text-gray-700'
               }`}
               htmlFor='checkout_id_delivery_shipping'
             >
@@ -126,49 +126,37 @@ export default function Index() {
           </InputRow>
           {/* </div> */}
         </FieldsetGroup>
-        {billingDetails.deliveryMethod && (
+
+        {billingDetails.deliveryMethod === 'shipping' && (
           <div
-          // initial={{ opacity: 0, height: 0 }}
-          // animate={{ opacity: 1, height: 'auto' }}
-          // exit={{ opacity: 0, height: 0 }}
+          // key={'shipping'}
+          // initial={{ opacity: 0 }}
+          // animate={{ opacity: 1 }}
+          // exit={{ opacity: 0 }}
           // transition={{ duration: 0.5 }}
-          // style={{ overflow: 'hidden' }}
           >
-            {billingDetails.deliveryMethod === 'shipping' && (
-              <div
-              // key={'shipping'}
-              // initial={{ opacity: 0 }}
-              // animate={{ opacity: 1 }}
-              // exit={{ opacity: 0 }}
-              // transition={{ duration: 0.5 }}
-              >
-                <legend className='form-heading'>ship to:</legend>
-                <FieldsetGroup>
-                  <ShippingDetailsInputs
-                    billingDetails={billingDetails}
-                    setBillingDetails={setBillingDetails}
-                  />
-                </FieldsetGroup>
-              </div>
-            )}
-            {billingDetails.deliveryMethod === 'pickup' && (
-              <div
-              // key={'pickup'}
-              // initial={{ opacity: 0 }}
-              // animate={{ opacity: 1 }}
-              // exit={{ opacity: 0 }}
-              // transition={{ duration: 0.5 }}
-              >
-                <legend className='form-heading'>pickup location</legend>
-                <FieldsetGroup className='FormGroup'>
-                  <p>pickup deets inputs</p>
-                  {/* <PickupChoiceInput
-                      billingDetails={billingDetails}
-                      setShippingDetails={setShippingDetails}
-                    /> */}
-                </FieldsetGroup>
-              </div>
-            )}
+            <legend className='text-sm text-blue-800'>ship to:</legend>
+            <FieldsetGroup>
+              <ShippingDetailsInputs
+                billingDetails={billingDetails}
+                setBillingDetails={setBillingDetails}
+              />
+            </FieldsetGroup>
+          </div>
+        )}
+        {billingDetails.deliveryMethod === 'pickup' && (
+          <div
+          // key={'pickup'}
+          // initial={{ opacity: 0 }}
+          // animate={{ opacity: 1 }}
+          // exit={{ opacity: 0 }}
+          // transition={{ duration: 0.5 }}
+          >
+            <legend className='text-sm text-blue-800'>pickup location</legend>
+            <PickupChoiceInputs
+              billingDetails={billingDetails}
+              setBillingDetails={setBillingDetails}
+            />
           </div>
         )}
         <PaymentElement />

@@ -26,6 +26,7 @@ export interface BillingDetails {
   email: string;
   phone: string;
   deliveryMethod: string;
+  pickupLocation?: string;
 }
 // export interface KeyedCartItem {
 //   quantity: number;

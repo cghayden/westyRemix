@@ -15,11 +15,11 @@
 }
 
 .input-radio:checked {
-  border-color: darkblue;
+  border-color: rgb(30 64 175);
   border-width: 7px;
 }
 
 .input-radio:focus-visible {
   outline: -webkit-focus-ring-color auto 1px;
-  outline: darkblue auto 1px;
+  outline: rgb(30 64 175) auto 1px;
 }
