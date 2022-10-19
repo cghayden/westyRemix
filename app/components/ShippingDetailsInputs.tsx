@@ -1,5 +1,6 @@
 import { BillingDetails } from 'myTypes';
 import CheckoutFormField from './CheckoutFormField';
+import FieldsetGroup from './styledContainers/FieldsetGroup';
 
 export default function ShippingDetailsInputs({
   billingDetails,
@@ -10,7 +11,7 @@ export default function ShippingDetailsInputs({
 }) {
   const shipping = billingDetails.shipping;
   return (
-    <>
+    <FieldsetGroup>
       <CheckoutFormField
         label={!billingDetails.shipping?.name?.length ? '' : 'name'}
         id='shippingName'
@@ -27,11 +28,11 @@ export default function ShippingDetailsInputs({
         }}
       />
       <CheckoutFormField
-        label={!billingDetails.shipping?.line1?.length ? '' : 'Address Line 1'}
+        label={!billingDetails.shipping?.line1?.length ? '' : 'address'}
         id='shippingLine1'
         inputType={'text'}
         placeholder={
-          !billingDetails.shipping?.line1?.length ? 'Address Line 1' : ''
+          !billingDetails.shipping?.line1?.length ? 'address line 1' : ''
         }
         required={true}
         autoComplete='address-line1'
@@ -44,11 +45,11 @@ export default function ShippingDetailsInputs({
         }}
       />
       <CheckoutFormField
-        label={!billingDetails.shipping?.line2?.length ? '' : 'Address Line 2'}
+        label={!billingDetails.shipping?.line2?.length ? '' : ''}
         id='shippingLine2'
         inputType={'text'}
         placeholder={
-          !billingDetails.shipping?.line2?.length ? 'Address Line 2' : ''
+          !billingDetails.shipping?.line2?.length ? 'address line 2' : ''
         }
         required={false}
         autoComplete='address-line2'
@@ -105,6 +106,6 @@ export default function ShippingDetailsInputs({
           });
         }}
       />
-    </>
+    </FieldsetGroup>
   );
 }

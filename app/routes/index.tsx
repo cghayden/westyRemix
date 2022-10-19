@@ -43,7 +43,7 @@ export default function Index() {
   const data = useLoaderData<LoaderData>();
 
   return (
-    <main>
+    <main className='w-min-[320px] p-4'>
       <HomeHero heroContent={data.heroContent} />
       <FeaturedItems
         allCoffee={data.coffee}

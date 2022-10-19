@@ -7,6 +7,7 @@ module.exports = {
       },
       gridTemplateColumns: {
         autoFit2: 'repeat(auto-fit, minmax(225px, 1fr))',
+        checkoutForm: '25% 1fr',
       },
     },
   },

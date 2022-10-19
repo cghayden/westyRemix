@@ -136,12 +136,10 @@ export default function Index() {
           // transition={{ duration: 0.5 }}
           >
             <legend className='text-sm text-blue-800'>ship to:</legend>
-            <FieldsetGroup>
-              <ShippingDetailsInputs
-                billingDetails={billingDetails}
-                setBillingDetails={setBillingDetails}
-              />
-            </FieldsetGroup>
+            <ShippingDetailsInputs
+              billingDetails={billingDetails}
+              setBillingDetails={setBillingDetails}
+            />
           </div>
         )}
         {billingDetails.deliveryMethod === 'pickup' && (
