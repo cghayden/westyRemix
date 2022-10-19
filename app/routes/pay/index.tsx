@@ -24,7 +24,9 @@ export function links() {
 export default function Index() {
   const elements = useElements();
   const stripe = useStripe();
-  const [billingDetails, setBillingDetails] = useState({} as BillingDetails);
+  const [billingDetails, setBillingDetails] = useState({
+    deliveryMethod: 'pickup',
+  } as BillingDetails);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,8 +76,12 @@ export default function Index() {
               />
             </div>
             <label
-              // active={billingDetails.deliveryMethod === 'Pickup' ? darkBlue : gray}
-              htmlFor='checkout_id_delivery-pickup'
+              className={`flex flex-col cursor-pointer ${
+                billingDetails.deliveryMethod === 'pickup'
+                  ? 'text-blue-800'
+                  : 'text-gray-400'
+              }`}
+              htmlFor='checkout_id_delivery_pickup'
             >
               <span>
                 <StoreFrontIcon />
@@ -92,7 +98,7 @@ export default function Index() {
                 // active={billingDetails?.deliveryMethod === 'pickup'}
                 checked={billingDetails?.deliveryMethod === 'shipping'}
                 name='deliveryMethod'
-                id='checkout_id_delivery_pickup'
+                id='checkout_id_delivery_shipping'
                 onChange={() => {
                   const newDetails: BillingDetails = {
                     ...billingDetails,
@@ -104,12 +110,18 @@ export default function Index() {
             </div>
             <label
               // active={billingDetails.deliveryMethod === 'Pickup' ? darkBlue : gray}
-              htmlFor='checkout_id_delivery-pickup'
+              className={`flex flex-col cursor-pointer ${
+                billingDetails.deliveryMethod === 'shipping'
+                  ? 'text-blue-800'
+                  : 'text-gray-400'
+              }`}
+              htmlFor='checkout_id_delivery_shipping'
             >
               <span>
                 <ShippingTruckIcon />
-                shipping
+                $10 shipping
               </span>
+              <span className='text-sm'>free on orders over $50</span>
             </label>
           </InputRow>
           {/* </div> */}
