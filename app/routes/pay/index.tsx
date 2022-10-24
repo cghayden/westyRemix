@@ -16,6 +16,7 @@ import ShippingTruckIcon from '~/icons/ShippingTruckIcon';
 
 import styles from '~/styles/formStyles.css';
 import PickupChoiceInputs from '~/components/PickupChoiceInputs';
+import { AnimatePresence, motion } from 'framer-motion';
 // styles is now something like /build/global-AE33KB2.css
 
 export function links() {
@@ -127,36 +128,38 @@ export default function Index() {
           {/* </div> */}
         </FieldsetGroup>
 
-        {billingDetails.deliveryMethod === 'shipping' && (
-          <div
-          // key={'shipping'}
-          // initial={{ opacity: 0 }}
-          // animate={{ opacity: 1 }}
-          // exit={{ opacity: 0 }}
-          // transition={{ duration: 0.5 }}
-          >
-            <legend className='text-sm text-blue-800'>ship to:</legend>
-            <ShippingDetailsInputs
-              billingDetails={billingDetails}
-              setBillingDetails={setBillingDetails}
-            />
-          </div>
-        )}
-        {billingDetails.deliveryMethod === 'pickup' && (
-          <div
-          // key={'pickup'}
-          // initial={{ opacity: 0 }}
-          // animate={{ opacity: 1 }}
-          // exit={{ opacity: 0 }}
-          // transition={{ duration: 0.5 }}
-          >
-            <legend className='text-sm text-blue-800'>pickup location</legend>
-            <PickupChoiceInputs
-              billingDetails={billingDetails}
-              setBillingDetails={setBillingDetails}
-            />
-          </div>
-        )}
+        <AnimatePresence exitBeforeEnter>
+          {billingDetails.deliveryMethod === 'shipping' && (
+            <motion.div
+              key={'shipping'}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <legend className='text-sm text-blue-800'>ship to:</legend>
+              <ShippingDetailsInputs
+                billingDetails={billingDetails}
+                setBillingDetails={setBillingDetails}
+              />
+            </motion.div>
+          )}
+          {billingDetails.deliveryMethod === 'pickup' && (
+            <motion.div
+              key={'pickup'}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <legend className='text-sm text-blue-800'>pickup location</legend>
+              <PickupChoiceInputs
+                billingDetails={billingDetails}
+                setBillingDetails={setBillingDetails}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <PaymentElement />
         <button className='bg-amber-700 text-amber-50 px-4 py-3'>
           confirm payment

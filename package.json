@@ -23,6 +23,7 @@
     "@stripe/stripe-js": "^1.36.0",
     "dayjs": "^1.10.8",
     "dotenv": "^16.0.0",
+    "framer-motion": "^7.6.1",
     "isbot": "^3.6.1",
     "normalize.css": "^8.0.1",
     "picosanity": "^4.0.0",
