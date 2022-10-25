@@ -1,8 +1,11 @@
-import { Form, useSearchParams } from '@remix-run/react';
+import { Form, useSearchParams, useTransition } from '@remix-run/react';
 import CartSummary from '~/components/CartSummary';
 import { useCartItems } from '~/context/useCart';
 
 export default function CheckoutPage() {
+  const transition = useTransition();
+  console.log('transition', transition);
+
   const cartItems = useCartItems();
   const [searchParams] = useSearchParams();
   const warnings = searchParams.getAll('warnings');
@@ -25,7 +28,9 @@ export default function CheckoutPage() {
             </div>
           )}
           <button type='submit' name='cart' value={JSON.stringify(cartItems)}>
-            looks good!
+            {transition.state === 'submitting'
+              ? 'calculating...'
+              : 'looks good!'}{' '}
           </button>
         </Form>
       </div>

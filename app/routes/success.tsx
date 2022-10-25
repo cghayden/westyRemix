@@ -12,6 +12,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function success() {
   const paymentIntent = useLoaderData<typeof loader>();
   const order = JSON.parse(paymentIntent.description);
+  console.log('order', order);
   return (
     <div>
       Thank You for your order! details of your order are below, and you should
@@ -25,14 +26,18 @@ export default function success() {
         ))}
       </ul>
       <p>Total Charge: {paymentIntent.amount}</p>
-      <p>Ship To:</p>
-      <p>{paymentIntent.shipping.name}</p>
-      <p>{paymentIntent.shipping.address.line1}</p>
-      <p>
-        <span>{paymentIntent.shipping.address.city}, </span>
-        <span>{paymentIntent.shipping.address.state} </span>
-        <span>{paymentIntent.shipping.address.postal_code}</span>
-      </p>
+      {paymentIntent.shipping ? (
+        <div>
+          <p>Ship To:</p>
+          <p>{paymentIntent.shipping.name}</p>
+          <p>{paymentIntent.shipping.address.line1}</p>
+          <p>
+            <span>{paymentIntent.shipping.address.city}, </span>
+            <span>{paymentIntent.shipping.address.state} </span>
+            <span>{paymentIntent.shipping.address.postal_code}</span>
+          </p>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form } from '@remix-run/react';
+import { Form, useTransition } from '@remix-run/react';
 import {
   PaymentElement,
   useElements,
@@ -25,37 +25,50 @@ export function links() {
 }
 
 export default function Index() {
-  const cartItems = useCartItems();
+  const transition = useTransition();
+  console.log(' pay index transition', transition);
 
+  const cartItems = useCartItems();
   const elements = useElements();
   const stripe = useStripe();
   const [billingDetails, setBillingDetails] = useState({
     deliveryMethod: 'pickup',
+    pickupLocation: 'daniels',
+    shipping: {},
   } as BillingDetails);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return null;
-
-    stripe.confirmPayment({
-      elements,
-
-      confirmParams: {
-        return_url: 'http://localhost:3000/success',
-        shipping: {
-          address: {
-            line1: billingDetails?.shipping?.line1,
-            line2: billingDetails?.shipping?.line2,
-            city: billingDetails?.shipping?.city,
-            state: billingDetails?.shipping?.state,
-            postal_code: billingDetails.shipping?.postal_code,
+    if (billingDetails.deliveryMethod === 'shipping') {
+      stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: 'http://localhost:3000/success',
+          shipping: {
+            name: 'Corey Hayden',
+            address: {
+              line1: billingDetails.shipping?.line1,
+              line2: billingDetails.shipping?.line2,
+              city: billingDetails.shipping?.city,
+              state: billingDetails.shipping?.state,
+              postal_code: billingDetails.shipping?.postal_code,
+            },
           },
-          name: 'Corey Hayden',
+          receipt_email: billingDetails.email,
         },
-        receipt_email: 'cghayden@gmail.com',
-      },
-    });
+      });
+    }
+    if (billingDetails.deliveryMethod === 'pickup') {
+      stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: 'http://localhost:3000/success',
+        },
+      });
+    }
   };
+  // x4$J27pY
   if (!cartItems.length) {
     return (
       <ContentContainer>
@@ -173,7 +186,7 @@ export default function Index() {
         </AnimatePresence>
         <PaymentElement />
         <button className='bg-amber-700 text-amber-50 px-4 py-3'>
-          confirm payment
+          {transition.state === 'submitting' ? 'confirming...' : 'confirm'}
         </button>
       </Form>
     </ContentContainer>
