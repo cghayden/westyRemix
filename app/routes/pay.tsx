@@ -54,21 +54,24 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   const total = calcVerifiedTotal(cartKeyedByName);
-  return await createPaymentIntent(total, JSON.stringify(cart));
+  return await createPaymentIntent(total, JSON.stringify(cart)).catch((err) =>
+    console.log(err)
+  );
 };
 
 export default function Pay() {
   const paymentIntent = useActionData<typeof action>();
+  console.log('paymentIntent', paymentIntent);
   // console.log('client_secret', paymentIntent.client_secret);
   return (
     // <div className='p-4'>
     <Elements
       stripe={stripePromise}
-      options={{
-        clientSecret:
-          'pi_3LuIt8IelpPXOmiI2As4bJfd_secret_5IMVODJXybZEcywL312Oje2R7',
-      }}
-      // options={{ clientSecret: paymentIntent.client_secret }}
+      // options={{
+      //   clientSecret:
+      //     'pi_3LuIt8IelpPXOmiI2As4bJfd_secret_5IMVODJXybZEcywL312Oje2R7',
+      // }}
+      options={{ clientSecret: paymentIntent.client_secret }}
     >
       <Outlet />
     </Elements>

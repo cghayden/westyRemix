@@ -17,6 +17,7 @@ import ShippingTruckIcon from '~/icons/ShippingTruckIcon';
 import styles from '~/styles/formStyles.css';
 import PickupChoiceInputs from '~/components/PickupChoiceInputs';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useCartItems } from '~/context/useCart';
 // styles is now something like /build/global-AE33KB2.css
 
 export function links() {
@@ -24,6 +25,8 @@ export function links() {
 }
 
 export default function Index() {
+  const cartItems = useCartItems();
+
   const elements = useElements();
   const stripe = useStripe();
   const [billingDetails, setBillingDetails] = useState({
@@ -36,6 +39,7 @@ export default function Index() {
 
     stripe.confirmPayment({
       elements,
+
       confirmParams: {
         return_url: 'http://localhost:3000/success',
         shipping: {
@@ -52,6 +56,13 @@ export default function Index() {
       },
     });
   };
+  if (!cartItems.length) {
+    return (
+      <ContentContainer>
+        Oops! There was an error retrieving your cart, please continue shopping.
+      </ContentContainer>
+    );
+  }
   return (
     <ContentContainer>
       <CollapsibleCartSummary />
@@ -128,7 +139,7 @@ export default function Index() {
           {/* </div> */}
         </FieldsetGroup>
 
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence exitBeforeEnter initial={false}>
           {billingDetails.deliveryMethod === 'shipping' && (
             <motion.div
               key={'shipping'}
