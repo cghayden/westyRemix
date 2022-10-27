@@ -3,22 +3,33 @@ import { Outlet, useActionData } from '@remix-run/react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import invariant from 'tiny-invariant';
-import { createPaymentIntent } from '~/lib/stripePaymentIntent';
-const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
-import reduceCartByName from '~/lib/reduceCartByName';
 import { Coffee } from 'sanityTypes';
 import sanityClient from '~/lib/sanity/sanity';
 import checkAvailability from '~/lib/checkAvailability';
 import calcVerifiedTotal from '~/lib/calcVerifiedTotal';
+import reduceCartByName from '~/lib/reduceCartByName';
+import { createPaymentIntent } from '~/lib/stripePaymentIntent';
+
+const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
 
 export const action = async ({ request }: ActionArgs) => {
   const body = await request.formData();
-  const res = body.get('cart');
+  const cartRes = body.get('cart');
+  const billingDetailsRes = body.get('billingDetails');
+
   invariant(
-    typeof res === 'string',
+    typeof cartRes === 'string',
     'cart not submitted properly; must be a string'
   );
-  const cart = JSON.parse(res);
+  invariant(
+    typeof billingDetailsRes === 'string',
+    'cart not submitted properly; must be a string'
+  );
+
+  const cart = JSON.parse(cartRes);
+  const billingDetails = JSON.parse(billingDetailsRes);
+  console.log('billingDetails', billingDetails);
+  console.log('cart', cart);
   //create an OBJ of cart Items keyed by price and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
   const cartKeyedByName = reduceCartByName(cart);
   console.log('cartKeyedByName', cartKeyedByName);
@@ -54,17 +65,18 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   const total = calcVerifiedTotal(cartKeyedByName);
-  return await createPaymentIntent(total, JSON.stringify(cart)).catch((err) =>
-    console.log(err)
-  );
+  return await createPaymentIntent(
+    total,
+    JSON.stringify(cart),
+    JSON.stringify(billingDetails)
+  ).catch((err) => console.log(err));
 };
 
 export default function Pay() {
   const paymentIntent = useActionData<typeof action>();
   console.log('paymentIntent', paymentIntent);
-  // console.log('client_secret', paymentIntent.client_secret);
+
   return (
-    // <div className='p-4'>
     <Elements
       stripe={stripePromise}
       // options={{
@@ -75,6 +87,5 @@ export default function Pay() {
     >
       <Outlet />
     </Elements>
-    // </div>
   );
 }

@@ -7,8 +7,11 @@ export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url);
   const id = url.searchParams.get('payment_intent');
   if (!id) return null;
-  return await retrievePaymentIntent(id);
+  const paymentIntent = await retrievePaymentIntent(id);
+  console.log('paymentIntent', paymentIntent);
+  return paymentIntent;
 };
+
 export default function success() {
   const paymentIntent = useLoaderData<typeof loader>();
   const order = JSON.parse(paymentIntent.description);

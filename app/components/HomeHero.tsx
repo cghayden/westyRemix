@@ -10,7 +10,7 @@ export default function HomeHero({
   const blockContent = heroContent.overlayText1;
   if (!heroContent.imageUrl && !heroContent.overlayText1) return null;
   return (
-    <div className='grid place-content-center bg-slate-50 w-screen'>
+    <div className='grid place-content-center bg-slate-50'>
       <img
         className='row-span-full col-span-full w-screen'
         src={heroContent.imageUrl}

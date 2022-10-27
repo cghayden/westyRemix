@@ -7,7 +7,11 @@ const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY, {
   apiVersion: '2022-08-01',
 });
 
-export async function createPaymentIntent(total: number, cart: string) {
+export async function createPaymentIntent(
+  total: number,
+  cart: string,
+  billingDetails: string
+) {
   return await stripe.paymentIntents.create({
     amount: total,
     currency: 'usd',
@@ -15,9 +19,9 @@ export async function createPaymentIntent(total: number, cart: string) {
       enabled: true,
     },
     description: cart,
+    metadata: { billingDetails },
   });
 }
-//helper for fetching PaymentIntent server side
 export async function retrievePaymentIntent(id: string) {
   return await stripe.paymentIntents.retrieve(id);
 }
