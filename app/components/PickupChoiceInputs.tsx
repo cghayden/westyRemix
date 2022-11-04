@@ -1,16 +1,16 @@
-import { BillingDetails } from 'myTypes';
-import CheckoutFormField from './CheckoutFormField';
+import { FulfillmentDetails, OrderDetails } from 'myTypes';
 import FieldsetGroup from './styledContainers/FieldsetGroup';
 import InputRow from './styledContainers/InputRow';
 
 export default function PickupChoiceInputs({
-  billingDetails,
-  setBillingDetails,
+  fulfillmentDetails,
+  setFulfillmentDetails,
 }: {
-  billingDetails: BillingDetails;
-  setBillingDetails: React.Dispatch<React.SetStateAction<BillingDetails>>;
+  fulfillmentDetails: FulfillmentDetails;
+  setFulfillmentDetails: React.Dispatch<
+    React.SetStateAction<FulfillmentDetails>
+  >;
 }) {
-  // const shippingDetails = billingDetails.shipping;
   return (
     <FieldsetGroup>
       <InputRow>
@@ -18,22 +18,21 @@ export default function PickupChoiceInputs({
           <input
             className='input-radio'
             type='radio'
-            value='pickup'
-            checked={billingDetails.pickupLocation === 'daniels'}
+            value='daniels'
+            checked={fulfillmentDetails.pickupLocation === 'daniels'}
             name='pickupLocation'
             id='checkout_id_pickup_daniels'
-            onChange={() => {
-              const newDetails: BillingDetails = {
-                ...billingDetails,
-                pickupLocation: 'daniels',
-              };
-              setBillingDetails(newDetails);
+            onChange={(e) => {
+              setFulfillmentDetails({
+                ...fulfillmentDetails,
+                pickupLocation: e.target.value,
+              });
             }}
           />
         </div>
         <label
           className={`flex flex-col cursor-pointer ${
-            billingDetails.pickupLocation === 'daniels'
+            fulfillmentDetails.pickupLocation === 'daniels'
               ? 'text-blue-800'
               : 'text-gray-700'
           }`}
@@ -52,22 +51,20 @@ export default function PickupChoiceInputs({
             className='input-radio'
             type='radio'
             value='edge'
-            checked={billingDetails.pickupLocation === 'edge'}
+            checked={fulfillmentDetails.pickupLocation === 'edge'}
             name='pickupLocation'
             id='checkout_id_pickup_edge'
-            onChange={() => {
-              const newDetails: BillingDetails = {
-                ...billingDetails,
-                pickupLocation: 'edge',
-              };
-              setBillingDetails(newDetails);
+            onChange={(e) => {
+              setFulfillmentDetails({
+                ...fulfillmentDetails,
+                pickupLocation: e.target.value,
+              });
             }}
           />
         </div>
         <label
-          // active={billingDetails.deliveryMethod === 'Pickup' ? darkBlue : gray}
           className={`flex flex-col cursor-pointer ${
-            billingDetails.pickupLocation === 'edge'
+            fulfillmentDetails.pickupLocation === 'edge'
               ? 'text-blue-800'
               : 'text-gray-700'
           }`}
@@ -81,7 +78,6 @@ export default function PickupChoiceInputs({
           </div>
         </label>
       </InputRow>
-      {/* </div> */}
     </FieldsetGroup>
   );
 }

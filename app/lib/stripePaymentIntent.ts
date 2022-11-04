@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY, {
 export async function createPaymentIntent(
   total: number,
   cart: string,
-  billingDetails: string
+  orderDetails: string
 ) {
   return await stripe.paymentIntents.create({
     amount: total,
@@ -19,7 +19,7 @@ export async function createPaymentIntent(
       enabled: true,
     },
     description: cart,
-    metadata: { billingDetails },
+    metadata: { orderDetails },
   });
 }
 export async function retrievePaymentIntent(id: string) {

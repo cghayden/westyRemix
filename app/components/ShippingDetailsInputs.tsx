@@ -1,108 +1,123 @@
-import { BillingDetails } from 'myTypes';
+import { FulfillmentDetails, OrderDetails } from 'myTypes';
 import CheckoutFormField from './CheckoutFormField';
 import FieldsetGroup from './styledContainers/FieldsetGroup';
 
 export default function ShippingDetailsInputs({
-  billingDetails,
-  setBillingDetails,
+  fulfillmentDetails,
+  setFulfillmentDetails,
 }: {
-  billingDetails: BillingDetails;
-  setBillingDetails: React.Dispatch<React.SetStateAction<BillingDetails>>;
+  fulfillmentDetails: FulfillmentDetails;
+  setFulfillmentDetails: React.Dispatch<
+    React.SetStateAction<FulfillmentDetails>
+  >;
 }) {
-  const shipping = billingDetails.shipping;
   return (
     <FieldsetGroup>
       <CheckoutFormField
-        label={!billingDetails.shipping?.name?.length ? '' : 'name'}
+        label={!fulfillmentDetails.shippingName?.length ? '' : 'name'}
         id='shippingName'
+        name='shippingName'
         inputType={'text'}
-        placeholder={!billingDetails.shipping?.name?.length ? 'name' : ''}
+        placeholder={!fulfillmentDetails.shippingName?.length ? 'name' : ''}
         required={true}
         autoComplete='name'
-        value={billingDetails.shipping?.name}
+        value={fulfillmentDetails.shippingName}
         onChange={(e) => {
-          setBillingDetails({
-            ...billingDetails,
-            shipping: { ...shipping, name: e.target.value },
+          setFulfillmentDetails({
+            ...fulfillmentDetails,
+            [e.target.name]: e.target.value,
           });
         }}
       />
       <CheckoutFormField
-        label={!billingDetails.shipping?.line1?.length ? '' : 'address'}
+        label={
+          !fulfillmentDetails.shippingAddressLine1?.length ? '' : 'address'
+        }
         id='shippingLine1'
+        name='shippingLine1'
         inputType={'text'}
         placeholder={
-          !billingDetails.shipping?.line1?.length ? 'address line 1' : ''
+          !fulfillmentDetails.shippingAddressLine1?.length
+            ? 'address line 1'
+            : ''
         }
         required={true}
         autoComplete='address-line1'
-        value={billingDetails.shipping?.line1}
+        value={fulfillmentDetails.shippingAddressLine1}
         onChange={(e) => {
-          setBillingDetails({
-            ...billingDetails,
-            shipping: { ...shipping, line1: e.target.value },
+          setFulfillmentDetails({
+            ...fulfillmentDetails,
+            [e.target.name]: e.target.value,
           });
         }}
       />
       <CheckoutFormField
-        label={!billingDetails.shipping?.line2?.length ? '' : ''}
+        label={!fulfillmentDetails.shippingAddressline2?.length ? '' : ''}
         id='shippingLine2'
+        name='shippingLine2'
         inputType={'text'}
         placeholder={
-          !billingDetails.shipping?.line2?.length ? 'address line 2' : ''
+          !fulfillmentDetails.shippingAddressline2?.length
+            ? 'address line 2'
+            : ''
         }
         required={false}
         autoComplete='address-line2'
-        value={billingDetails.shipping?.line2}
+        value={fulfillmentDetails.shippingAddressline2}
         onChange={(e) => {
-          setBillingDetails({
-            ...billingDetails,
-            shipping: { ...shipping, line2: e.target.value },
+          setFulfillmentDetails({
+            ...fulfillmentDetails,
+            [e.target.name]: e.target.value,
           });
         }}
       />
       <CheckoutFormField
-        label={!billingDetails.shipping?.city?.length ? '' : 'city'}
+        label={!fulfillmentDetails.shippingCity?.length ? '' : 'city'}
         id='shippingCity'
+        name='shippingCity'
         inputType={'text'}
-        placeholder={!billingDetails.shipping?.city?.length ? 'city' : ''}
+        placeholder={!fulfillmentDetails.shippingCity?.length ? 'city' : ''}
         required={true}
         autoComplete='address-level2'
-        value={billingDetails.shipping?.city}
+        value={fulfillmentDetails.shippingCity}
         onChange={(e) => {
-          setBillingDetails({
-            ...billingDetails,
-            shipping: { ...shipping, city: e.target.value },
+          setFulfillmentDetails({
+            ...fulfillmentDetails,
+            [e.target.name]: e.target.value,
           });
         }}
       />
       <CheckoutFormField
-        label={!billingDetails.shipping?.state?.length ? '' : 'state'}
+        label={!fulfillmentDetails.shippingState?.length ? '' : 'state'}
         id='shippingState'
+        name='shippingState'
         inputType={'text'}
-        placeholder={!billingDetails.shipping?.state?.length ? 'state' : ''}
+        placeholder={!fulfillmentDetails.shippingState?.length ? 'state' : ''}
         required={true}
         autoComplete='address-level1'
-        value={billingDetails.shipping?.state}
+        value={fulfillmentDetails.shippingState}
         onChange={(e) => {
-          setBillingDetails({
-            ...billingDetails,
-            shipping: { ...shipping, state: e.target.value },
+          setFulfillmentDetails({
+            ...fulfillmentDetails,
+            [e.target.name]: e.target.value,
           });
         }}
       />
       <CheckoutFormField
-        label={!billingDetails.shipping?.postal_code?.length ? '' : 'zip'}
+        label={!fulfillmentDetails.shippingPostal_code?.length ? '' : 'zip'}
         id='shippingPostal_code'
+        name='shippingPostal_code'
         inputType={'text'}
-        placeholder={!billingDetails.shipping?.postal_code?.length ? 'zip' : ''}
+        placeholder={
+          !fulfillmentDetails.shippingPostal_code?.length ? 'zip' : ''
+        }
         required={true}
         autoComplete='postal-code'
-        value={billingDetails.shipping?.postal_code}
+        value={fulfillmentDetails.shippingPostal_code}
         onChange={(e) => {
-          setBillingDetails({
-            ...billingDetails,
-            shipping: { ...shipping, postal_code: e.target.value },
+          setFulfillmentDetails({
+            ...fulfillmentDetails,
+            [e.target.name]: e.target.value,
           });
         }}
       />

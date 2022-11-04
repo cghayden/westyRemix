@@ -11,22 +11,27 @@ export interface CartItem {
   unavailable?: boolean;
 }
 
-export interface ShippingDetails {
-  name: string;
-  line1?: string;
-  line2?: string;
-  city?: string;
-  state?: string;
-  postal_code?: string;
+export interface FulfillmentDetails {
+  method: 'pickup' | 'shipping';
+  pickupLocation?: string;
+  shippingName: string;
+  shippingAddressLine1: string;
+  shippingAddressline2?: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingPostal_code: string;
 }
 
-export interface BillingDetails {
+export interface Customer {
   name: string;
-  shipping?: ShippingDetails;
-  email: string;
   phone: string;
-  deliveryMethod: string;
-  pickupLocation?: string;
+  email: string;
+}
+
+export interface OrderDetails {
+  customer: Customer;
+  fulfillment: FulfillmentDetails;
+  cart: CartItem[];
 }
 // export interface KeyedCartItem {
 //   quantity: number;

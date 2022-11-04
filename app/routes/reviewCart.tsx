@@ -6,9 +6,10 @@ import {
   useTransition,
 } from '@remix-run/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BillingDetails } from 'myTypes';
+import { Customer, FulfillmentDetails, OrderDetails } from 'myTypes';
 import CartSummary from '~/components/CartSummary';
 import ShippingDetailsInputs from '~/components/ShippingDetailsInputs';
+import CustomerDetailsInputs from '~/components/CustomerDetailsInputs';
 import ContentContainer from '~/components/styledContainers/ContentContainer';
 import { useCartItems } from '~/context/useCart';
 import FieldsetGroup from '~/components/styledContainers/FieldsetGroup';
@@ -23,14 +24,13 @@ export function links() {
 }
 export default function CheckoutPage() {
   const transition = useTransition();
-  // console.log('transition', transition);
   const submit = useSubmit();
 
-  const [billingDetails, setBillingDetails] = useState({
-    deliveryMethod: 'pickup',
+  const [customerDetails, setCustomerDetails] = useState({} as Customer);
+  const [fulfillmentDetails, setFulfillmentDetails] = useState({
+    method: 'pickup',
     pickupLocation: 'daniels',
-    shipping: {},
-  } as BillingDetails);
+  } as FulfillmentDetails);
 
   const cartItems = useCartItems();
   const [searchParams] = useSearchParams();
@@ -39,7 +39,10 @@ export default function CheckoutPage() {
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     const formData = new FormData();
-    formData.set('billingDetails', JSON.stringify(billingDetails));
+    formData.set(
+      'orderDetails',
+      JSON.stringify({ customerDetails, fulfillmentDetails })
+    );
     formData.set('cart', JSON.stringify(cartItems));
     submit(formData, { method: 'post', action: '/pay' });
   };
@@ -53,6 +56,7 @@ export default function CheckoutPage() {
         <CartSummary />
       </ContentContainer>
       <ContentContainer>
+        {/* <Form action='/pay' method='post'> */}
         <Form onSubmit={handleSubmit}>
           {warnings && (
             <div>
@@ -63,6 +67,11 @@ export default function CheckoutPage() {
               </ul>
             </div>
           )}
+          <legend className='text-sm text-blue-800'>contact</legend>
+          <CustomerDetailsInputs
+            customerDetails={customerDetails}
+            setCustomerDetails={setCustomerDetails}
+          />
           <FieldsetGroup>
             <InputRow>
               <div className='label__radio__input pr-3'>
@@ -70,21 +79,20 @@ export default function CheckoutPage() {
                   className='input-radio'
                   type='radio'
                   value='pickup'
-                  checked={billingDetails?.deliveryMethod === 'pickup'}
-                  name='deliveryMethod'
+                  checked={fulfillmentDetails.method === 'pickup'}
+                  name='fulfillmentMethod'
                   id='checkout_id_delivery_pickup'
-                  onChange={() => {
-                    const newDetails: BillingDetails = {
-                      ...billingDetails,
-                      deliveryMethod: 'pickup',
-                    };
-                    setBillingDetails(newDetails);
-                  }}
+                  onChange={() =>
+                    setFulfillmentDetails({
+                      ...fulfillmentDetails,
+                      method: 'pickup',
+                    })
+                  }
                 />
               </div>
               <label
                 className={`flex flex-col cursor-pointer ${
-                  billingDetails.deliveryMethod === 'pickup'
+                  fulfillmentDetails.method === 'pickup'
                     ? 'text-blue-800'
                     : 'text-gray-700'
                 }`}
@@ -102,21 +110,20 @@ export default function CheckoutPage() {
                   className='input-radio'
                   type='radio'
                   value='shipping'
-                  checked={billingDetails?.deliveryMethod === 'shipping'}
-                  name='deliveryMethod'
+                  checked={fulfillmentDetails.method === 'shipping'}
+                  name='fulfillmentMethod'
                   id='checkout_id_delivery_shipping'
-                  onChange={() => {
-                    const newDetails: BillingDetails = {
-                      ...billingDetails,
-                      deliveryMethod: 'shipping',
-                    };
-                    setBillingDetails(newDetails);
-                  }}
+                  onChange={() =>
+                    setFulfillmentDetails({
+                      ...fulfillmentDetails,
+                      method: 'shipping',
+                    })
+                  }
                 />
               </div>
               <label
                 className={`flex flex-col cursor-pointer ${
-                  billingDetails.deliveryMethod === 'shipping'
+                  fulfillmentDetails.method === 'shipping'
                     ? 'text-blue-800'
                     : 'text-gray-700'
                 }`}
@@ -132,7 +139,7 @@ export default function CheckoutPage() {
           </FieldsetGroup>
 
           <AnimatePresence exitBeforeEnter initial={false}>
-            {billingDetails.deliveryMethod === 'shipping' && (
+            {fulfillmentDetails.method === 'shipping' && (
               <motion.div
                 key={'shipping'}
                 initial={{ opacity: 0 }}
@@ -142,12 +149,12 @@ export default function CheckoutPage() {
               >
                 <legend className='text-sm text-blue-800'>ship to:</legend>
                 <ShippingDetailsInputs
-                  billingDetails={billingDetails}
-                  setBillingDetails={setBillingDetails}
+                  fulfillmentDetails={fulfillmentDetails}
+                  setFulfillmentDetails={setFulfillmentDetails}
                 />
               </motion.div>
             )}
-            {billingDetails.deliveryMethod === 'pickup' && (
+            {fulfillmentDetails.method === 'pickup' && (
               <motion.div
                 key={'pickup'}
                 initial={{ opacity: 0 }}
@@ -159,8 +166,8 @@ export default function CheckoutPage() {
                   pickup location
                 </legend>
                 <PickupChoiceInputs
-                  billingDetails={billingDetails}
-                  setBillingDetails={setBillingDetails}
+                  fulfillmentDetails={fulfillmentDetails}
+                  setFulfillmentDetails={setFulfillmentDetails}
                 />
               </motion.div>
             )}

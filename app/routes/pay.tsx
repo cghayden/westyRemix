@@ -13,26 +13,34 @@ import { createPaymentIntent } from '~/lib/stripePaymentIntent';
 const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
 
 export const action = async ({ request }: ActionArgs) => {
-  const body = await request.formData();
-  const cartRes = body.get('cart');
-  const billingDetailsRes = body.get('billingDetails');
+  const form = await request.formData();
+  const cartBody = form.get('cart');
+  console.log('cartBody', cartBody);
+  const orderDetailsBody = form.get('orderDetails');
+  // function constructOrderDetails(formData) {
+  //   const result = {};
+  //   for (const pair of formData.entries()) {
+  //     result[pair[0]] = pair[1];
+  //   }
+  //   return result;
+  // }
+  // const orderDetails = constructOrderDetails(form);
+  // const cart = orderDetails.cart;
 
   invariant(
-    typeof cartRes === 'string',
+    typeof cartBody === 'string',
     'cart not submitted properly; must be a string'
   );
   invariant(
-    typeof billingDetailsRes === 'string',
+    typeof orderDetailsBody === 'string',
     'cart not submitted properly; must be a string'
   );
 
-  const cart = JSON.parse(cartRes);
-  const billingDetails = JSON.parse(billingDetailsRes);
-  console.log('billingDetails', billingDetails);
-  console.log('cart', cart);
+  const cart = JSON.parse(cartBody);
+  // const orderDetails = JSON.parse(orderDetailsBody);
+
   //create an OBJ of cart Items keyed by price and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
   const cartKeyedByName = reduceCartByName(cart);
-  console.log('cartKeyedByName', cartKeyedByName);
 
   // create array of coffeeNames that need to be queried in Sanity
   const coffeeInCart: string[] = Object.keys(cartKeyedByName);
@@ -65,16 +73,21 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   const total = calcVerifiedTotal(cartKeyedByName);
-  return await createPaymentIntent(
-    total,
-    JSON.stringify(cart),
-    JSON.stringify(billingDetails)
-  ).catch((err) => console.log(err));
+  return await createPaymentIntent(total, cartBody, orderDetailsBody).catch(
+    (err) => {
+      console.log(err);
+      return err;
+    }
+  );
 };
 
 export default function Pay() {
   const paymentIntent = useActionData<typeof action>();
   console.log('paymentIntent', paymentIntent);
+
+  if (!paymentIntent.client_secret) {
+    return <p>error</p>;
+  }
 
   return (
     <Elements

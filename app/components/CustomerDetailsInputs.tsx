@@ -1,0 +1,65 @@
+import { Customer } from 'myTypes';
+import CheckoutFormField from './CheckoutFormField';
+import FieldsetGroup from './styledContainers/FieldsetGroup';
+
+export default function CustomerDetailsInputs({
+  customerDetails,
+  setCustomerDetails,
+}: {
+  customerDetails: Customer;
+  setCustomerDetails: React.Dispatch<React.SetStateAction<Customer>>;
+}) {
+  //will still react controlled inputs for custom UI on form...
+  return (
+    <FieldsetGroup>
+      <CheckoutFormField
+        label={!customerDetails.name?.length ? '' : 'name'}
+        id='customerName'
+        name='customerName'
+        inputType={'text'}
+        placeholder={!customerDetails.name?.length ? 'name' : ''}
+        required={true}
+        autoComplete='name'
+        value={customerDetails.name}
+        onChange={(e) => {
+          setCustomerDetails({
+            ...customerDetails,
+            [e.target.name]: e.target.value,
+          });
+        }}
+      />
+      <CheckoutFormField
+        label={!customerDetails.phone?.length ? '' : 'phone'}
+        id='customerPhone'
+        name='customerPhone'
+        inputType={'text'}
+        placeholder={!customerDetails.phone?.length ? 'phone' : ''}
+        required={true}
+        autoComplete='phone'
+        value={customerDetails.phone}
+        onChange={(e) => {
+          setCustomerDetails({
+            ...customerDetails,
+            [e.target.name]: e.target.value,
+          });
+        }}
+      />
+      <CheckoutFormField
+        label={!customerDetails.email?.length ? '' : 'email'}
+        id='email'
+        name='email'
+        inputType={'email'}
+        placeholder={!customerDetails.email?.length ? 'email' : ''}
+        required={true}
+        autoComplete='email'
+        value={customerDetails.email}
+        onChange={(e) => {
+          setCustomerDetails({
+            ...customerDetails,
+            [e.target.name]: e.target.value,
+          });
+        }}
+      />
+    </FieldsetGroup>
+  );
+}
