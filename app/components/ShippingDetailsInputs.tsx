@@ -1,4 +1,4 @@
-import { FulfillmentDetails, OrderDetails } from 'myTypes';
+import { FulfillmentDetails } from 'myTypes';
 import CheckoutFormField from './CheckoutFormField';
 import FieldsetGroup from './styledContainers/FieldsetGroup';
 
@@ -33,8 +33,8 @@ export default function ShippingDetailsInputs({
         label={
           !fulfillmentDetails.shippingAddressLine1?.length ? '' : 'address'
         }
-        id='shippingLine1'
-        name='shippingLine1'
+        id='shippingAddressLine1'
+        name='shippingAddressLine1'
         inputType={'text'}
         placeholder={
           !fulfillmentDetails.shippingAddressLine1?.length
@@ -52,18 +52,18 @@ export default function ShippingDetailsInputs({
         }}
       />
       <CheckoutFormField
-        label={!fulfillmentDetails.shippingAddressline2?.length ? '' : ''}
-        id='shippingLine2'
-        name='shippingLine2'
+        label={!fulfillmentDetails.shippingAddressLine2?.length ? '' : ''}
+        id='shippingAddressLine2'
+        name='shippingAddressLine2'
         inputType={'text'}
         placeholder={
-          !fulfillmentDetails.shippingAddressline2?.length
+          !fulfillmentDetails.shippingAddressLine2?.length
             ? 'address line 2'
             : ''
         }
         required={false}
         autoComplete='address-line2'
-        value={fulfillmentDetails.shippingAddressline2}
+        value={fulfillmentDetails.shippingAddressLine2}
         onChange={(e) => {
           setFulfillmentDetails({
             ...fulfillmentDetails,

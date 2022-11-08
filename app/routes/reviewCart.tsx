@@ -29,7 +29,7 @@ export default function CheckoutPage() {
   const [customerDetails, setCustomerDetails] = useState({} as Customer);
   const [fulfillmentDetails, setFulfillmentDetails] = useState({
     method: 'pickup',
-    pickupLocation: 'daniels',
+    pickupLocation: '',
   } as FulfillmentDetails);
 
   const cartItems = useCartItems();
@@ -56,7 +56,6 @@ export default function CheckoutPage() {
         <CartSummary />
       </ContentContainer>
       <ContentContainer>
-        {/* <Form action='/pay' method='post'> */}
         <Form onSubmit={handleSubmit}>
           {warnings && (
             <div>

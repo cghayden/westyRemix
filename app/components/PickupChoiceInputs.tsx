@@ -48,6 +48,7 @@ export default function PickupChoiceInputs({
       <InputRow>
         <div className='label__radio__input pr-3'>
           <input
+            required
             className='input-radio'
             type='radio'
             value='edge'

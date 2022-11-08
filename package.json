@@ -25,6 +25,7 @@
     "dotenv": "^16.0.0",
     "framer-motion": "^7.6.1",
     "isbot": "^3.6.1",
+    "nanoid": "^4.0.0",
     "normalize.css": "^8.0.1",
     "picosanity": "^4.0.0",
     "react": "^18.2.0",

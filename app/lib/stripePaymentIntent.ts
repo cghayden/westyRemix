@@ -18,8 +18,7 @@ export async function createPaymentIntent(
     automatic_payment_methods: {
       enabled: true,
     },
-    description: cart,
-    metadata: { orderDetails },
+    metadata: { orderDetails, cartItems: cart },
   });
 }
 export async function retrievePaymentIntent(id: string) {

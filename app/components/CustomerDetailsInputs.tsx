@@ -13,14 +13,14 @@ export default function CustomerDetailsInputs({
   return (
     <FieldsetGroup>
       <CheckoutFormField
-        label={!customerDetails.name?.length ? '' : 'name'}
+        label={!customerDetails.customerName?.length ? '' : 'name'}
         id='customerName'
         name='customerName'
         inputType={'text'}
-        placeholder={!customerDetails.name?.length ? 'name' : ''}
+        placeholder={!customerDetails.customerName?.length ? 'name' : ''}
         required={true}
         autoComplete='name'
-        value={customerDetails.name}
+        value={customerDetails.customerName}
         onChange={(e) => {
           setCustomerDetails({
             ...customerDetails,
@@ -29,14 +29,14 @@ export default function CustomerDetailsInputs({
         }}
       />
       <CheckoutFormField
-        label={!customerDetails.phone?.length ? '' : 'phone'}
+        label={!customerDetails.customerPhone?.length ? '' : 'phone'}
         id='customerPhone'
         name='customerPhone'
         inputType={'text'}
-        placeholder={!customerDetails.phone?.length ? 'phone' : ''}
+        placeholder={!customerDetails.customerPhone?.length ? 'phone' : ''}
         required={true}
         autoComplete='phone'
-        value={customerDetails.phone}
+        value={customerDetails.customerPhone}
         onChange={(e) => {
           setCustomerDetails({
             ...customerDetails,
@@ -45,14 +45,14 @@ export default function CustomerDetailsInputs({
         }}
       />
       <CheckoutFormField
-        label={!customerDetails.email?.length ? '' : 'email'}
-        id='email'
-        name='email'
+        label={!customerDetails.customerEmail?.length ? '' : 'email'}
+        id='customerEmail'
+        name='customerEmail'
         inputType={'email'}
-        placeholder={!customerDetails.email?.length ? 'email' : ''}
+        placeholder={!customerDetails.customerEmail?.length ? 'email' : ''}
         required={true}
         autoComplete='email'
-        value={customerDetails.email}
+        value={customerDetails.customerEmail}
         onChange={(e) => {
           setCustomerDetails({
             ...customerDetails,
