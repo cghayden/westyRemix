@@ -20,7 +20,7 @@ export default function Index() {
     stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: 'http://localhost:3000/success',
+        return_url: 'http://localhost:3000/writeOrder',
       },
     });
   };

@@ -24,7 +24,6 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     return {
       name: cartItem.name,
       grind: cartItem.grind,
-      // size: cartItem.size,
       quantity: cartItem.quantity,
       _key: nanoid(),
     };
@@ -51,7 +50,6 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     shipped: false,
     stripe_id: orderDetails.id,
   };
-  console.log('doc', doc);
   // if (env !== 'production') {
   //   await SanityDevelopment.create(doc)
   //     .then((res) => {
@@ -64,11 +62,9 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
   //   return;
   // }
   await SanityClient.create(doc)
-    .then((res) => {
-      console.log('order written to sanity', res);
-    })
+    .then((res) => {})
     .catch((err) => {
-      console.error('error writing order to Sanity:', err);
+      throw `Error writing to sanity: ${err}`;
       // notify neighborly of error writing to sanity orders
     });
 }

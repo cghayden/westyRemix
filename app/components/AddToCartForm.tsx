@@ -67,7 +67,6 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
               <button
                 type='button'
                 onClick={() => {
-                  console.log('cart total:', totalCartQuantity);
                   if (
                     totalCartQuantity === coffee.stock ||
                     totalCartQuantity + desiredQuantity === coffee.stock

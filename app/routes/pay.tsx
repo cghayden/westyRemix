@@ -15,17 +15,7 @@ const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();
   const cartBody = form.get('cart');
-  console.log('cartBody', cartBody);
   const orderDetailsBody = form.get('orderDetails');
-  // function constructOrderDetails(formData) {
-  //   const result = {};
-  //   for (const pair of formData.entries()) {
-  //     result[pair[0]] = pair[1];
-  //   }
-  //   return result;
-  // }
-  // const orderDetails = constructOrderDetails(form);
-  // const cart = orderDetails.cart;
 
   invariant(
     typeof cartBody === 'string',
@@ -37,7 +27,6 @@ export const action = async ({ request }: ActionArgs) => {
   );
 
   const cart = JSON.parse(cartBody);
-  // const orderDetails = JSON.parse(orderDetailsBody);
 
   //create an OBJ of cart Items keyed by price and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
   const cartKeyedByName = reduceCartByName(cart);
@@ -83,7 +72,6 @@ export const action = async ({ request }: ActionArgs) => {
 
 export default function Pay() {
   const paymentIntent = useActionData<typeof action>();
-  console.log('paymentIntent', paymentIntent);
 
   if (!paymentIntent.client_secret) {
     return <p>error</p>;

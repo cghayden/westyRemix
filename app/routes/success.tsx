@@ -10,19 +10,6 @@ export const loader = async ({ request }: LoaderArgs) => {
   if (!id) return null;
   const paymentIntent = await retrievePaymentIntent(id);
   console.log('paymentIntent', paymentIntent);
-  const orderDetails = JSON.parse(paymentIntent.metadata.orderDetails);
-  const cartItems = JSON.parse(paymentIntent.metadata.cartItems);
-  const orderId = paymentIntent.id;
-  const total = paymentIntent.amount_received;
-
-  writeOrderToSanity({
-    cart: cartItems,
-    customer: orderDetails.customerDetails,
-    fulfillment: orderDetails.fulfillmentDetails,
-    total,
-    id: orderId,
-  });
-
   return paymentIntent;
 };
 
