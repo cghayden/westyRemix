@@ -32,10 +32,12 @@ export default function Index() {
       </ContentContainer>
     );
   }
+
+  // TODO - pending UI
   return (
     <ContentContainer>
       <CollapsibleCartSummary />
-      <Form onSubmit={handleSubmit} method='post'>
+      <Form onSubmit={handleSubmit}>
         <PaymentElement />
         <button className='bg-amber-700 text-amber-50 px-4 py-3'>
           confirm
