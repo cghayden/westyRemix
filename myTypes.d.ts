@@ -33,7 +33,7 @@ export interface OrderDetails {
   fulfillment: FulfillmentDetails;
   cart: CartItem[];
   total: number;
-  id: string;
+  id: string | null;
 }
 
 export interface SanityOrder {

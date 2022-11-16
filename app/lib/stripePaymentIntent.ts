@@ -1,3 +1,4 @@
+import { OrderDetails } from 'myTypes';
 import Stripe from 'stripe';
 
 // The docs do not show the config being required, because it's optional when using vanilla javascript. When using typescript it's required because the types are pinned to a specific API version.
@@ -7,18 +8,14 @@ const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY, {
   apiVersion: '2022-08-01',
 });
 
-export async function createPaymentIntent(
-  total: number,
-  cart: string,
-  orderDetails: string
-) {
+export async function createPaymentIntent(orderDetails: OrderDetails) {
   return await stripe.paymentIntents.create({
-    amount: total,
+    amount: orderDetails.total,
     currency: 'usd',
     automatic_payment_methods: {
       enabled: true,
     },
-    metadata: { orderDetails, cartItems: cart },
+    metadata: { orderDetails: JSON.stringify(orderDetails) },
   });
 }
 export async function retrievePaymentIntent(id: string) {

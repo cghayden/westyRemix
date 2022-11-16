@@ -1,4 +1,5 @@
 import { LoaderArgs, redirect } from '@remix-run/node';
+import { OrderDetails } from 'myTypes';
 import { writeOrderToSanity } from '~/lib/sanity/writeOrder';
 import { retrievePaymentIntent } from '~/lib/stripePaymentIntent';
 
@@ -8,15 +9,17 @@ export const loader = async ({ request }: LoaderArgs) => {
   if (!id) return null;
   const paymentIntent = await retrievePaymentIntent(id);
   console.log('paymentIntent', paymentIntent);
-  const orderDetails = JSON.parse(paymentIntent.metadata.orderDetails);
-  const cartItems = JSON.parse(paymentIntent.metadata.cartItems);
+  const orderDetails: OrderDetails = JSON.parse(
+    paymentIntent.metadata.orderDetails
+  );
+  const cartItems = orderDetails.cart;
   const orderId = paymentIntent.id;
   const total = paymentIntent.amount_received;
 
   writeOrderToSanity({
     cart: cartItems,
-    customer: orderDetails.customerDetails,
-    fulfillment: orderDetails.fulfillmentDetails,
+    customer: orderDetails.customer,
+    fulfillment: orderDetails.fulfillment,
     total,
     id: orderId,
   });

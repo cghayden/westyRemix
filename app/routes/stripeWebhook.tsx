@@ -1,4 +1,5 @@
 import { ActionArgs } from '@remix-run/node';
+import { OrderDetails } from 'myTypes';
 import Stripe from 'stripe';
 import { writeOrderToSanity } from '~/lib/sanity/writeOrder';
 
@@ -21,21 +22,23 @@ export const action = async ({ request }: ActionArgs) => {
     console.log('payment succeeded');
     console.log(event.data.object.metadata);
 
-    const orderDetails = JSON.parse(event.data.object.metadata.orderDetails);
-    const cartItems = JSON.parse(event.data.object.metadata.cartItems);
-    const orderId = event.data.object.id;
-    const total = event.data.object.amount_captured;
+    const orderDetails: OrderDetails = JSON.parse(
+      event.data.object.metadata.orderDetails
+    );
+    const cartItems = orderDetails.cart;
+    const orderId = orderDetails.id;
+    const total = orderDetails.total;
 
     try {
       writeOrderToSanity({
         cart: cartItems,
-        customer: orderDetails.customerDetails,
-        fulfillment: orderDetails.fulfillmentDetails,
+        customer: orderDetails.customer,
+        fulfillment: orderDetails.fulfillment,
         total,
         id: orderId,
       });
     } catch (err) {
-      console.log('errror writing to sanity:', err);
+      console.log('error writing to sanity:', err);
     }
   }
   return {};

@@ -1,48 +1,123 @@
 import { LoaderArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-import { CartItem, OrderDetails } from 'myTypes';
-import { writeOrderToSanity } from '~/lib/sanity/writeOrder';
 import { retrievePaymentIntent } from '~/lib/stripePaymentIntent';
+import ContentContainer from '~/components/styledContainers/ContentContainer';
+import { OrderDetails } from 'myTypes';
+import formatMoney from '~/lib/formatMoney';
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url);
   const id = url.searchParams.get('payment_intent');
   if (!id) return null;
   const paymentIntent = await retrievePaymentIntent(id);
-  console.log('paymentIntent', paymentIntent);
-  return paymentIntent;
+  const orderDetails: OrderDetails = JSON.parse(
+    paymentIntent.metadata.orderDetails
+  );
+
+  return orderDetails;
 };
 
 export default function success() {
-  const paymentIntent = useLoaderData<typeof loader>();
-  console.log('paymentIntent', paymentIntent);
-  // const {cartItems} = JSON.parse(paymentIntent.metadata.cartItems);
-  // console.log('cartItems', cartItems);
+  const orderDetails = useLoaderData<typeof loader>();
+  console.log('orderDetails in success', orderDetails);
+  const cartItems = orderDetails?.cart;
+  const customer = orderDetails?.customer;
+  const fulfillment = orderDetails?.fulfillment;
+
   return (
-    <div>
-      Thank You for your order! details of your order are below, and you should
-      receive a receipt in your email. Please contact us with any questions
-      <p>Order:</p>
-      {/* <ul>
-        {cartItems.map((cartItem: CartItem) => (
-          <li key={cartItem.variant_id}>
-            {cartItem.quantity} {cartItem.name}, {cartItem.grind}
-          </li>
-        ))}
-      </ul>
-      <p>Total Charge: {paymentIntent.amount}</p>
-      {paymentIntent.shipping ? (
-        <div>
-          <p>Ship To:</p>
-          <p>{paymentIntent.shipping.name}</p>
-          <p>{paymentIntent.shipping.address.line1}</p>
+    <main>
+      <ContentContainer>
+        <h2 className='text-xl font-bold'>Thank You For Your Order!</h2>
+        <div className='ml-4'>
+          <p>Check your email for a receipt of your order</p>
           <p>
-            <span>{paymentIntent.shipping.address.city}, </span>
-            <span>{paymentIntent.shipping.address.state} </span>
-            <span>{paymentIntent.shipping.address.postal_code}</span>
+            We'll contact you when your order
+            {fulfillment?.method === 'pickup'
+              ? ' is ready for pickup'
+              : ' ships'}
           </p>
         </div>
-      ) : null} */}
-    </div>
+        <h3 className='text-xl font-bold'>Order Summary</h3>
+        <div>
+          <div className='ml-4'>
+            <p>{customer?.customerName}</p>
+            <p>{customer?.customerEmail}</p>
+            <p>{customer?.customerPhone}</p>
+          </div>
+        </div>
+        {fulfillment?.method === 'pickup' ? (
+          <div>
+            <h3 className='text-xl font-bold'>Delivery:</h3>
+            <div className='ml-4'>
+              <p>pickup at: {fulfillment.pickupLocation}</p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <h3 className='text-xl font-bold'>ship to: </h3>
+            <div className='ml-4'>
+              <p>{fulfillment?.shippingName}</p>
+              <p>{fulfillment?.shippingAddressLine1}</p>
+              <p>{fulfillment?.shippingAddressLine2}</p>
+              <p>
+                <span>{fulfillment?.shippingCity}</span>
+                <span>{fulfillment?.shippingPostal_code}</span>
+              </p>
+            </div>
+          </div>
+        )}
+
+        <ul className='w-2/3 mx-auto'>
+          {cartItems?.map((cartItem) => (
+            <li key={cartItem.name}>
+              <p className='flex'>
+                {`${cartItem.quantity} ${cartItem.name}, ${cartItem.grind}: `}
+                <span className='ml-auto'>
+                  {`$${formatMoney(cartItem.price * cartItem.quantity)}`}
+                </span>
+              </p>
+            </li>
+          ))}
+          {fulfillment?.method === 'shipping' && (
+            <li className='px-3'>
+              <p className='flex'>
+                Shipping: set cost on fulfillment type and include on Payment
+                Intent
+                {/* <span className='ml-auto'>{`$${formatMoney(shipping)}`}</span> */}
+              </p>
+            </li>
+          )}
+        </ul>
+        {/* 
+            <div className='paymentDetails'>
+              {shippingDetails.deliveryMethod === 'Shipping' && (
+                <p
+                  style={{
+                    textAlign: 'right',
+                    color: 'darkgreen',
+                    fontSize: '1rem',
+                  }}
+                >
+                  Shipping: {charge.amount < 5000 ? '$10.00' : '$0.00'}
+                </p>
+              )}
+              <p>Total Amount Charged: ${formatMoney(charge.amount)}</p>
+            </div>
+            <DeliveryMethodDiv>
+              {shippingDetails.deliveryMethod === 'Pickup' ? (
+                <>
+                  <h4>picking up at</h4>
+                  <PickupDetailsReview shippingDetails={shippingDetails} />
+                </>
+              ) : (
+                <>
+                  <h4>shipping to:</h4>
+                  <ShippingDetailsReview shippingDetails={shippingDetails} />
+                </>
+              )}
+            </DeliveryMethodDiv>
+          */}
+      </ContentContainer>
+    </main>
   );
 }

@@ -9,6 +9,7 @@ import checkAvailability from '~/lib/checkAvailability';
 import calcVerifiedTotal from '~/lib/calcVerifiedTotal';
 import reduceCartByName from '~/lib/reduceCartByName';
 import { createPaymentIntent } from '~/lib/stripePaymentIntent';
+import { OrderDetails } from 'myTypes';
 
 const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
 
@@ -28,6 +29,7 @@ export const action = async ({ request }: ActionArgs) => {
 
   const cart = JSON.parse(cartBody);
 
+  const orderDetails = JSON.parse(orderDetailsBody);
   //create an OBJ of cart Items keyed by price and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
   const cartKeyedByName = reduceCartByName(cart);
 
@@ -62,12 +64,17 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   const total = calcVerifiedTotal(cartKeyedByName);
-  return await createPaymentIntent(total, cartBody, orderDetailsBody).catch(
-    (err) => {
-      console.log(err);
-      return err;
-    }
-  );
+  const typedOrderDetails: OrderDetails = {
+    cart,
+    total,
+    customer: orderDetails.customerDetails,
+    fulfillment: orderDetails.fulfillmentDetails,
+    id: null,
+  };
+  return await createPaymentIntent(typedOrderDetails).catch((err) => {
+    console.log(err);
+    return err;
+  });
 };
 
 export default function Pay() {
