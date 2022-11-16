@@ -20,17 +20,18 @@ export interface FulfillmentDetails {
   shippingCity: string;
   shippingState: string;
   shippingPostal_code: string;
+  shippingCost: number;
 }
 
-export interface Customer {
+export interface CustomerDetails {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
 }
 
 export interface OrderDetails {
-  customer: Customer;
-  fulfillment: FulfillmentDetails;
+  customerDetails: CustomerDetails;
+  fulfillmentDetails: FulfillmentDetails;
   cart: CartItem[];
   total: number;
   id: string | null;
@@ -53,5 +54,6 @@ export interface SanityOrder {
   shippingState: string;
   shippingZip: string;
   customerComments: string;
+  // shippingCost: number
   env;
 }

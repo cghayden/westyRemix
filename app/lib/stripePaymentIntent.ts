@@ -9,14 +9,48 @@ const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY, {
 });
 
 export async function createPaymentIntent(orderDetails: OrderDetails) {
-  return await stripe.paymentIntents.create({
-    amount: orderDetails.total,
-    currency: 'usd',
-    automatic_payment_methods: {
-      enabled: true,
-    },
-    metadata: { orderDetails: JSON.stringify(orderDetails) },
-  });
+  const { fulfillmentDetails } = orderDetails;
+  if (fulfillmentDetails.method === 'shipping') {
+    return await stripe.paymentIntents.create({
+      amount: orderDetails.total,
+      receipt_email: orderDetails.customerDetails.customerEmail,
+      shipping: {
+        name: orderDetails.customerDetails.customerName,
+        address: {
+          line1: fulfillmentDetails.shippingAddressLine1,
+          line2: fulfillmentDetails.shippingAddressLine2,
+          city: fulfillmentDetails.shippingCity,
+          state: fulfillmentDetails.shippingState,
+          postal_code: fulfillmentDetails.shippingPostal_code,
+        },
+      },
+      currency: 'usd',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+      description: JSON.stringify(orderDetails.cart),
+      metadata: {
+        customerDetails: JSON.stringify(orderDetails.customerDetails),
+        fulfillmentDetails: JSON.stringify(fulfillmentDetails),
+      },
+    });
+  }
+
+  if (fulfillmentDetails.method === 'pickup') {
+    return await stripe.paymentIntents.create({
+      amount: orderDetails.total,
+      receipt_email: orderDetails.customerDetails.customerEmail,
+      currency: 'usd',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+      description: JSON.stringify(orderDetails.cart),
+      metadata: {
+        customerDetails: JSON.stringify(orderDetails.customerDetails),
+        fulfillmentDetails: JSON.stringify(fulfillmentDetails),
+      },
+    });
+  }
 }
 export async function retrievePaymentIntent(id: string) {
   return await stripe.paymentIntents.retrieve(id);

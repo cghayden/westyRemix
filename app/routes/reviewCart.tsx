@@ -1,12 +1,7 @@
 import { useState } from 'react';
-import {
-  Form,
-  useSearchParams,
-  useSubmit,
-  useTransition,
-} from '@remix-run/react';
+import { useSearchParams, useSubmit, useTransition } from '@remix-run/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Customer, FulfillmentDetails, OrderDetails } from 'myTypes';
+import { CustomerDetails, FulfillmentDetails, OrderDetails } from 'myTypes';
 import CartSummary from '~/components/CartSummary';
 import ShippingDetailsInputs from '~/components/ShippingDetailsInputs';
 import CustomerDetailsInputs from '~/components/CustomerDetailsInputs';
@@ -26,7 +21,7 @@ export default function CheckoutPage() {
   const transition = useTransition();
   const submit = useSubmit();
 
-  const [customerDetails, setCustomerDetails] = useState({} as Customer);
+  const [customerDetails, setCustomerDetails] = useState({} as CustomerDetails);
   const [fulfillmentDetails, setFulfillmentDetails] = useState({
     method: 'pickup',
     pickupLocation: '',
@@ -41,13 +36,12 @@ export default function CheckoutPage() {
     const formData = new FormData();
     formData.set(
       'orderDetails',
-      JSON.stringify({ customerDetails, fulfillmentDetails })
+      JSON.stringify({ customerDetails, fulfillmentDetails, cart: cartItems })
     );
-    formData.set('cart', JSON.stringify(cartItems));
     submit(formData, { method: 'post', action: '/pay' });
   };
 
-  // review cart, and on confirmation, send cart to '/checkout' action via form submission
+  // review cart, and on confirmation, send cart to '/pay' action handler via form submission
   // if the action finds errors of price or stock, it will redirect back to this page with warnings in the url query string
   return (
     <div>
@@ -56,7 +50,7 @@ export default function CheckoutPage() {
         <CartSummary />
       </ContentContainer>
       <ContentContainer>
-        <Form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           {warnings && (
             <div>
               <ul>
@@ -181,7 +175,7 @@ export default function CheckoutPage() {
               ? 'calculating...'
               : 'looks good!'}{' '}
           </button>
-        </Form>
+        </form>
       </ContentContainer>
     </div>
   );

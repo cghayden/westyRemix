@@ -8,21 +8,23 @@ export const loader = async ({ request }: LoaderArgs) => {
   const id = url.searchParams.get('payment_intent');
   if (!id) return null;
   const paymentIntent = await retrievePaymentIntent(id);
-  console.log('paymentIntent', paymentIntent);
-  const orderDetails: OrderDetails = JSON.parse(
-    paymentIntent.metadata.orderDetails
+
+  const customerDetails = JSON.parse(paymentIntent.metadata.customerDetails);
+  const fulfillmentDetails = JSON.parse(
+    paymentIntent.metadata.fulfillmentDetails
   );
-  const cartItems = orderDetails.cart;
+  const cartItems = JSON.parse(paymentIntent.description);
   const orderId = paymentIntent.id;
   const total = paymentIntent.amount_received;
 
   writeOrderToSanity({
     cart: cartItems,
-    customer: orderDetails.customer,
-    fulfillment: orderDetails.fulfillment,
+    customerDetails,
+    fulfillmentDetails,
     total,
     id: orderId,
   });
 
   return redirect(`/success?payment_intent=${id}`);
+  // return redirect('/test');
 };

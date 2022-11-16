@@ -8,7 +8,8 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
   const orderNumber = nanoid();
   // ?? is it ok to assign an object to a var like this , or make a copy {...}
   const cartItems = orderDetails.cart;
-  const { customerName, customerEmail, customerPhone } = orderDetails.customer;
+  const { customerName, customerEmail, customerPhone } =
+    orderDetails.customerDetails;
   const {
     method,
     pickupLocation,
@@ -18,7 +19,7 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     shippingCity,
     shippingPostal_code,
     shippingState,
-  } = orderDetails.fulfillment;
+  } = orderDetails.fulfillmentDetails;
 
   const configuredOrderItems = cartItems.map((cartItem) => {
     return {

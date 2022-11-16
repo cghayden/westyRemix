@@ -1,4 +1,4 @@
-import { Customer } from 'myTypes';
+import { CustomerDetails } from 'myTypes';
 import CheckoutFormField from './CheckoutFormField';
 import FieldsetGroup from './styledContainers/FieldsetGroup';
 
@@ -6,8 +6,8 @@ export default function CustomerDetailsInputs({
   customerDetails,
   setCustomerDetails,
 }: {
-  customerDetails: Customer;
-  setCustomerDetails: React.Dispatch<React.SetStateAction<Customer>>;
+  customerDetails: CustomerDetails;
+  setCustomerDetails: React.Dispatch<React.SetStateAction<CustomerDetails>>;
 }) {
   //will still react controlled inputs for custom UI on form...
   return (

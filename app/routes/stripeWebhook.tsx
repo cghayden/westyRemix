@@ -32,8 +32,8 @@ export const action = async ({ request }: ActionArgs) => {
     try {
       writeOrderToSanity({
         cart: cartItems,
-        customer: orderDetails.customer,
-        fulfillment: orderDetails.fulfillment,
+        customerDetails: orderDetails.customerDetails,
+        fulfillmentDetails: orderDetails.fulfillmentDetails,
         total,
         id: orderId,
       });
