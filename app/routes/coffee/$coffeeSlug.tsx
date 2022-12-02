@@ -71,7 +71,7 @@ export default function CoffeeRoute() {
         />
       )}
       {/* When working with draft content, optional chain _everything_ */}
-      <div className='label__desc+formContainer mx-auto max-w-[800px] mt-4'>
+      <div className=' mx-auto max-w-[800px] mt-4'>
         {coffee?.name && (
           <h2 className='p-4 text-3xl text-center'>{coffee.name}</h2>
         )}

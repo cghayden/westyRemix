@@ -1,9 +1,4 @@
-import { Coffee } from 'sanityTypes';
-
-export function filterDataToSingleItem(
-  data: Coffee[] = [],
-  preview: Boolean = false
-) {
+export function filterDataToSingleItem(data = [], preview = false) {
   if (!Array.isArray(data)) {
     return data;
   }

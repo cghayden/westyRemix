@@ -1,6 +1,5 @@
-import { json, LoaderArgs, LoaderFunction } from '@remix-run/node';
+import { LoaderArgs, LoaderFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
-import ContentContainer from '~/components/styledContainers/ContentContainer';
 import { urlFor } from '~/lib/sanity/helpers';
 import sanity from '~/lib/sanity/sanity';
 import { PortableText } from '@portabletext/react';
