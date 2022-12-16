@@ -18,7 +18,10 @@ export default function AdjustQuantityButtons({
   const removeFromCart = useRemoveFromCart();
   const cartItems = useCartItems();
 
-  const totalQ = getTotalQuantityInCart(cartItem.coffeeId, cartItems);
+  const totalCartQuantity = getTotalQuantityInCart(
+    cartItem.coffeeId,
+    cartItems
+  );
 
   return (
     <>
@@ -55,7 +58,10 @@ export default function AdjustQuantityButtons({
             <button
               className='-mt-1 text-green-50'
               onClick={() => {
-                if (totalQ === cartItem.inStock || cartItem.inStock < totalQ) {
+                if (
+                  totalCartQuantity === cartItem.inStock ||
+                  cartItem.inStock < totalCartQuantity
+                ) {
                   setAlert(`There are only ${cartItem.inStock} available`);
                   setTimeout(() => {
                     setAlert(null);

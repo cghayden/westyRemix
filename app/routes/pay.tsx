@@ -3,29 +3,33 @@ import { Outlet, useActionData } from '@remix-run/react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import invariant from 'tiny-invariant';
-import { createPaymentIntent } from '~/lib/stripePaymentIntent';
-const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
-import reduceCartByName from '~/lib/reduceCartByName';
 import { Coffee } from 'sanityTypes';
 import sanityClient from '~/lib/sanity/sanity';
 import checkAvailability from '~/lib/checkAvailability';
 import calcVerifiedTotal from '~/lib/calcVerifiedTotal';
+import reduceCartByName from '~/lib/reduceCartByName';
+import { createPaymentIntent } from '~/lib/stripePaymentIntent';
+import { OrderDetails } from 'myTypes';
+import calcShipping from '~/lib/calcShipping';
+
+const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8');
 
 export const action = async ({ request }: ActionArgs) => {
-  const body = await request.formData();
-  const res = body.get('cart');
+  const form = await request.formData();
+  const orderDetailsBody = form.get('orderDetails');
+
   invariant(
-    typeof res === 'string',
+    typeof orderDetailsBody === 'string',
     'cart not submitted properly; must be a string'
   );
-  const cart = JSON.parse(res);
+
+  const orderDetails: OrderDetails = JSON.parse(orderDetailsBody);
+  const cart = orderDetails.cart;
+
   //create an OBJ of cart Items keyed by price and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
   const cartKeyedByName = reduceCartByName(cart);
-  console.log('cartKeyedByName', cartKeyedByName);
-
   // create array of coffeeNames that need to be queried in Sanity
   const coffeeInCart: string[] = Object.keys(cartKeyedByName);
-
   // query Sanity to verify prices and stock
   const sanityQuery = `*[_type == "coffee" && name in ${JSON.stringify(
     coffeeInCart
@@ -54,20 +58,38 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   const total = calcVerifiedTotal(cartKeyedByName);
-  return await createPaymentIntent(total);
+  const shippingCost = calcShipping(total);
+  orderDetails.fulfillmentDetails.shippingCost = shippingCost;
+  const typedOrderDetails: OrderDetails = {
+    cart,
+    total: total + shippingCost,
+    customerDetails: orderDetails.customerDetails,
+    fulfillmentDetails: orderDetails.fulfillmentDetails,
+    id: null,
+  };
+  return await createPaymentIntent(typedOrderDetails).catch((err) => {
+    console.log(err);
+    return err;
+  });
 };
 
 export default function Pay() {
-  const paymentIntent = useActionData();
+  const paymentIntent = useActionData<typeof action>();
+
+  if (!paymentIntent.client_secret) {
+    return <p>error</p>;
+  }
+
   return (
-    <div>
-      <h1>Pay</h1>
-      <Elements
-        stripe={stripePromise}
-        options={{ clientSecret: paymentIntent.client_secret }}
-      >
-        <Outlet />
-      </Elements>
-    </div>
+    <Elements
+      stripe={stripePromise}
+      // options={{
+      //   clientSecret:
+      //     'pi_3LuIt8IelpPXOmiI2As4bJfd_secret_5IMVODJXybZEcywL312Oje2R7',
+      // }}
+      options={{ clientSecret: paymentIntent.client_secret }}
+    >
+      <Outlet />
+    </Elements>
   );
 }

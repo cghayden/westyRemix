@@ -1,0 +1,25 @@
+.input-radio {
+  background-color: white;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+  width: 18px;
+  height: 18px;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  cursor: pointer;
+  vertical-align: -4px;
+  border: 1px solid;
+  appearance: none;
+  border-radius: 50%;
+}
+
+.input-radio:checked {
+  border-color: rgb(30 64 175);
+  border-width: 7px;
+}
+
+.input-radio:focus-visible {
+  outline: -webkit-focus-ring-color auto 1px;
+  outline: rgb(30 64 175) auto 1px;
+}

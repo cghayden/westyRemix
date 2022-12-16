@@ -11,16 +11,17 @@ import type { Coffee } from '../../sanityTypes';
 import getTotalQuantityInCart from '~/lib/getTotalQuantityInCart';
 
 export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
+  const [alert, setAlert] = useState<string | null>();
   const [grind, setGrind] = useState('whole');
   const [desiredQuantity, setDesiredQuantity] = useState<number>(1);
   const cartItems = useCartItems();
   const changeCartItemQuantity = useChangeCartItemQuantity();
   const { toggleIsCartOpen } = useCartUtils();
+  const totalCartQuantity = getTotalQuantityInCart(coffee._id, cartItems);
 
   const handleGrindChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGrind(e.target.value);
   };
-  const totalCartQuantity = getTotalQuantityInCart(coffee._id, cartItems);
 
   return (
     <>
@@ -65,11 +66,21 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
               <p className='mx-5 text-xl'>{desiredQuantity}</p>
               <button
                 type='button'
-                disabled={
-                  totalCartQuantity + desiredQuantity === coffee.stock ||
-                  totalCartQuantity + desiredQuantity > coffee.stock
-                }
-                onClick={() => setDesiredQuantity(desiredQuantity + 1)}
+                onClick={() => {
+                  if (
+                    totalCartQuantity === coffee.stock ||
+                    totalCartQuantity + desiredQuantity === coffee.stock
+                  ) {
+                    setAlert(
+                      `you have ${totalCartQuantity} ${coffee.name} in your cart.  There are only ${coffee.stock} available`
+                    );
+                    setTimeout(() => {
+                      setAlert(null);
+                    }, 2000);
+                  } else {
+                    setDesiredQuantity(desiredQuantity + 1);
+                  }
+                }}
               >
                 <PlusSvg w={'18'} h={'18'} />
               </button>
@@ -78,10 +89,14 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
         </div>
         <div>
           <button
-            disabled={totalCartQuantity + desiredQuantity > coffee.stock}
-            className='text-lg bg-slate-600 text-slate-50 rounded-full px-5 py-2 mt-2'
+            disabled={
+              totalCartQuantity === coffee.stock ||
+              totalCartQuantity + desiredQuantity > coffee.stock
+            }
+            className='text-lg bg-slate-600 text-slate-50 rounded-full px-5 py-2 mt-2 disabled:bg-slate-300 disabled:text-slate:100'
             onClick={(e) => {
               e.preventDefault();
+              setDesiredQuantity(1);
               changeCartItemQuantity({
                 name: `${coffee.name}`,
                 coffeeId: `${coffee._id}`,
@@ -97,15 +112,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             Add {desiredQuantity} to Cart
           </button>
         </div>
-        {totalCartQuantity > 0 && (
-          <p>
-            {totalCartQuantity} {coffee.name} in your cart
-          </p>
-        )}
-        {totalCartQuantity + desiredQuantity === coffee.stock ||
-        totalCartQuantity + desiredQuantity > coffee.stock ? (
-          <p>there are only {coffee.stock} in stock</p>
-        ) : null}
+        {alert && <p>{alert}</p>}
       </div>
     </>
   );

@@ -67,7 +67,6 @@ const myCartReducerFunction = (
         return updatedCart;
       }
     case 'REMOVE_FROM_CART':
-      console.log('REMOVE_FROM_CART');
       const cartCopy = [...cartItemsState];
       cartCopy.splice(cartItemIndex, 1);
       return cartCopy;

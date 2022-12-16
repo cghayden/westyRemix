@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useCartItems } from '~/context/useCart';
 import PlaySvg from '~/icons/PlaySvg';
+import calcTotalPrice from '~/lib/calcCartTotal';
 import formatMoney from '~/lib/formatMoney';
 
 export default function CollapsibleCartSummary() {
   const [showSummary, toggleShowSummary] = useState(false);
   const cartItems = useCartItems();
-
+  const subtotal = calcTotalPrice(cartItems);
+  const shipping = subtotal < 4999 ? 1000 : 0;
+  if (!cartItems.length) return <div>Your cart is empty</div>;
   return (
     <>
       <div className='flex p-2 w-full items-center '>
@@ -19,7 +22,9 @@ export default function CollapsibleCartSummary() {
           </div>
         </button>
         <p>{showSummary ? `Hide Summary` : `Show Summary`}</p>
-        <p className='ml-auto'>T?.00</p>
+        <p className='ml-auto'>{`Total Cost: $${formatMoney(
+          subtotal + shipping
+        )}`}</p>
       </div>
       <div>
         <p className='p-2'>
@@ -38,7 +43,7 @@ export default function CollapsibleCartSummary() {
               <li className='px-3'>
                 <p className='flex'>
                   Shipping:
-                  <span className='ml-auto'>$?.00</span>
+                  <span className='ml-auto'>{`$${formatMoney(shipping)}`}</span>
                 </p>
               </li>
             </ul>
