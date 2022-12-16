@@ -61,7 +61,7 @@ export default function Index() {
                 <h2 className='font-bold text-center pt-2 py-0 col-span-full'>
                   {post.title}
                 </h2>
-                <p className='text-xs col-span-full pb-4'>
+                <p className='text-xs pb-4'>
                   {dayjs(post.publishedAt).format('MMMM DD, YYYY')}
                 </p>
                 <div className='flex flex-col md:flex-row md:items-start md:justify-around items-center w-full'>
