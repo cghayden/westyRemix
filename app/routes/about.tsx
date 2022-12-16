@@ -15,7 +15,7 @@ export default function aboutPage() {
   console.log('data', data);
   return (
     <main>
-      <h1>{data.heading}</h1>
+      <h1 className='text-2xl font-bold text-center my-4'>{data.heading}</h1>
       <ContentContainer>
         <PortableText value={data.content} />
       </ContentContainer>

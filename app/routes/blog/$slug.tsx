@@ -8,6 +8,7 @@ import { getClient } from '~/lib/sanity/getClient';
 import { PortableText, urlFor } from '~/lib/sanity/helpers';
 import ContentContainer from '~/components/styledContainers/ContentContainer';
 import { ImageUrlBuilder } from '@sanity/image-url/lib/types/builder';
+import dayjs from 'dayjs';
 // interface ImageProps extends Omit<React.HTMLProps<HTMLImageElement>, 'src'> {
 //   src: string | ImageUrlBuilder;
 // }
@@ -76,19 +77,21 @@ export default function CoffeeRoute() {
       )}
       {/* When working with draft content, optional chain _everything_ */}
       <ContentContainer>
-        Post Container
+        {post?.title && (
+          <h2 className='p-4 text-3xl text-center'>{post.title}</h2>
+        )}
+        {post?.publishedAt && (
+          <p className='text-xs text-center pb-4'>
+            {dayjs(post.publishedAt).format('MMMM DD, YYYY')}
+          </p>
+        )}
         {post?.mainImage && (
           <img
             loading='lazy'
-            src={urlFor(post.mainImage)}
-            width='400'
-            height='200'
+            src={urlFor(post.mainImage).fit('max').url()}
             alt={post?.title ?? ``}
-            className='m-auto py-7'
+            className='m-auto py-7 max-w-lg w-full'
           />
-        )}
-        {post?.title && (
-          <h2 className='p-4 text-3xl text-center'>{post.title}</h2>
         )}
         <PortableText value={post.body} />
       </ContentContainer>
