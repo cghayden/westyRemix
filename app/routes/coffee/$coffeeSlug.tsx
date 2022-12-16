@@ -7,6 +7,8 @@ import Preview from '~/components/Preview';
 import { getClient } from '~/lib/sanity/getClient';
 import { PortableText, urlFor } from '~/lib/sanity/helpers';
 import AddToCartForm from '~/components/AddToCartForm';
+import ContentContainer from '~/components/styledContainers/ContentContainer';
+import dayjs from 'dayjs';
 
 type LoaderData = {
   initialData: Coffee[];
@@ -71,7 +73,7 @@ export default function CoffeeRoute() {
         />
       )}
       {/* When working with draft content, optional chain _everything_ */}
-      <div className=' mx-auto max-w-[800px] mt-4'>
+      <ContentContainer>
         {coffee?.name && (
           <h2 className='p-4 text-3xl text-center'>{coffee.name}</h2>
         )}
@@ -100,17 +102,19 @@ export default function CoffeeRoute() {
               {coffee?.roastDate && (
                 <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
                       roasted
                     </dt>
-                    <dd className='text-amber-800'>{coffee.roastDate}</dd>
+                    <dd className='text-amber-800'>
+                      {dayjs(coffee.roastDate).format('MMMM DD')}
+                    </dd>
                   </>
                 </div>
               )}
               {coffee?.grade && (
                 <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                    <dt className='w-20 w- text-slate-900 justify-self-start text-lg mr-3'>
                       grade
                     </dt>
                     <dd className='text-amber-800'>{coffee.grade}</dd>
@@ -120,7 +124,7 @@ export default function CoffeeRoute() {
               {coffee?.region && (
                 <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
                       region
                     </dt>
                     <dd className='text-amber-800'>{coffee.region}</dd>
@@ -130,7 +134,8 @@ export default function CoffeeRoute() {
               {coffee?.cultivar && (
                 <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                    post{' '}
+                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
                       cultivar
                     </dt>
                     <dd className='text-amber-800'>{coffee.cultivar}</dd>
@@ -140,7 +145,8 @@ export default function CoffeeRoute() {
               {coffee?.elevation && (
                 <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                    post{' '}
+                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
                       elevation
                     </dt>
                     <dd className='text-amber-800'>{coffee.elevation}</dd>
@@ -150,7 +156,8 @@ export default function CoffeeRoute() {
               {coffee?.process && (
                 <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='text-amber-800 justify-self-start text-lg mr-3'>
+                    post{' '}
+                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
                       process
                     </dt>
                     <dd className='text-amber-800'>{coffee.process}</dd>
@@ -166,7 +173,7 @@ export default function CoffeeRoute() {
             )}
           </div>
         </div>
-      </div>
+      </ContentContainer>
     </main>
   );
 }

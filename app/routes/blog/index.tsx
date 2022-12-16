@@ -3,6 +3,7 @@ import { Link, useLoaderData } from '@remix-run/react';
 import { urlFor } from '~/lib/sanity/helpers';
 import sanity from '~/lib/sanity/sanity';
 import { PortableText } from '@portabletext/react';
+import dayjs from 'dayjs';
 
 const query = `*[_type == "post" && !(_id in path('drafts.**'))] | order(publishedAt desc) {
   _id,
@@ -46,29 +47,37 @@ export default function Index() {
   return (
     <main>
       {/* {siteMeta?.bio && siteMeta?.bio?.length > 1 ? <Intro value={siteMeta.bio} /> : null} */}
-      <ul className='grid gap-5 mx-auto my-8 w-[95%] max-w-[800px]'>
+      <h1 className='text-center text-xl font-bold pt-4'>Blog</h1>
+
+      <ul className='grid gap-5 mx-auto my-6 w-[95%] max-w-[800px]'>
         {allPosts.length > 0 &&
           allPosts.map((post) => (
             <li key={post.title}>
               {/* Link has all ClassNames of ContentContainer except my-6 */}
               <Link
                 to={`${referringPath}/${post.slug.current}`}
-                className='bg-slate-50 p-4 rounded max-w-[800px] min-w-[316px] w-11/12 mx-auto grid md:grid-cols-autoFit2 h-full place-items-center gap-3 drop-shadow-md'
+                className='bg-slate-50 p-4 rounded w-full mx-auto flex flex-col h-full place-items-center drop-shadow-md'
               >
-                {post.mainImage && (
-                  <div>
+                <h2 className='font-bold text-center pt-2 py-0 col-span-full'>
+                  {post.title}
+                </h2>
+                <p className='text-xs col-span-full pb-4'>
+                  {dayjs(post.publishedAt).format('MMMM DD, YYYY')}
+                </p>
+                <div className='flex flex-col md:flex-row md:items-start md:justify-around items-center w-full'>
+                  {post.mainImage && (
                     <img
+                      className='max-w-[300]'
                       loading='lazy'
-                      src={urlFor(post.mainImage)}
+                      src={urlFor(post.mainImage).width(300).fit('max').url()}
                       // width='400'
                       // height='200'
                       alt={post.title ?? ``}
                     />
+                  )}
+                  <div className='text-center p-4'>
+                    <PortableText value={post.excerpt} />
                   </div>
-                )}
-                <div>
-                  <h2 className='font-bold text-center pb-4'>{post.title}</h2>
-                  <PortableText value={post.excerpt} />
                 </div>
               </Link>
             </li>

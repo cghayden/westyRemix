@@ -8,9 +8,9 @@ import { getClient } from '~/lib/sanity/getClient';
 import { PortableText, urlFor } from '~/lib/sanity/helpers';
 import ContentContainer from '~/components/styledContainers/ContentContainer';
 import { ImageUrlBuilder } from '@sanity/image-url/lib/types/builder';
-interface ImageProps extends Omit<React.HTMLProps<HTMLImageElement>, 'src'> {
-  src: string | ImageUrlBuilder;
-}
+// interface ImageProps extends Omit<React.HTMLProps<HTMLImageElement>, 'src'> {
+//   src: string | ImageUrlBuilder;
+// }
 type LoaderData = {
   initialData: Post[];
   preview: boolean;
@@ -65,7 +65,7 @@ export default function CoffeeRoute() {
   const post: Post = filterDataToSingleItem(data, preview);
   console.log('post', post);
   return (
-    <main className='h-screen'>
+    <main>
       {preview && (
         <Preview
           data={data}

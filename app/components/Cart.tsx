@@ -7,7 +7,7 @@ export default function Cart() {
   const cartItems = useCartItems();
   return (
     <div
-      className={`p-2 fixed bg-slate-50 h-screen w-11/12 max-w-[650px] min-w-[310px] top-0 right-0 z-40 transition-all duration-300 overflow-scroll
+      className={`p-2 fixed bg-slate-100 h-screen w-11/12 max-w-[650px] min-w-[310px] top-0 right-0 z-40 transition-all duration-300 overflow-scroll shadow-2xl
   ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}
     >
       <header className='flex px-2'>
@@ -39,23 +39,6 @@ export default function Cart() {
         >
           checkout
         </Link>
-      </div>
-      <div>
-        Cart:
-        {cartItems.map((cartItem, i) => (
-          <div key={cartItem.variant_id}>
-            <p className='text-2xl font-bold underline'>CartItem {i}</p>
-            {Object.keys(cartItem).map((cartItemKey, i) => (
-              <p className='text-xl' key={i}>
-                <span>
-                  {cartItemKey}:{'  '}
-                </span>
-                {/* @ts-ignore */}
-                <span>{cartItem[cartItemKey]}</span>
-              </p>
-            ))}
-          </div>
-        ))}
       </div>
     </div>
   );
