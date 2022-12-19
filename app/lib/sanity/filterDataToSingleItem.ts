@@ -1,4 +1,9 @@
-export function filterDataToSingleItem(data = [], preview = false) {
+import { SanityDocument } from '@sanity/client';
+
+export function filterDataToSingleItem(
+  data: SanityDocument[],
+  preview = false
+) {
   if (!Array.isArray(data)) {
     return data;
   }

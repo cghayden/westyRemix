@@ -15,6 +15,6 @@ interface ClientConfig {
 export const config: ClientConfig = {
   apiVersion: '2021-03-25',
   dataset: 'production',
-  projectId: 't9guxb1x',
+  projectId: process.env.SANITY_PROJECT_ID,
   useCdn: false,
 };
