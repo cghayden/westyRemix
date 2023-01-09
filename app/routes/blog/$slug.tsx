@@ -64,7 +64,6 @@ export default function CoffeeRoute() {
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
   const post: Post = filterDataToSingleItem(data, preview);
-  console.log('post', post);
   return (
     <main>
       {preview && (

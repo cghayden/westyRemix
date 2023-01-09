@@ -1,12 +1,14 @@
 import type { Coffee } from '../../sanityTypes';
 import CoffeeCard from './CoffeeCard';
 
-function FeaturedItems({
+function AllCoffee({
   allCoffee,
   referringPath,
+  previewQuery,
 }: {
   allCoffee: Coffee[];
   referringPath: string;
+  previewQuery: string;
 }) {
   return (
     <main className='px-4 py-2 w-full flex flex-col items-center'>
@@ -19,6 +21,7 @@ function FeaturedItems({
             key={coffee.name}
             coffee={coffee}
             referringPath={referringPath}
+            previewQuery={previewQuery}
           />
         ))}
       </div>
@@ -26,4 +29,4 @@ function FeaturedItems({
   );
 }
 
-export default FeaturedItems;
+export default AllCoffee;

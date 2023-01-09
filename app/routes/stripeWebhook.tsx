@@ -17,10 +17,8 @@ export const action = async ({ request }: ActionArgs) => {
   } catch (err: any) {
     return new Response(err.message, { status: 400 });
   }
-  console.log('event', event);
   if (event.type === 'charge.succeeded') {
-    console.log('payment succeeded');
-    console.log(event.data.object.metadata);
+    console.log('payment succeeded', event.data.object.metadata);
 
     const orderDetails: OrderDetails = JSON.parse(
       event.data.object.metadata.orderDetails

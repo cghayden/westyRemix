@@ -31,7 +31,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function success() {
   const orderDetails = useLoaderData<typeof loader>();
-  console.log('orderDetails in success', orderDetails);
   const cartItems = orderDetails?.cart;
   const customerDetails = orderDetails?.customerDetails;
   const fulfillmentDetails = orderDetails?.fulfillmentDetails;

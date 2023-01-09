@@ -12,7 +12,6 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
 
 export default function aboutPage() {
   const data = useLoaderData<typeof loader>()[0];
-  console.log('data', data);
   return (
     <main>
       <h1 className='text-2xl font-bold text-center my-4'>{data.heading}</h1>

@@ -16,5 +16,5 @@ export function filterDataToSingleItem(
     return data.find((item) => item._id.startsWith(`drafts.`)) || data[0];
   }
 
-  return data[0];
+  return data.find((item) => !item._id.startsWith(`drafts.`)) || data[0];
 }
