@@ -1,45 +1,45 @@
-import { useState } from 'react';
-import { useSearchParams, useSubmit, useTransition } from '@remix-run/react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CustomerDetails, FulfillmentDetails, OrderDetails } from 'myTypes';
-import CartSummary from '~/components/CartSummary';
-import ShippingDetailsInputs from '~/components/ShippingDetailsInputs';
-import CustomerDetailsInputs from '~/components/CustomerDetailsInputs';
-import ContentContainer from '~/components/styledContainers/ContentContainer';
-import { useCartItems } from '~/context/useCart';
-import FieldsetGroup from '~/components/styledContainers/FieldsetGroup';
-import InputRow from '~/components/styledContainers/InputRow';
-import StoreFrontIcon from '~/icons/StoreFrontIcon';
-import ShippingTruckIcon from '~/icons/ShippingTruckIcon';
-import PickupChoiceInputs from '~/components/PickupChoiceInputs';
-import styles from '~/styles/formStyles.css';
+import { useState } from 'react'
+import { useSearchParams, useSubmit, useTransition } from '@remix-run/react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { CustomerDetails, FulfillmentDetails, OrderDetails } from 'myTypes'
+import CartSummary from '~/components/CartSummary'
+import ShippingDetailsInputs from '~/components/ShippingDetailsInputs'
+import CustomerDetailsInputs from '~/components/CustomerDetailsInputs'
+import ContentContainer from '~/components/styledComponents/ContentContainer'
+import { useCartItems } from '~/context/useCart'
+import FieldsetGroup from '~/components/styledComponents/FieldsetGroup'
+import InputRow from '~/components/styledComponents/InputRow'
+import StoreFrontIcon from '~/icons/StoreFrontIcon'
+import ShippingTruckIcon from '~/icons/ShippingTruckIcon'
+import PickupChoiceInputs from '~/components/PickupChoiceInputs'
+import styles from '~/styles/formStyles.css'
 
 export function links() {
-  return [{ rel: 'stylesheet', href: styles }];
+  return [{ rel: 'stylesheet', href: styles }]
 }
 export default function CheckoutPage() {
-  const transition = useTransition();
-  const submit = useSubmit();
+  const transition = useTransition()
+  const submit = useSubmit()
 
-  const [customerDetails, setCustomerDetails] = useState({} as CustomerDetails);
+  const [customerDetails, setCustomerDetails] = useState({} as CustomerDetails)
   const [fulfillmentDetails, setFulfillmentDetails] = useState({
     method: 'pickup',
     pickupLocation: '',
-  } as FulfillmentDetails);
+  } as FulfillmentDetails)
 
-  const cartItems = useCartItems();
-  const [searchParams] = useSearchParams();
-  const warnings = searchParams.getAll('warnings');
+  const cartItems = useCartItems()
+  const [searchParams] = useSearchParams()
+  const warnings = searchParams.getAll('warnings')
 
   const handleSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    const formData = new FormData();
+    event.preventDefault()
+    const formData = new FormData()
     formData.set(
       'orderDetails',
       JSON.stringify({ customerDetails, fulfillmentDetails, cart: cartItems })
-    );
-    submit(formData, { method: 'post', action: '/pay' });
-  };
+    )
+    submit(formData, { method: 'post', action: '/pay' })
+  }
 
   // review cart, and on confirmation, send cart to '/pay' action handler via form submission
   // if the action finds errors of price or stock, it will redirect back to this page with warnings in the url query string
@@ -178,5 +178,5 @@ export default function CheckoutPage() {
         </form>
       </ContentContainer>
     </div>
-  );
+  )
 }

@@ -1,15 +1,15 @@
-import { FulfillmentDetails } from 'myTypes';
-import CheckoutFormField from './CheckoutFormField';
-import FieldsetGroup from './styledContainers/FieldsetGroup';
+import { FulfillmentDetails } from 'myTypes'
+import CheckoutFormField from './CheckoutFormField'
+import FieldsetGroup from './styledComponents/FieldsetGroup'
 
 export default function ShippingDetailsInputs({
   fulfillmentDetails,
   setFulfillmentDetails,
 }: {
-  fulfillmentDetails: FulfillmentDetails;
+  fulfillmentDetails: FulfillmentDetails
   setFulfillmentDetails: React.Dispatch<
     React.SetStateAction<FulfillmentDetails>
-  >;
+  >
 }) {
   return (
     <FieldsetGroup>
@@ -26,7 +26,7 @@ export default function ShippingDetailsInputs({
           setFulfillmentDetails({
             ...fulfillmentDetails,
             [e.target.name]: e.target.value,
-          });
+          })
         }}
       />
       <CheckoutFormField
@@ -48,7 +48,7 @@ export default function ShippingDetailsInputs({
           setFulfillmentDetails({
             ...fulfillmentDetails,
             [e.target.name]: e.target.value,
-          });
+          })
         }}
       />
       <CheckoutFormField
@@ -68,7 +68,7 @@ export default function ShippingDetailsInputs({
           setFulfillmentDetails({
             ...fulfillmentDetails,
             [e.target.name]: e.target.value,
-          });
+          })
         }}
       />
       <CheckoutFormField
@@ -84,7 +84,7 @@ export default function ShippingDetailsInputs({
           setFulfillmentDetails({
             ...fulfillmentDetails,
             [e.target.name]: e.target.value,
-          });
+          })
         }}
       />
       <CheckoutFormField
@@ -100,7 +100,7 @@ export default function ShippingDetailsInputs({
           setFulfillmentDetails({
             ...fulfillmentDetails,
             [e.target.name]: e.target.value,
-          });
+          })
         }}
       />
       <CheckoutFormField
@@ -118,9 +118,9 @@ export default function ShippingDetailsInputs({
           setFulfillmentDetails({
             ...fulfillmentDetails,
             [e.target.name]: e.target.value,
-          });
+          })
         }}
       />
     </FieldsetGroup>
-  );
+  )
 }

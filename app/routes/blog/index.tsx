@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
+import { TwoColContainer } from '~/components/styledComponents/TwoColContainer'
 
 const query = `*[_type == "post"] | order(publishedAt desc){
   _id,
@@ -57,36 +58,20 @@ export default function Index() {
       )}
       <h1 className='text-center text-xl font-bold pt-4'>Blog</h1>
 
-      <ul className='grid gap-5 mx-auto my-6 w-[95%] max-w-[800px]'>
+      <ul className='flex flex-col mx-auto mt-6'>
         {allPosts.length > 0 &&
           allPosts.map((post) => (
             <li key={post.title}>
               {/* Link has all ClassNames of ContentContainer except my-6 */}
               <Link
                 to={`${referringPath}/${post.slug.current}/${previewQuery}`}
-                className='bg-slate-50 p-4 rounded w-full mx-auto flex flex-col h-full place-items-center drop-shadow-md'
               >
-                <h2 className='font-bold text-center pt-2 py-0 col-span-full'>
-                  {post.title}
-                </h2>
-                <p className='text-xs pb-4'>
-                  {dayjs(post.publishedAt).format('MMMM DD, YYYY')}
-                </p>
-                <div className='flex flex-col md:flex-row md:items-start md:justify-around items-center w-full'>
-                  {post.mainImage && (
-                    <img
-                      className='max-w-[300]'
-                      loading='lazy'
-                      src={urlFor(post.mainImage).width(300).fit('max').url()}
-                      // width='400'
-                      // height='200'
-                      alt={post.title ?? ``}
-                    />
-                  )}
-                  <div className='text-center p-4'>
-                    <PortableText value={post.excerpt} />
-                  </div>
-                </div>
+                <TwoColContainer
+                  heading={post.title}
+                  image={post.mainImage}
+                  date={post.publishedAt}
+                  content={post.excerpt}
+                />
               </Link>
             </li>
           ))}

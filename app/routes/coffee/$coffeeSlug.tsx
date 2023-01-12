@@ -1,44 +1,44 @@
-import type { LoaderFunction } from '@remix-run/node';
-import { useCatch, useLoaderData, useParams } from '@remix-run/react';
-import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
-import type { Coffee } from '../../../sanityTypes';
-import { useState } from 'react';
-import Preview from '~/components/Preview';
-import { getClient } from '~/lib/sanity/getClient';
-import { PortableText, urlFor } from '~/lib/sanity/helpers';
-import AddToCartForm from '~/components/AddToCartForm';
-import ContentContainer from '~/components/styledContainers/ContentContainer';
-import dayjs from 'dayjs';
+import type { LoaderFunction } from '@remix-run/node'
+import { useCatch, useLoaderData, useParams } from '@remix-run/react'
+import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
+import type { Coffee } from '../../../sanityTypes'
+import { useState } from 'react'
+import Preview from '~/components/Preview'
+import { getClient } from '~/lib/sanity/getClient'
+import { PortableText, urlFor } from '~/lib/sanity/helpers'
+import AddToCartForm from '~/components/AddToCartForm'
+import ContentContainer from '~/components/styledComponents/ContentContainer'
+import dayjs from 'dayjs'
 
 type LoaderData = {
-  initialData: Coffee[];
-  preview: boolean;
-  singleCoffeeQuery?: string | null;
-  queryParams?: { slug: string | undefined } | null;
-};
+  initialData: Coffee[]
+  preview: boolean
+  singleCoffeeQuery?: string | null
+  queryParams?: { slug: string | undefined } | null
+}
 
 //Route params are passed to your loader.
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const requestUrl = new URL(request?.url);
+  const requestUrl = new URL(request?.url)
   const preview =
     requestUrl?.searchParams?.get('preview') ===
-    process.env.SANITY_PREVIEW_SECRET;
+    process.env.SANITY_PREVIEW_SECRET
 
   // Query for _all_ documents with this slug
   // There could be two: Draft and Published!
 
   //in this query, '$' character before 'slug' denotes that slug will is a string template, provided in second argument of the fetch function call
-  const singleCoffeeQuery = `*[_type == "coffee" && slug.current == $slug]`;
-  const queryParams = { slug: params.coffeeSlug };
+  const singleCoffeeQuery = `*[_type == "coffee" && slug.current == $slug]`
+  const queryParams = { slug: params.coffeeSlug }
   const initialData = await getClient(preview).fetch(
     singleCoffeeQuery,
     queryParams
-  );
+  )
   if (!initialData) {
     throw new Response('Oh no - that Coffee was not found!', {
       status: 404,
       statusText: 'That coffee was not found',
-    });
+    })
   }
 
   const data: LoaderData = {
@@ -46,21 +46,21 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     preview,
     singleCoffeeQuery: preview ? singleCoffeeQuery : null,
     queryParams: preview ? queryParams : null,
-  };
+  }
 
-  return data;
-};
+  return data
+}
 
 export default function CoffeeRoute() {
   let { initialData, preview, singleCoffeeQuery, queryParams } =
-    useLoaderData<LoaderData>();
+    useLoaderData<LoaderData>()
 
   // If `preview` mode is active, its component update this state for us
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(initialData)
 
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
-  const coffee = filterDataToSingleItem(data, preview);
+  const coffee = filterDataToSingleItem(data, preview)
 
   return (
     <main className='h-screen'>
@@ -175,32 +175,32 @@ export default function CoffeeRoute() {
         </div>
       </ContentContainer>
     </main>
-  );
+  )
 }
 
 export function CatchBoundary() {
-  const caught = useCatch();
-  const params = useParams();
+  const caught = useCatch()
+  const params = useParams()
   switch (caught.status) {
     case 404: {
       return (
         <div className='error-container'>
           Huh? What the heck is {params.coffeeSlug}?
         </div>
-      );
+      )
     }
     default: {
-      throw new Error(`Unhandled error: ${caught.status}`);
+      throw new Error(`Unhandled error: ${caught.status}`)
     }
   }
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error);
-  const { coffeeSlug } = useParams();
+  console.error(error)
+  const { coffeeSlug } = useParams()
   return (
     <div className='error-container'>{`There was an error loading coffee ${coffeeSlug}. Sorry.`}</div>
-  );
+  )
 }
 
 // export const meta: MetaFunction = ({

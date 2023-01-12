@@ -2,9 +2,9 @@ import { LoaderArgs, LoaderFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import dayjs from 'dayjs'
 import { useState } from 'react'
-import { EventPreviewLi } from '~/components/EventPreviewLi'
+import { TwoColContainer } from '~/components/styledComponents/TwoColContainer'
 import Preview from '~/components/Preview'
-import ContentContainer from '~/components/styledContainers/ContentContainer'
+import ContentContainer from '~/components/styledComponents/ContentContainer'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { PortableText, urlFor } from '~/lib/sanity/helpers'
 import sanity from '~/lib/sanity/sanity'
@@ -57,15 +57,17 @@ export default function eventsPage() {
       <h1 className='text-center text-xl font-bold pt-6'>
         {pageData?.heading}
       </h1>
-      <ul className='grid gap-5 mx-auto my-6 w-[95%] max-w-[800px]'>
+      <ul className='flex flex-col mx-auto mt-6'>
         {data.events?.length > 0 &&
           data.events?.map((event) => (
-            <EventPreviewLi
-              heading={event.title}
-              image={event.mainImage}
-              date={event.date}
-              content={event.description}
-            />
+            <li>
+              <TwoColContainer
+                heading={event.title}
+                image={event.mainImage}
+                date={event.date}
+                content={event.description}
+              />
+            </li>
           ))}
       </ul>
     </main>

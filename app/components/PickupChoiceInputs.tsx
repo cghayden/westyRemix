@@ -1,15 +1,15 @@
-import { FulfillmentDetails, OrderDetails } from 'myTypes';
-import FieldsetGroup from './styledContainers/FieldsetGroup';
-import InputRow from './styledContainers/InputRow';
+import { FulfillmentDetails, OrderDetails } from 'myTypes'
+import FieldsetGroup from './styledComponents/FieldsetGroup'
+import InputRow from './styledComponents/InputRow'
 
 export default function PickupChoiceInputs({
   fulfillmentDetails,
   setFulfillmentDetails,
 }: {
-  fulfillmentDetails: FulfillmentDetails;
+  fulfillmentDetails: FulfillmentDetails
   setFulfillmentDetails: React.Dispatch<
     React.SetStateAction<FulfillmentDetails>
-  >;
+  >
 }) {
   return (
     <FieldsetGroup>
@@ -26,7 +26,7 @@ export default function PickupChoiceInputs({
               setFulfillmentDetails({
                 ...fulfillmentDetails,
                 pickupLocation: e.target.value,
-              });
+              })
             }}
           />
         </div>
@@ -59,7 +59,7 @@ export default function PickupChoiceInputs({
               setFulfillmentDetails({
                 ...fulfillmentDetails,
                 pickupLocation: e.target.value,
-              });
+              })
             }}
           />
         </div>
@@ -80,5 +80,5 @@ export default function PickupChoiceInputs({
         </label>
       </InputRow>
     </FieldsetGroup>
-  );
+  )
 }

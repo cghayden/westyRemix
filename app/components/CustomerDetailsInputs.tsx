@@ -1,13 +1,13 @@
-import { CustomerDetails } from 'myTypes';
-import CheckoutFormField from './CheckoutFormField';
-import FieldsetGroup from './styledContainers/FieldsetGroup';
+import { CustomerDetails } from 'myTypes'
+import CheckoutFormField from './CheckoutFormField'
+import FieldsetGroup from './styledComponents/FieldsetGroup'
 
 export default function CustomerDetailsInputs({
   customerDetails,
   setCustomerDetails,
 }: {
-  customerDetails: CustomerDetails;
-  setCustomerDetails: React.Dispatch<React.SetStateAction<CustomerDetails>>;
+  customerDetails: CustomerDetails
+  setCustomerDetails: React.Dispatch<React.SetStateAction<CustomerDetails>>
 }) {
   //will still react controlled inputs for custom UI on form...
   return (
@@ -25,7 +25,7 @@ export default function CustomerDetailsInputs({
           setCustomerDetails({
             ...customerDetails,
             [e.target.name]: e.target.value,
-          });
+          })
         }}
       />
       <CheckoutFormField
@@ -41,7 +41,7 @@ export default function CustomerDetailsInputs({
           setCustomerDetails({
             ...customerDetails,
             [e.target.name]: e.target.value,
-          });
+          })
         }}
       />
       <CheckoutFormField
@@ -57,9 +57,9 @@ export default function CustomerDetailsInputs({
           setCustomerDetails({
             ...customerDetails,
             [e.target.name]: e.target.value,
-          });
+          })
         }}
       />
     </FieldsetGroup>
-  );
+  )
 }
