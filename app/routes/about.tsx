@@ -1,22 +1,62 @@
-import { LoaderArgs, LoaderFunction } from '@remix-run/node';
+import { LoaderFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
+import { useState } from 'react';
+import { AboutPage } from 'sanityTypes';
+import Preview from '~/components/Preview';
 import ContentContainer from '~/components/styledContainers/ContentContainer';
+import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
 import { PortableText } from '~/lib/sanity/helpers';
 import sanity from '~/lib/sanity/sanity';
 
-const aboutPageQuery = `*[_type == 'aboutPage']`;
-export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
-  const data = await sanity.fetch(aboutPageQuery);
+type LoaderData = {
+  initialData: AboutPage[];
+  preview: boolean;
+  query?: string | null;
+  queryParams?: { slug: string | undefined } | null;
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const query = `*[_type == 'aboutPage']`;
+  const requestUrl = new URL(request?.url);
+  const preview =
+    requestUrl?.searchParams?.get('preview') ===
+    process.env.SANITY_PREVIEW_SECRET;
+  const initialData = await sanity
+    .fetch(query)
+    .catch((err) => console.log(err));
+  const data: LoaderData = {
+    initialData,
+    preview,
+    query,
+    queryParams: null,
+  };
   return data;
 };
 
 export default function aboutPage() {
-  const data = useLoaderData<typeof loader>()[0];
+  const { initialData, preview, queryParams, query } =
+    useLoaderData<LoaderData>();
+  console.log('initialData', initialData);
+  const [data, setData] = useState(initialData);
+
+  const aboutContent = filterDataToSingleItem(initialData, preview);
+  console.log('aboutContent', aboutContent);
+
   return (
     <main>
-      <h1 className='text-2xl font-bold text-center my-4'>{data.heading}</h1>
+      {preview && (
+        <Preview
+          data={data}
+          setData={setData}
+          query={query}
+          queryParams={queryParams}
+        />
+      )}
+      <h1 className='text-2xl font-bold text-center my-4'>
+        {aboutContent.heading}
+      </h1>
       <ContentContainer>
-        <PortableText value={data.content} />
+        <PortableText value={aboutContent.content} />
       </ContentContainer>
     </main>
   );

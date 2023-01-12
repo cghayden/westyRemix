@@ -1,22 +1,22 @@
-import { LoaderFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
-import sanity from '~/lib/sanity/sanity';
-import type { Coffee, LandingPage } from '../../sanityTypes';
+import { LoaderFunction } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
+import sanity from '~/lib/sanity/sanity'
+import type { Coffee, LandingPage } from '../../sanityTypes'
 
-import HomeHero from '~/components/HomeHero';
-import FeaturedItems from '~/components/FeaturedItems';
-import { useState } from 'react';
-import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem';
-import Preview from '~/components/Preview';
-import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts';
+import HomeHero from '~/components/HomeHero'
+import FeaturedItems from '~/components/FeaturedItems'
+import { useState } from 'react'
+import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
+import Preview from '~/components/Preview'
+import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 
 interface LoaderData {
-  initialData: { coffee: Coffee[]; heroContent: LandingPage[] };
-  referringPath: string;
-  preview: boolean;
-  previewQuery: string;
-  pageQuery: string | null;
-  queryParams?: { slug: string | undefined } | null;
+  initialData: { coffee: Coffee[]; heroContent: LandingPage[] }
+  referringPath: string
+  preview: boolean
+  previewQuery: string
+  pageQuery: string | null
+  queryParams?: { slug: string | undefined } | null
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -34,19 +34,18 @@ export const loader: LoaderFunction = async ({ request }) => {
       roastDate,
       stock, slug{current}
     }
-  }`;
-  const requestUrl = new URL(request?.url);
-  const previewQuery = requestUrl.search;
-  const referringPath = requestUrl.pathname;
-  console.log('requestUrl', requestUrl);
+  }`
+  const requestUrl = new URL(request?.url)
+  const previewQuery = requestUrl.search
+  const referringPath = requestUrl.pathname
   const preview =
     requestUrl?.searchParams?.get('preview') ===
-    process.env.SANITY_PREVIEW_SECRET;
+    process.env.SANITY_PREVIEW_SECRET
 
-  const initialData = await sanity.fetch(pageQuery);
+  const initialData = await sanity.fetch(pageQuery)
 
-  const heroContent = filterDataToSingleItem(initialData.heroContent, preview);
-  const coffee = filterDataToDrafts(initialData.coffee, preview);
+  const heroContent = filterDataToSingleItem(initialData.heroContent, preview)
+  const coffee = filterDataToDrafts(initialData.coffee, preview)
 
   const data: LoaderData = {
     initialData: { coffee, heroContent },
@@ -55,9 +54,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     previewQuery,
     pageQuery,
     queryParams: null,
-  };
-  return data;
-};
+  }
+  return data
+}
 
 export default function Index() {
   const {
@@ -67,10 +66,10 @@ export default function Index() {
     previewQuery,
     queryParams,
     referringPath,
-  } = useLoaderData<LoaderData>();
+  } = useLoaderData<LoaderData>()
 
   // If `preview` mode is active, its component update this state for us
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(initialData)
 
   return (
     <main className='w-min-[320px] p-4'>
@@ -90,5 +89,5 @@ export default function Index() {
         previewQuery={previewQuery}
       />
     </main>
-  );
+  )
 }

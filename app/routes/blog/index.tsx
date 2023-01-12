@@ -1,12 +1,12 @@
-import { LoaderArgs, LoaderFunction } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
-import { urlFor } from '~/lib/sanity/helpers';
-import sanity from '~/lib/sanity/sanity';
-import { PortableText } from '@portabletext/react';
-import dayjs from 'dayjs';
-import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts';
-import { useState } from 'react';
-import Preview from '~/components/Preview';
+import { LoaderArgs, LoaderFunction } from '@remix-run/node'
+import { Link, useLoaderData } from '@remix-run/react'
+import { urlFor } from '~/lib/sanity/helpers'
+import sanity from '~/lib/sanity/sanity'
+import { PortableText } from '@portabletext/react'
+import dayjs from 'dayjs'
+import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
+import { useState } from 'react'
+import Preview from '~/components/Preview'
 
 const query = `*[_type == "post"] | order(publishedAt desc){
   _id,
@@ -15,21 +15,20 @@ const query = `*[_type == "post"] | order(publishedAt desc){
   excerpt, 
   mainImage,
   slug
-}`;
+}`
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   // Put site in preview mode if the right query param is used
-  const requestUrl = new URL(request?.url);
-  const previewQuery = requestUrl.search;
+  const requestUrl = new URL(request?.url)
+  const previewQuery = requestUrl.search
 
-  const referringPath = requestUrl.pathname;
+  const referringPath = requestUrl.pathname
   const preview =
-    requestUrl.searchParams.get(`preview`) ===
-    process.env.SANITY_PREVIEW_SECRET;
+    requestUrl.searchParams.get(`preview`) === process.env.SANITY_PREVIEW_SECRET
 
-  const initialData = await sanity.fetch(query);
+  const initialData = await sanity.fetch(query)
 
-  const allPosts = filterDataToDrafts(initialData, preview);
+  const allPosts = filterDataToDrafts(initialData, preview)
   return {
     allPosts,
     referringPath,
@@ -37,14 +36,14 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
     previewQuery,
     query,
     queryParams: null,
-  };
-};
+  }
+}
 
 export default function Index() {
   const { allPosts, referringPath, preview, previewQuery, query, queryParams } =
-    useLoaderData<typeof loader>();
+    useLoaderData<typeof loader>()
   // If `preview` mode is active, its component updates this state for us
-  const [data, setData] = useState(allPosts);
+  const [data, setData] = useState(allPosts)
 
   return (
     <main>
@@ -93,5 +92,5 @@ export default function Index() {
           ))}
       </ul>
     </main>
-  );
+  )
 }

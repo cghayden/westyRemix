@@ -23,6 +23,7 @@ price
 interface LoaderData {
   coffee: Coffee[];
   referringPath: string;
+  previewQuery: string;
   preview: boolean;
   query: string | null;
   queryParams?: { slug: string | undefined } | null;
@@ -39,6 +40,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const initialData = await sanity
     .fetch(query)
     .catch((err) => console.log(err));
+  console.log('initialData', initialData);
 
   //  A helper function checks the returned documents
   // To show drafts if in preview mode, otherwise Published
@@ -58,6 +60,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 function coffeeIndex() {
   const { coffee, referringPath, preview, previewQuery, query, queryParams } =
     useLoaderData<LoaderData>();
+  console.log('queryParams', queryParams);
 
   // If `preview` mode is active, its component updates this state for us
   const [data, setData] = useState(coffee);
