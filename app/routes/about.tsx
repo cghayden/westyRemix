@@ -34,11 +34,9 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function aboutPage() {
   const { initialData, preview, queryParams, query } =
     useLoaderData<LoaderData>()
-  console.log('initialData', initialData)
   const [data, setData] = useState(initialData)
 
   const aboutContent = filterDataToSingleItem(initialData, preview)
-  console.log('aboutContent', aboutContent)
 
   return (
     <main>

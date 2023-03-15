@@ -24,7 +24,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     "heroContent": *[_type == "landingPage" ] {
       _id,
     "imageUrl": bgImage1.asset->url,
-    overlayText1
+    overlayText1,
+    coffeeSectionHeading,
+    coffeeText,
+    transitionText1
     },
     "coffee": *[_type == "coffee"] {
       _id,
@@ -32,7 +35,8 @@ export const loader: LoaderFunction = async ({ request }) => {
       roastLevel,
       description,
       roastDate,
-      stock, slug{current}
+      stock, 
+      slug{current}
     }
   }`
   const requestUrl = new URL(request?.url)

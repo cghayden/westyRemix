@@ -37,10 +37,8 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
 export default function eventsPage() {
   const { initialData, preview, query, queryParams } =
     useLoaderData<typeof loader>()
-  console.log('initialData', initialData)
 
   const [data, setData] = useState(initialData)
-  console.log('data', data)
   const pageData = filterDataToSingleItem(data.pageData, preview)
 
   // const pageData = filterDataToSingleItem(initialData.pageData, preview)
