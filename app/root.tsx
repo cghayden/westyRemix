@@ -16,6 +16,7 @@ import { CartProvider } from './context/useCart'
 import Preview from './components/Preview'
 import { useState } from 'react'
 import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
+import Footer from './components/Footer'
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
@@ -29,26 +30,31 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const query = `*[_type == "siteSettings"] {
+  const query = `{
+    "siteSettings": *[_type == "siteSettings"] {
     _id,
     backgroundColor,
     textColor
-  } `
+  },
+  "contactData": *[_type == 'contactPage']
+} `
   const requestUrl = new URL(request?.url)
   const preview: boolean =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
   const initialData = await sanity.fetch(query).catch((err) => console.log(err))
-  console.log('initialData', initialData)
 
-  const siteSettings = filterDataToSingleItem(initialData, preview)
+  const siteSettings = filterDataToSingleItem(initialData.siteSettings, preview)
 
   const data = {
+    initialData,
     siteSettings,
+    contactData: initialData.contactData[0],
     preview,
     query: preview ? query : null,
     queryParams: null,
   }
+  console.log('data in root', data)
   return data
 }
 
@@ -62,8 +68,6 @@ function Document({
   const { siteSettings, preview, query, queryParams } =
     useLoaderData<typeof loader>()
   const [data, setData] = useState(siteSettings)
-  console.log('data', data)
-  // console.log('siteSettings', siteSettings)
 
   return (
     <html lang='en'>
@@ -83,6 +87,7 @@ function Document({
         />
       )}
       <body
+        className='min-h-screen m-0 flex flex-col'
         style={{
           backgroundColor: `${siteSettings?.backgroundColor.hex}`,
           overscrollBehavior: 'none',
@@ -101,7 +106,7 @@ export default function App() {
     <Document>
       <Header />
       <Outlet />
-      <div>Footer</div>
+      <Footer />
     </Document>
   )
 }
