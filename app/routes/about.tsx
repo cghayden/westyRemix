@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { AboutPage } from 'sanityTypes'
 import Preview from '~/components/Preview'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
+import PageHeading from '~/components/styledComponents/PageHeading'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { PortableText } from '~/lib/sanity/helpers'
 import sanity from '~/lib/sanity/sanity'
@@ -48,9 +49,7 @@ export default function aboutPage() {
           queryParams={queryParams}
         />
       )}
-      <h1 className='text-2xl font-bold text-center my-4'>
-        {aboutContent.heading}
-      </h1>
+      <PageHeading text={aboutContent.heading} />
       <ContentContainer>
         <PortableText value={aboutContent.content} />
       </ContentContainer>

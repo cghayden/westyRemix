@@ -87,7 +87,7 @@ function Document({
         />
       )}
       <body
-        className='min-h-screen m-0 flex flex-col'
+        className='min-h-screen m-0 flex flex-col font-HindSiliguri'
         style={{
           backgroundColor: `${siteSettings?.backgroundColor.hex}`,
           overscrollBehavior: 'none',

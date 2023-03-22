@@ -8,6 +8,8 @@ import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
 import { TwoColContainer } from '~/components/styledComponents/TwoColContainer'
+import PageHeading from '~/components/styledComponents/PageHeading'
+import { Post } from 'sanityTypes'
 
 const query = `*[_type == "post"] | order(publishedAt desc){
   _id,
@@ -56,15 +58,14 @@ export default function Index() {
           queryParams={queryParams}
         />
       )}
-      <h1 className='text-center text-xl font-bold pt-4'>Blog</h1>
-
+      {/* <PageHeading text='blog' /> */}
       <ul className='flex flex-col mx-auto mt-6'>
         {allPosts.length > 0 &&
-          allPosts.map((post) => (
+          allPosts.map((post: Post) => (
             <li key={post.title}>
               {/* Link has all ClassNames of ContentContainer except my-6 */}
               <Link
-                to={`${referringPath}/${post.slug.current}/${previewQuery}`}
+                to={`${referringPath}/${post?.slug?.current}/${previewQuery}`}
               >
                 <TwoColContainer
                   heading={post.title}

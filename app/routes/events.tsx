@@ -10,6 +10,7 @@ import { PortableText, urlFor } from '~/lib/sanity/helpers'
 import sanity from '~/lib/sanity/sanity'
 import { Event } from 'sanityTypes'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
+import PageHeading from '~/components/styledComponents/PageHeading'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const query = `{
@@ -52,9 +53,8 @@ export default function eventsPage() {
           queryParams={queryParams}
         />
       )}
-      <h1 className='text-center text-xl font-bold pt-6'>
-        {pageData?.heading}
-      </h1>
+      <PageHeading text={pageData?.heading} />
+
       <ul className='flex flex-col mx-auto mt-6'>
         {data.events?.length > 0 &&
           data.events?.map((event) => (

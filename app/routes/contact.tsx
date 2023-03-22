@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Preview from '~/components/Preview'
 import SocialLinks from '~/components/SocialLinks'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
+import PageHeading from '~/components/styledComponents/PageHeading'
 
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { PortableText } from '~/lib/sanity/helpers'
@@ -42,9 +43,7 @@ export default function contactPage() {
           queryParams={queryParams}
         />
       )}
-      <h1 className='text-2xl font-bold text-center my-4'>
-        {contactContent.heading}
-      </h1>
+      <PageHeading text={contactContent.heading} />
       <ContentContainer>
         <PortableText value={contactContent.content} />
         <SocialLinks contactData={contactContent} />

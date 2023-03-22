@@ -9,11 +9,17 @@ export default function Footer() {
   const { contactData } = useLoaderData()
 
   return (
-    <div className='bg-slate-50 mt-auto w-full flex justify-between px-8 py-4'>
-      <div>
-        <PortableText value={contactData.content} />
+    <div className='bg-slate-50 text-slate-800 mt-auto w-full flex flex-col px-8 py-4'>
+      <div className='flex justify-between'>
+        <div>
+          <PortableText value={contactData.content} />
+        </div>
+        <SocialLinks contactData={contactData} />
       </div>
-      <SocialLinks contactData={contactData} />
+      <p className='text-center text-sm pt-4'>
+        website by Corey Hayden{' '}
+        <a href='mailto:cghayden@gmail.com'>cghayden@gmail.com</a>
+      </p>
     </div>
   )
 }
