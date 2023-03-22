@@ -32,7 +32,6 @@ export default function contactPage() {
   const [data, setData] = useState(initialData)
 
   const contactContent = filterDataToSingleItem(initialData, preview)
-  console.log('contactContent', contactContent)
   return (
     <main>
       {preview && (

@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import { Link } from "@remix-run/react";
-import DesktopNav from './DesktopNav';
-import MobileNav from './MobileNav';
-import MenuSvg from '~/icons/MenuSvg';
-import Cart from './Cart';
-import CoffeeCupIcon from '~/icons/CoffeeCupIcon';
-import CartCount from './CartCount';
-import { useCartUtils } from '~/context/useCart';
+import { useState } from 'react'
+import { Link } from '@remix-run/react'
+import DesktopNav from './DesktopNav'
+import MobileNav from './MobileNav'
+import MenuSvg from '~/icons/MenuSvg'
+import Cart from './Cart'
+import CoffeeCupIcon from '~/icons/CoffeeCupIcon'
+import CartCount from './CartCount'
+import { useCartUtils } from '~/context/useCart'
 
 function Header() {
-  const [showMobileNav, toggleShowMobileNav] = useState(false);
-  const { toggleIsCartOpen } = useCartUtils();
+  const [showMobileNav, toggleShowMobileNav] = useState(false)
+  const { toggleIsCartOpen } = useCartUtils()
 
   return (
-    <header className='flex text-slate-900 bg-slate-50 items-center p-4'>
+    <header className='flex text-slate-800 bg-slate-50 items-center p-4'>
       <p className='text-2xl'>
         <Link to='/'>westy coffee</Link>
       </p>
@@ -27,7 +27,7 @@ function Header() {
           type='button'
           aria-label='show navigation menu'
           onClick={() => {
-            toggleShowMobileNav(true);
+            toggleShowMobileNav(true)
           }}
         >
           <MenuSvg />
@@ -49,7 +49,7 @@ function Header() {
 
       <Cart />
     </header>
-  );
+  )
 }
 
-export default Header;
+export default Header

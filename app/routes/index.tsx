@@ -1,4 +1,4 @@
-import { LoaderFunction } from '@remix-run/node'
+import { LoaderArgs, LoaderFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import sanity from '~/lib/sanity/sanity'
 import type { Coffee, LandingPage } from '../../sanityTypes'
@@ -10,16 +10,16 @@ import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import Preview from '~/components/Preview'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 
-interface LoaderData {
-  initialData: { coffee: Coffee[]; heroContent: LandingPage[] }
-  referringPath: string
-  preview: boolean
-  previewQuery: string
-  pageQuery: string | null
-  queryParams?: { slug: string | undefined } | null
-}
+// interface LoaderData {
+//   initialData: { coffee: Coffee[]; heroContent: LandingPage[] }
+//   referringPath: string
+//   preview: boolean
+//   previewQuery: string
+//   pageQuery: string | null
+//   queryParams?: { slug: string | undefined } | null
+// }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const pageQuery = `{
     "heroContent": *[_type == "landingPage" ] {
       _id,
@@ -51,7 +51,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const heroContent = filterDataToSingleItem(initialData.heroContent, preview)
   const coffee = filterDataToDrafts(initialData.coffee, preview)
 
-  const data: LoaderData = {
+  const data = {
     initialData: { coffee, heroContent },
     referringPath: referringPath,
     preview,
@@ -70,7 +70,7 @@ export default function Index() {
     previewQuery,
     queryParams,
     referringPath,
-  } = useLoaderData<LoaderData>()
+  } = useLoaderData<typeof loader>()
 
   // If `preview` mode is active, its component update this state for us
   const [data, setData] = useState(initialData)
@@ -88,6 +88,7 @@ export default function Index() {
 
       <HomeHero heroContent={initialData.heroContent} />
       <FeaturedItems
+        featureHeading={initialData.heroContent.coffeeSectionHeading}
         allCoffee={initialData?.coffee}
         referringPath={referringPath + 'coffee/'}
         previewQuery={previewQuery}
