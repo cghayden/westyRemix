@@ -1,23 +1,12 @@
 import { LoaderArgs, LoaderFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import sanity from '~/lib/sanity/sanity'
-import type { Coffee, LandingPage } from '../../sanityTypes'
-
 import HomeHero from '~/components/HomeHero'
 import FeaturedItems from '~/components/FeaturedItems'
 import { useState } from 'react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import Preview from '~/components/Preview'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
-
-// interface LoaderData {
-//   initialData: { coffee: Coffee[]; heroContent: LandingPage[] }
-//   referringPath: string
-//   preview: boolean
-//   previewQuery: string
-//   pageQuery: string | null
-//   queryParams?: { slug: string | undefined } | null
-// }
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const pageQuery = `{

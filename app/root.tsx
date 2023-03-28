@@ -13,6 +13,7 @@ import Header from './components/Header'
 import styles from './styles/tailwind-build.css'
 import sanity from './lib/sanity/sanity'
 import { CartProvider } from './context/useCart'
+import { ThemeContext } from './context/ThemeContext'
 import Preview from './components/Preview'
 import { useState } from 'react'
 import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
@@ -32,9 +33,11 @@ export const meta: MetaFunction = () => {
 export const loader: LoaderFunction = async ({ request }) => {
   const query = `{
     "siteSettings": *[_type == "siteSettings"] {
-    _id,
-    backgroundColor,
-    textColor
+      _id,
+      backgroundColor,
+      pageTextColor,
+      productTileBackgroundColor,
+      productTileTextColor
   },
   "contactData": *[_type == 'contactPage']
 } `
@@ -54,7 +57,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     query: preview ? query : null,
     queryParams: null,
   }
-  console.log('data in root', data)
   return data
 }
 
@@ -90,10 +92,13 @@ function Document({
         className='min-h-screen m-0 flex flex-col font-HindSiliguri'
         style={{
           backgroundColor: `${siteSettings?.backgroundColor.hex}`,
+          color: `${siteSettings?.pageTextColor.hex}`,
           overscrollBehavior: 'none',
         }}
       >
-        <CartProvider initialCart={[]}>{children}</CartProvider>
+        <ThemeContext.Provider value={siteSettings}>
+          <CartProvider initialCart={[]}>{children}</CartProvider>
+        </ThemeContext.Provider>
         <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
       </body>
