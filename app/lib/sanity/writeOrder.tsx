@@ -1,15 +1,15 @@
-import { OrderDetails } from 'myTypes';
-import SanityClient from '~/lib/sanity/sanity';
-import { customAlphabet } from 'nanoid';
-const nanoid = customAlphabet('1234567890abcdef', 10);
+import { OrderDetails } from 'myTypes'
+import SanityClient from '~/lib/sanity/sanity'
+import { customAlphabet } from 'nanoid'
+const nanoid = customAlphabet('1234567890abcdef', 10)
 
 async function writeOrderToSanity(orderDetails: OrderDetails) {
-  const orderDate = new Date().toISOString();
-  const orderNumber = nanoid();
+  const orderDate = new Date().toISOString()
+  const orderNumber = nanoid()
   // ?? is it ok to assign an object to a var like this , or make a copy {...}
-  const cartItems = orderDetails.cart;
+  const cartItems = orderDetails.cart
   const { customerName, customerEmail, customerPhone } =
-    orderDetails.customerDetails;
+    orderDetails.customerDetails
   const {
     method,
     pickupLocation,
@@ -19,7 +19,7 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     shippingCity,
     shippingPostal_code,
     shippingState,
-  } = orderDetails.fulfillmentDetails;
+  } = orderDetails.fulfillmentDetails
 
   const configuredOrderItems = cartItems.map((cartItem) => {
     return {
@@ -27,8 +27,8 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
       grind: cartItem.grind,
       quantity: cartItem.quantity,
       _key: nanoid(),
-    };
-  });
+    }
+  })
 
   const doc = {
     _type: 'order',
@@ -50,7 +50,7 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     // customerComments,
     shipped: false,
     stripe_id: orderDetails.id,
-  };
+  }
   // if (env !== 'production') {
   //   await SanityDevelopment.create(doc)
   //     .then((res) => {
@@ -58,16 +58,15 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
   //     })
   //     .catch((err) => {
   //       console.error('error writing order to Sanity:', err);
-  //       // notify neighborly of error writing to sanity orders
   //     });
   //   return;
   // }
   await SanityClient.create(doc)
     .then((res) => {})
     .catch((err) => {
-      throw `Error writing to sanity: ${err}`;
+      throw `Error writing to sanity: ${err}`
       // notify neighborly of error writing to sanity orders
-    });
+    })
 }
 
-export { writeOrderToSanity };
+export { writeOrderToSanity }
