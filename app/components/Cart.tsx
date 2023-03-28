@@ -1,10 +1,10 @@
-import { Link } from '@remix-run/react';
-import { useCartItems, useCartUtils } from '~/context/useCart';
-import CartSummary from './CartSummary';
+import { Link } from '@remix-run/react'
+import { useCartItems, useCartUtils } from '~/context/useCart'
+import CartSummary from './CartSummary'
 
 export default function Cart() {
-  const { isCartOpen, toggleIsCartOpen } = useCartUtils();
-  const cartItems = useCartItems();
+  const { isCartOpen, toggleIsCartOpen } = useCartUtils()
+  const cartItems = useCartItems()
   return (
     <div
       className={`p-2 fixed bg-slate-100 h-screen w-11/12 max-w-[650px] min-w-[310px] top-0 right-0 z-40 transition-all duration-300 overflow-scroll shadow-2xl
@@ -25,9 +25,7 @@ export default function Cart() {
       <div className='flex justify-evenly'>
         <button
           className='bg-slate-600 text-slate-50 px-6 py-3 rounded'
-          // role='link'
           onClick={() => toggleIsCartOpen(false)}
-          // to='/'
         >
           keep shopping
         </button>
@@ -41,5 +39,5 @@ export default function Cart() {
         </Link>
       </div>
     </div>
-  );
+  )
 }

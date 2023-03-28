@@ -8,7 +8,6 @@ import {
   useCatch,
   useLoaderData,
 } from '@remix-run/react'
-import { SiteSettings } from 'sanityTypes'
 import Header from './components/Header'
 import styles from './styles/tailwind-build.css'
 import sanity from './lib/sanity/sanity'
@@ -46,6 +45,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
   const initialData = await sanity.fetch(query).catch((err) => console.log(err))
+  console.log('initialData', initialData)
 
   const siteSettings = filterDataToSingleItem(initialData.siteSettings, preview)
 

@@ -1,8 +1,13 @@
 import FacebookSvg from '~/icons/FacebookSvg'
 import InstagramSvg from '~/icons/InstagramSvg'
 import TwitterSvg from '~/icons/TwitterSvg'
+import { ContactPage } from 'sanityTypes'
 
-export default function SocialLinks({ contactData }) {
+export default function SocialLinks({
+  contactData,
+}: {
+  contactData: ContactPage
+}) {
   const instagram = contactData.instagramLink
   const twitter = contactData.twitterLink
   const fb = contactData.facebookLink

@@ -9,7 +9,6 @@ export default function CustomerDetailsInputs({
   customerDetails: CustomerDetails
   setCustomerDetails: React.Dispatch<React.SetStateAction<CustomerDetails>>
 }) {
-  //will still react controlled inputs for custom UI on form...
   return (
     <FieldsetGroup>
       <CheckoutFormField

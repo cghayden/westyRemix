@@ -30,7 +30,6 @@
     "picosanity": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-portable-text": "^0.4.3",
     "stripe": "^10.8.0",
     "tiny-invariant": "^1.2.0"
   },

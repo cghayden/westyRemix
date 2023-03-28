@@ -1,4 +1,4 @@
-import { FulfillmentDetails, OrderDetails } from 'myTypes'
+import { FulfillmentDetails } from 'myTypes'
 import FieldsetGroup from './styledComponents/FieldsetGroup'
 import InputRow from './styledComponents/InputRow'
 

@@ -13,7 +13,6 @@ function AllCoffee({
   referringPath: string
   previewQuery: string
 }) {
-  console.log('pageContent', pageContent)
   return (
     <main className='px-4 py-2 w-full flex flex-col items-center'>
       {pageContent.heading && (
