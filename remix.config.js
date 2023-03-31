@@ -15,4 +15,7 @@ module.exports = {
   // serverBuildPath: "api/index.js",
   // publicPath: "/build/",
   // devServerPort: 8002
-};
+  future: {
+    // unstable_dev: true,
+  },
+}

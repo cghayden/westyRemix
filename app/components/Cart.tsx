@@ -30,7 +30,7 @@ export default function Cart() {
           keep shopping
         </button>
         <Link
-          className='bg-amber-800 text-amber-50 px-6 py-3 rounded'
+          className='bg-blue-400 text-amber-50 px-6 py-3 rounded'
           role='link'
           onClick={() => toggleIsCartOpen(false)}
           to='/reviewCart'
