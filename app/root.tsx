@@ -9,7 +9,7 @@ import {
   useLoaderData,
 } from '@remix-run/react'
 import Header from './components/Header'
-import styles from './styles/tailwind-build.css'
+import styles from './styles/tailwind.css'
 import sanity from './lib/sanity/sanity'
 import { CartProvider } from './context/useCart'
 import { ThemeContext } from './context/ThemeContext'
