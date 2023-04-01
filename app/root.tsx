@@ -12,7 +12,7 @@ import Header from './components/Header'
 import styles from './styles/tailwind.css'
 import sanity from './lib/sanity/sanity'
 import { CartProvider } from './context/useCart'
-import { ThemeContext } from './context/ThemeContext'
+import { ThemeProvider } from './context/ThemeContext'
 import Preview from './components/Preview'
 import { useState } from 'react'
 import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
@@ -33,10 +33,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   const query = `{
     "siteSettings": *[_type == "siteSettings"] {
       _id,
-      backgroundColor,
-      pageTextColor,
-      productTileBackgroundColor,
-      productTileTextColor
+      backgroundColor {alpha, hsl, hex},
+      pageTextColor {alpha, hsl, hex},
+      productTileBackgroundColor {alpha, hsl, hex},
+      productTileTextColor {alpha, hsl, hex}
   },
   "contactData": *[_type == 'contactPage']
 } `
@@ -45,10 +45,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
   const initialData = await sanity.fetch(query).catch((err) => console.log(err))
-  console.log('initialData', initialData)
 
   const siteSettings = filterDataToSingleItem(initialData.siteSettings, preview)
 
+  console.log('single siteSettings', siteSettings)
   const data = {
     initialData,
     siteSettings,
@@ -96,9 +96,9 @@ function Document({
           overscrollBehavior: 'none',
         }}
       >
-        <ThemeContext.Provider value={siteSettings}>
+        <ThemeProvider siteSettings={siteSettings}>
           <CartProvider initialCart={[]}>{children}</CartProvider>
-        </ThemeContext.Provider>
+        </ThemeProvider>
         <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
       </body>

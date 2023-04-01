@@ -1,27 +1,25 @@
-import { CartItem } from 'myTypes';
-import { useState } from 'react';
+import { CartItem } from 'myTypes'
+import { useState } from 'react'
+
 import {
   useCartItems,
   useChangeCartItemQuantity,
   useRemoveFromCart,
-} from '~/context/useCart';
-import formatMoney from '~/lib/formatMoney';
-import getTotalQuantityInCart from '~/lib/getTotalQuantityInCart';
+} from '~/context/useCart'
+import formatMoney from '~/lib/formatMoney'
+import getTotalQuantityInCart from '~/lib/getTotalQuantityInCart'
 
 export default function AdjustQuantityButtons({
   cartItem,
 }: {
-  cartItem: CartItem;
+  cartItem: CartItem
 }) {
-  const [alert, setAlert] = useState<string | null>();
-  const changeCartItemQuantity = useChangeCartItemQuantity();
-  const removeFromCart = useRemoveFromCart();
-  const cartItems = useCartItems();
+  const [alert, setAlert] = useState<string | null>()
+  const changeCartItemQuantity = useChangeCartItemQuantity()
+  const removeFromCart = useRemoveFromCart()
+  const cartItems = useCartItems()
 
-  const totalCartQuantity = getTotalQuantityInCart(
-    cartItem.coffeeId,
-    cartItems
-  );
+  const totalCartQuantity = getTotalQuantityInCart(cartItem.coffeeId, cartItems)
 
   return (
     <>
@@ -34,9 +32,9 @@ export default function AdjustQuantityButtons({
               onClick={() => {
                 if (cartItem.quantity == 1) {
                   if (confirm(`remove ${cartItem.name} from cart?`)) {
-                    removeFromCart(cartItem);
+                    removeFromCart(cartItem)
                   }
-                  return;
+                  return
                 }
 
                 changeCartItemQuantity({
@@ -47,7 +45,7 @@ export default function AdjustQuantityButtons({
                   variant_id: cartItem.variant_id,
                   price: cartItem.price,
                   inStock: cartItem.inStock,
-                });
+                })
               }}
             >
               <span className='text-2xl'>-</span>
@@ -56,16 +54,16 @@ export default function AdjustQuantityButtons({
           <p className='mx-4 text-xl text-green-50'>{cartItem.quantity}</p>
           <p>
             <button
-              className='-mt-1 text-green-50'
+              className='text-green-50'
               onClick={() => {
                 if (
                   totalCartQuantity === cartItem.inStock ||
                   cartItem.inStock < totalCartQuantity
                 ) {
-                  setAlert(`There are only ${cartItem.inStock} available`);
+                  setAlert(`There are only ${cartItem.inStock} available`)
                   setTimeout(() => {
-                    setAlert(null);
-                  }, 2000);
+                    setAlert(null)
+                  }, 2000)
                 } else {
                   changeCartItemQuantity({
                     name: cartItem.name,
@@ -75,7 +73,7 @@ export default function AdjustQuantityButtons({
                     variant_id: cartItem.variant_id,
                     price: cartItem.price,
                     inStock: cartItem.inStock,
-                  });
+                  })
                 }
               }}
             >
@@ -89,5 +87,5 @@ export default function AdjustQuantityButtons({
         </p>
       </div>
     </>
-  );
+  )
 }

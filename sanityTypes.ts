@@ -1,3 +1,4 @@
+import { SanityColor } from 'myTypes'
 import type {
   SanityReference,
   SanityKeyedReference,
@@ -378,7 +379,7 @@ export interface SiteSettings extends SanityDocument {
    *
    *
    */
-  backgroundColor?: Color
+  backgroundColor?: SanityColor
 
   /**
    * Background Image for Pages — `backgroundImage`
@@ -392,7 +393,10 @@ export interface SiteSettings extends SanityDocument {
    *
    *
    */
-  textColor?: Color
+  /** manually added by CGH, did not run Sanity Codegen */
+  pageTextColor?: SanityColor
+  productTileBackgroundColor?: SanityColor
+  productTileTextColor?: SanityColor
 }
 
 /**
@@ -776,4 +780,6 @@ export type Documents =
  * the definition was not actually found. Future versions of
  * sanity-codegen will let you type this explicity.
  */
-type Color = any
+
+/** Sanity Color manually defined in MyTypes */
+export type SanityColor = SanityColor

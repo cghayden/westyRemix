@@ -8,8 +8,8 @@ function darken(hex: string) {
 }
 
 function hslToHex(hue: number, saturation: number, lightness: number) {
-  let s = (saturation /= 100)
-  let l = (lightness /= 100)
+  let s = saturation
+  let l = lightness
   let h = hue
 
   let c = (1 - Math.abs(2 * l - 1)) * s,
@@ -104,4 +104,4 @@ function hexToHSL(H: string) {
   }
 }
 
-export { darken }
+export { darken, hslToHex, hexToHSL }

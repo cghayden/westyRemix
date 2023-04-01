@@ -19,6 +19,7 @@ function CoffeeCard({
   const theme = useContext(ThemeContext)
   const tileColor = theme.productTileBackgroundColor.hex
   const tileTextColor = theme.productTileTextColor.hex
+  const bgComplement = theme.bgComplement.hex
 
   const link = referringPath + coffee?.slug?.current + previewQuery
   return (
@@ -26,7 +27,7 @@ function CoffeeCard({
       <div
         className='p-4 border-4 rounded shadow text-green-50 w-[300px] h-[300px] mb-1 flex flex-col justify-between'
         style={{
-          background: `${tileColor}`,
+          background: `${bgComplement}`,
           borderColor: `${tileTextColor}`,
           color: `${tileTextColor}`,
         }}
