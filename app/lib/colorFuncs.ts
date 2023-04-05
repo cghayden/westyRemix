@@ -1,3 +1,5 @@
+import { HSL_Color, SanityColor } from 'myTypes'
+
 function darken(hex: string) {
   const hsl = hexToHSL(hex)
   const delta = hsl.l * 0.7
@@ -104,4 +106,52 @@ function hexToHSL(H: string) {
   }
 }
 
-export { darken, hslToHex, hexToHSL }
+// takes lightness and contrast percentage, in decimal forms (.10 for 10%)
+// returns color of same hue and saturation with proper lightness to obtain desired contrast
+
+function getContrastColorLightness(lightness: number, contrast: number) {
+  //  *100 to get from decimal to percent, then * 100 for proper contrast
+  return lightness - contrast * -100
+}
+
+function getContrastHSLString(hslColor: HSL_Color, contrast: number) {
+  const contrastingLightness = getContrastColorLightness(hslColor.l, contrast)
+  const contrastHSL: HSL_Color = {
+    h: hslColor.h,
+    s: hslColor.s * 100,
+    l: contrastingLightness,
+  }
+  return `hsl(${contrastHSL.h}, ${contrastHSL.s}%, ${contrastHSL.l}%)`
+}
+
+function getContrastColorHex(h: number, s: number, l: number) {
+  const contrastingLightness = l / 10000
+  return hslToHex(h, s, contrastingLightness)
+}
+
+function getComplement(hslColor: HSL_Color) {
+  const complement_hue = hslColor.h + 180
+  const complementHSL: HSL_Color = {
+    h: complement_hue,
+    s: hslColor.s,
+    l: hslColor.l,
+  }
+  const complementHex = hslToHex(complement_hue, hslColor.s, hslColor.l)
+
+  const complement: SanityColor = {
+    alpha: 1,
+    hsl: complementHSL,
+    hex: complementHex,
+  }
+  return complement
+}
+
+export {
+  darken,
+  hslToHex,
+  hexToHSL,
+  getComplement,
+  getContrastColorLightness,
+  getContrastHSLString,
+  getContrastColorHex,
+}

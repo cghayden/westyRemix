@@ -93,4 +93,6 @@ export type UserColors = {
   productTileBackgroundColor: SanityColor
   productTileTextColor: SanityColor
   bgComplement: SanityColor
+  bgContrast: string
+  tileContrast: string
 }

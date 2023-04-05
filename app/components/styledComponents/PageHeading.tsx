@@ -1,6 +1,14 @@
+import { useContext } from 'react'
+import { ThemeContext } from '~/context/ThemeContext'
+
 export default function PageHeading({ text }: { text: string }) {
+  const { pageTextColor } = useContext(ThemeContext)
+
   return (
-    <h2 className='text-2xl sm:text-2xl font-medium sm:py-6 text-center text-slate-800'>
+    <h2
+      className='text-2xl sm:text-2xl font-medium sm:py-6 text-center'
+      style={{ color: `${pageTextColor}` }}
+    >
       {text}
     </h2>
   )

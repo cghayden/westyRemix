@@ -1,6 +1,5 @@
-import { HSL_Color, SanityColor } from 'myTypes'
 import { createContext } from 'react'
-import { hslToHex } from '~/lib/colorFuncs'
+import { getComplement, getContrastHSLString } from '~/lib/colorFuncs'
 import { UserColors } from 'myTypes'
 
 const initialCtx: UserColors = {
@@ -14,6 +13,8 @@ const initialCtx: UserColors = {
   },
   productTileTextColor: { alpha: 1, hex: '#000', hsl: { h: 360, s: 50, l: 1 } },
   bgComplement: { alpha: 1, hex: '#bb1111', hsl: { h: 180, s: 50, l: 1 } },
+  bgContrast: '#000',
+  tileContrast: '#000',
 }
 
 const ThemeContext = createContext(initialCtx)
@@ -25,27 +26,15 @@ const ThemeProvider = ({
   siteSettings: UserColors
   children: React.ReactNode
 }) => {
-  //adjust hue to comp
-  // calc compHex
-  // create comp SanityColor
-  const complement_hue = siteSettings.backgroundColor.hsl.h + 180
-  const complementHSL: HSL_Color = {
-    h: complement_hue,
-    s: siteSettings.backgroundColor?.hsl.s,
-    l: siteSettings.backgroundColor?.hsl.l,
-  }
-  const complementHex = hslToHex(
-    complement_hue,
-    siteSettings.backgroundColor.hsl.s,
-    siteSettings.backgroundColor.hsl.l
+  const bgComplement = getComplement(siteSettings.backgroundColor.hsl)
+  const bgContrast = getContrastHSLString(siteSettings.backgroundColor.hsl, 0.2)
+  const tileContrast = getContrastHSLString(
+    siteSettings.productTileBackgroundColor.hsl,
+    0.7
   )
-  const bgComplement: SanityColor = {
-    alpha: 1,
-    hsl: complementHSL,
-    hex: complementHex,
-  }
-  console.log('bgComplement', bgComplement)
   siteSettings.bgComplement = bgComplement
+  siteSettings.bgContrast = bgContrast
+  siteSettings.tileContrast = tileContrast
 
   return (
     <ThemeContext.Provider value={siteSettings}>

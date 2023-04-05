@@ -63,7 +63,7 @@ export default function CoffeeRoute() {
   const coffee = filterDataToSingleItem(data, preview)
 
   return (
-    <main className='h-screen'>
+    <main>
       {preview && (
         <Preview
           data={data}

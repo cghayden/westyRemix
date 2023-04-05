@@ -13,6 +13,7 @@ import StoreFrontIcon from '~/icons/StoreFrontIcon'
 import ShippingTruckIcon from '~/icons/ShippingTruckIcon'
 import PickupChoiceInputs from '~/components/PickupChoiceInputs'
 import styles from '~/styles/formStyles.css'
+import calcTotalPrice from '~/lib/calcCartTotal'
 
 export function links() {
   return [{ rel: 'stylesheet', href: styles }]
@@ -30,6 +31,7 @@ export default function CheckoutPage() {
   const cartItems = useCartItems()
   const [searchParams] = useSearchParams()
   const warnings = searchParams.getAll('warnings')
+  const shipping = calcTotalPrice(cartItems) < 4999 ? 1000 : 0
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault()
@@ -60,11 +62,12 @@ export default function CheckoutPage() {
               </ul>
             </div>
           )}
-          <legend className='text-sm text-blue-800'>contact</legend>
+          <legend className=' text-blue-800 text-left'>contact</legend>
           <CustomerDetailsInputs
             customerDetails={customerDetails}
             setCustomerDetails={setCustomerDetails}
           />
+          <legend className='text-left text-blue-800'>fulfillment </legend>
           <FieldsetGroup>
             <InputRow>
               <div className='label__radio__input pr-3'>
@@ -115,7 +118,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <label
-                className={`flex flex-col cursor-pointer ${
+                className={`flex flex-col cursor-pointer items-start ${
                   fulfillmentDetails.method === 'shipping'
                     ? 'text-blue-800'
                     : 'text-gray-700'
@@ -124,9 +127,11 @@ export default function CheckoutPage() {
               >
                 <span>
                   <ShippingTruckIcon />
-                  $10 shipping
+                  {shipping === 1000 ? `shipping : $10 ` : `shipping : free  `}
                 </span>
-                <span className='text-sm'>free on orders over $50</span>
+                <span className='text-sm text-amber-800'>
+                  {shipping == 1000 ? `free on orders over $50` : ` `}
+                </span>
               </label>
             </InputRow>
           </FieldsetGroup>
@@ -155,7 +160,7 @@ export default function CheckoutPage() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <legend className='text-sm text-blue-800'>
+                <legend className='text-left text-blue-800'>
                   pickup location
                 </legend>
                 <PickupChoiceInputs
@@ -165,7 +170,10 @@ export default function CheckoutPage() {
               </motion.div>
             )}
           </AnimatePresence>
-          <button type='submit'>
+          <button
+            type='submit'
+            className='bg-green-400 px-12 py-4 rounded-lg w-full'
+          >
             <input
               name='cart'
               value={JSON.stringify(cartItems)}
