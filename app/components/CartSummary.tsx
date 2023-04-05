@@ -1,12 +1,20 @@
-import { useCartItems } from '~/context/useCart'
 import calcTotalPrice from '~/lib/calcCartTotal'
 import formatMoney from '~/lib/formatMoney'
 import CartListItem from './CartListItem'
+import { CartItem } from 'myTypes'
 
-export default function CartSummary() {
-  const cartItems = useCartItems()
+export default function CartSummary({ cartItems }: { cartItems: CartItem[] }) {
   const subtotal = calcTotalPrice(cartItems)
   const shipping = subtotal < 4999 ? 1000 : 0
+
+  if (!cartItems.length) {
+    return (
+      <div className='my-12 text-center text-lg'>
+        <p>You're cart is empty!!</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <div>

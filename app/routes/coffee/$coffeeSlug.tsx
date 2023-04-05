@@ -102,7 +102,7 @@ export default function CoffeeRoute() {
               {coffee?.roastDate && (
                 <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
+                    <dt className='w-20 text-slate-900 text-left text-lg mr-3'>
                       roasted
                     </dt>
                     <dd className='text-amber-800'>
@@ -114,7 +114,7 @@ export default function CoffeeRoute() {
               {coffee?.grade && (
                 <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='w-20 w- text-slate-900 justify-self-start text-lg mr-3'>
+                    <dt className='w-20 w- text-slate-900 text-left text-lg mr-3'>
                       grade
                     </dt>
                     <dd className='text-amber-800'>{coffee.grade}</dd>
@@ -124,7 +124,7 @@ export default function CoffeeRoute() {
               {coffee?.region && (
                 <div className='flex flex-row items-baseline'>
                   <>
-                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
+                    <dt className='w-20 text-slate-900 text-left text-lg mr-3'>
                       region
                     </dt>
                     <dd className='text-amber-800'>{coffee.region}</dd>
@@ -135,7 +135,7 @@ export default function CoffeeRoute() {
                 <div className='flex flex-row items-baseline'>
                   <>
                     post{' '}
-                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
+                    <dt className='w-20 text-slate-900 text-left text-lg mr-3'>
                       cultivar
                     </dt>
                     <dd className='text-amber-800'>{coffee.cultivar}</dd>
@@ -146,7 +146,7 @@ export default function CoffeeRoute() {
                 <div className='flex flex-row items-baseline'>
                   <>
                     post{' '}
-                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
+                    <dt className='w-20 text-slate-900 text-left text-lg mr-3'>
                       elevation
                     </dt>
                     <dd className='text-amber-800'>{coffee.elevation}</dd>
@@ -157,7 +157,7 @@ export default function CoffeeRoute() {
                 <div className='flex flex-row items-baseline'>
                   <>
                     post{' '}
-                    <dt className='w-20 text-slate-900 justify-self-start text-lg mr-3'>
+                    <dt className='w-20 text-slate-900 text-left text-lg mr-3'>
                       process
                     </dt>
                     <dd className='text-amber-800'>{coffee.process}</dd>
