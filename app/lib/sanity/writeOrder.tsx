@@ -62,7 +62,9 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
   //   return;
   // }
   await SanityClient.create(doc)
-    .then((res) => {})
+    .then((res) => {
+      console.log('order written', res)
+    })
     .catch((err) => {
       throw `Error writing to sanity: ${err}`
       // notify neighborly of error writing to sanity orders

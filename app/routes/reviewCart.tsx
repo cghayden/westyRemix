@@ -45,11 +45,18 @@ export default function CheckoutPage() {
 
   // review cart, and on confirmation, send cart to '/pay' action handler via form submission
   // if the action finds errors of price or stock, it will redirect back to this page with warnings in the url query string
+  if (!cartItems.length) {
+    return (
+      <ContentContainer>
+        <CartSummary cartItems={cartItems} />
+      </ContentContainer>
+    )
+  }
   return (
     <div>
       <h2 className='text-center text-xl p-1'>Review Your Cart</h2>
       <ContentContainer>
-        <CartSummary />
+        <CartSummary cartItems={cartItems} />
       </ContentContainer>
       <ContentContainer>
         <form onSubmit={handleSubmit}>

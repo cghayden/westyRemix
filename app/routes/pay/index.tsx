@@ -35,7 +35,7 @@ export default function Index() {
       <CollapsibleCartSummary />
       <Form onSubmit={handleSubmit}>
         <PaymentElement />
-        <button className='bg-amber-700 text-amber-50 px-4 py-3'>
+        <button className='bg-amber-700 text-amber-50 px-8 py-3 rounded-xl'>
           confirm
         </button>
       </Form>
