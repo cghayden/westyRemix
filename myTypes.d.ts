@@ -1,4 +1,5 @@
 export interface CartItem {
+  _id: string
   coffeeId: string
   quantity: number
   grind: string

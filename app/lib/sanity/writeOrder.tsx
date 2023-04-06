@@ -1,6 +1,7 @@
 import { OrderDetails } from 'myTypes'
 import SanityClient from '~/lib/sanity/sanity'
 import { customAlphabet } from 'nanoid'
+import { adjustSanityStock } from './adjustSanityStock'
 const nanoid = customAlphabet('1234567890abcdef', 10)
 
 async function writeOrderToSanity(orderDetails: OrderDetails) {
@@ -62,10 +63,13 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
   //   return;
   // }
   await SanityClient.create(doc)
-    .then((res) => {
-      console.log('order written', res)
-    })
+    .then((result) => console.log('write order result', result))
+    .then(() => adjustSanityStock(cartItems))
+    // .then((adjustOrderRes) =>
+    //   console.log('adjust order response', adjustOrderRes)
+    // )
     .catch((err) => {
+      console.error('err', err)
       throw `Error writing to sanity: ${err}`
       // notify neighborly of error writing to sanity orders
     })

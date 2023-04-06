@@ -48,7 +48,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const siteSettings = filterDataToSingleItem(initialData.siteSettings, preview)
 
-  console.log('single siteSettings', siteSettings)
   const data = {
     initialData,
     siteSettings,
