@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useSearchParams, useSubmit, useTransition } from '@remix-run/react'
+import { useSearchParams, useSubmit, useNavigation } from '@remix-run/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CustomerDetails, FulfillmentDetails, OrderDetails } from 'myTypes'
+import { CustomerDetails, FulfillmentDetails } from 'myTypes'
 import CartSummary from '~/components/CartSummary'
 import ShippingDetailsInputs from '~/components/ShippingDetailsInputs'
 import CustomerDetailsInputs from '~/components/CustomerDetailsInputs'
@@ -19,7 +19,7 @@ export function links() {
   return [{ rel: 'stylesheet', href: styles }]
 }
 export default function CheckoutPage() {
-  const transition = useTransition()
+  let navigation = useNavigation()
   const submit = useSubmit()
 
   const [customerDetails, setCustomerDetails] = useState({} as CustomerDetails)
@@ -143,7 +143,7 @@ export default function CheckoutPage() {
             </InputRow>
           </FieldsetGroup>
 
-          <AnimatePresence exitBeforeEnter initial={false}>
+          <AnimatePresence mode='wait' initial={false}>
             {fulfillmentDetails.method === 'shipping' && (
               <motion.div
                 key={'shipping'}
@@ -186,7 +186,7 @@ export default function CheckoutPage() {
               value={JSON.stringify(cartItems)}
               type='hidden'
             />
-            {transition.state === 'submitting'
+            {navigation.state === 'submitting'
               ? 'calculating...'
               : 'looks good!'}{' '}
           </button>
