@@ -1,14 +1,12 @@
-import type { LandingPage } from '../../sanityTypes';
-// import PortableText from 'react-portable-text';
-import { PortableText } from '@portabletext/react';
+import type { LandingPage } from '../../sanityTypes'
+import { PortableText } from '@portabletext/react'
 
 export default function HomeHero({
   heroContent,
 }: {
-  heroContent: LandingPage;
+  heroContent: LandingPage
 }) {
-  const blockContent = heroContent.overlayText1;
-  if (!heroContent.imageUrl && !heroContent.overlayText1) return null;
+  if (!heroContent.imageUrl && !heroContent.overlayText1) return null
   return (
     <div className='grid place-content-center bg-slate-50'>
       <img
@@ -25,5 +23,5 @@ export default function HomeHero({
         </div>
       )}
     </div>
-  );
+  )
 }

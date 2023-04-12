@@ -1,12 +1,20 @@
-import { useCartItems } from '~/context/useCart';
-import calcTotalPrice from '~/lib/calcCartTotal';
-import formatMoney from '~/lib/formatMoney';
-import CartListItem from './CartListItem';
+import calcTotalPrice from '~/lib/calcCartTotal'
+import formatMoney from '~/lib/formatMoney'
+import CartListItem from './CartListItem'
+import { CartItem } from 'myTypes'
 
-export default function CartSummary() {
-  const cartItems = useCartItems();
-  const subtotal = calcTotalPrice(cartItems);
-  const shipping = subtotal < 4999 ? 1000 : 0;
+export default function CartSummary({ cartItems }: { cartItems: CartItem[] }) {
+  const subtotal = calcTotalPrice(cartItems)
+  const shipping = subtotal < 4999 ? 1000 : 0
+
+  if (!cartItems.length) {
+    return (
+      <div className='my-12 text-center text-lg'>
+        <p>You're cart is empty!!</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <div>
@@ -23,11 +31,14 @@ export default function CartSummary() {
         <p className='text-xl text-slate-600'>
           Shipping: <span className='ml-2'>{`$${formatMoney(shipping)}`}</span>
         </p>
-        <p className='text-2xl py-1'>
+        <p className='text-sm text-amber-800 h-4'>
+          {shipping == 1000 ? `free shipping on orders over $50.00` : null}
+        </p>
+        <p className='text-2xl py-2'>
           Total:{' '}
           <span className='ml-2'>{`$${formatMoney(subtotal + shipping)}`}</span>
         </p>
       </div>
     </div>
-  );
+  )
 }

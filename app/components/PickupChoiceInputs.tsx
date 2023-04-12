@@ -1,15 +1,15 @@
-import { FulfillmentDetails, OrderDetails } from 'myTypes';
-import FieldsetGroup from './styledContainers/FieldsetGroup';
-import InputRow from './styledContainers/InputRow';
+import { FulfillmentDetails } from 'myTypes'
+import FieldsetGroup from './styledComponents/FieldsetGroup'
+import InputRow from './styledComponents/InputRow'
 
 export default function PickupChoiceInputs({
   fulfillmentDetails,
   setFulfillmentDetails,
 }: {
-  fulfillmentDetails: FulfillmentDetails;
+  fulfillmentDetails: FulfillmentDetails
   setFulfillmentDetails: React.Dispatch<
     React.SetStateAction<FulfillmentDetails>
-  >;
+  >
 }) {
   return (
     <FieldsetGroup>
@@ -26,7 +26,7 @@ export default function PickupChoiceInputs({
               setFulfillmentDetails({
                 ...fulfillmentDetails,
                 pickupLocation: e.target.value,
-              });
+              })
             }}
           />
         </div>
@@ -38,7 +38,7 @@ export default function PickupChoiceInputs({
           }`}
           htmlFor='checkout_id_pickup_daniels'
         >
-          <div className='radio__label pickupAddress'>
+          <div className=' pickupAddress text-left'>
             <p className='pickup-locationName'>neighborly coffee</p>
             <p className='text-sm'>36 lincoln rd.</p>
             <p className='text-sm'>sharon, ma 02067</p>
@@ -59,7 +59,7 @@ export default function PickupChoiceInputs({
               setFulfillmentDetails({
                 ...fulfillmentDetails,
                 pickupLocation: e.target.value,
-              });
+              })
             }}
           />
         </div>
@@ -71,7 +71,7 @@ export default function PickupChoiceInputs({
           }`}
           htmlFor='checkout_id_pickup_edge'
         >
-          <div className='radio__label pickupAddress'>
+          <div className='pickupAddress text-left'>
             <p className='pickup-locationName'>edge studio</p>
             <p className='text-sm'>905 turnpike st,</p>
             <p className='text-sm'>suite. f</p>
@@ -80,5 +80,5 @@ export default function PickupChoiceInputs({
         </label>
       </InputRow>
     </FieldsetGroup>
-  );
+  )
 }

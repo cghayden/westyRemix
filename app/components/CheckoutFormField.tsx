@@ -1,14 +1,14 @@
 type FormFieldParams = {
-  label: string;
-  name: string;
-  id: string;
-  inputType: string;
-  placeholder?: string;
-  required: boolean;
-  autoComplete: string;
-  value: string | undefined;
-  onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
-};
+  label: string
+  name: string
+  id: string
+  inputType: string
+  placeholder?: string
+  required: boolean
+  autoComplete: string
+  value: string | undefined
+  onChange: React.ChangeEventHandler<HTMLInputElement> | undefined
+}
 
 export default function CheckoutFormField({
   label,
@@ -30,7 +30,7 @@ export default function CheckoutFormField({
         {label}
       </label>
       <input
-        className='label__FormRowInput w-full py-3 pr-4 ml-2 bg-transparent focus-visible:outline-none'
+        className='label__FormRowInput w-full py-3 pr-4 ml-2 bg-slate-100 focus-visible:outline-none'
         id={id}
         type={inputType}
         placeholder={placeholder}
@@ -41,5 +41,5 @@ export default function CheckoutFormField({
         name={name}
       />
     </div>
-  );
+  )
 }

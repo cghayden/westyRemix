@@ -1,32 +1,31 @@
-import { useState } from 'react';
-import { Form } from '@remix-run/react';
+import { useState } from 'react'
 import {
   useChangeCartItemQuantity,
   useCartItems,
   useCartUtils,
-} from '~/context/useCart';
-import MinusSvg from '~/icons/MinusSvg';
-import PlusSvg from '~/icons/PlusSvg';
-import type { Coffee } from '../../sanityTypes';
-import getTotalQuantityInCart from '~/lib/getTotalQuantityInCart';
+} from '~/context/useCart'
+import MinusSvg from '~/icons/MinusSvg'
+import PlusSvg from '~/icons/PlusSvg'
+import type { Coffee } from '../../sanityTypes'
+import getTotalQuantityInCart from '~/lib/getTotalQuantityInCart'
 
 export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
-  const [alert, setAlert] = useState<string | null>();
-  const [grind, setGrind] = useState('whole');
-  const [desiredQuantity, setDesiredQuantity] = useState<number>(1);
-  const cartItems = useCartItems();
-  const changeCartItemQuantity = useChangeCartItemQuantity();
-  const { toggleIsCartOpen } = useCartUtils();
-  const totalCartQuantity = getTotalQuantityInCart(coffee._id, cartItems);
+  const [alert, setAlert] = useState<string | null>()
+  const [grind, setGrind] = useState('whole')
+  const [desiredQuantity, setDesiredQuantity] = useState<number>(1)
+  const cartItems = useCartItems()
+  const changeCartItemQuantity = useChangeCartItemQuantity()
+  const { toggleIsCartOpen } = useCartUtils()
+  const totalCartQuantity = getTotalQuantityInCart(coffee._id, cartItems)
 
   const handleGrindChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGrind(e.target.value);
-  };
+    setGrind(e.target.value)
+  }
 
   return (
     <>
       <div className=' label__Formcontainer p-3 flex flex-col justify-evenly items-center'>
-        <div className='grindRadio flex flex-col'>
+        <div className='grindRadio flex flex-col items-start'>
           <label htmlFor='whole' className='py-2'>
             <input
               type='radio'
@@ -73,12 +72,12 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
                   ) {
                     setAlert(
                       `you have ${totalCartQuantity} ${coffee.name} in your cart.  There are only ${coffee.stock} available`
-                    );
+                    )
                     setTimeout(() => {
-                      setAlert(null);
-                    }, 2000);
+                      setAlert(null)
+                    }, 2000)
                   } else {
-                    setDesiredQuantity(desiredQuantity + 1);
+                    setDesiredQuantity(desiredQuantity + 1)
                   }
                 }}
               >
@@ -95,8 +94,8 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             }
             className='text-lg bg-slate-600 text-slate-50 rounded-full px-5 py-2 mt-2 disabled:bg-slate-300 disabled:text-slate:100'
             onClick={(e) => {
-              e.preventDefault();
-              setDesiredQuantity(1);
+              e.preventDefault()
+              setDesiredQuantity(1)
               changeCartItemQuantity({
                 name: `${coffee.name}`,
                 coffeeId: `${coffee._id}`,
@@ -105,8 +104,9 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
                 variant_id: `${coffee._id + grind}`,
                 price: coffee.price,
                 inStock: coffee.stock,
-              });
-              toggleIsCartOpen(true);
+                _id: `${coffee._id}`,
+              })
+              toggleIsCartOpen(true)
             }}
           >
             Add {desiredQuantity} to Cart
@@ -115,5 +115,5 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
         {alert && <p>{alert}</p>}
       </div>
     </>
-  );
+  )
 }

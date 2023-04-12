@@ -4,7 +4,7 @@ export default sanityClient({
   // Find your project ID and dataset in `sanity.json` in your studio project
   projectId: process.env.SANITY_PROJECT_ID,
   dataset: 'production',
-  useCdn: true,
+  useCdn: false,
   apiVersion: '2022-03-06',
   token: process.env.SANITY_API_TOKEN ?? ``,
 

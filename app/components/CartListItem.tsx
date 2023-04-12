@@ -1,7 +1,6 @@
-import { CartItem } from 'myTypes';
-import TrashIcon from '~/icons/TrashIcon';
-import formatMoney from '~/lib/formatMoney';
-import AdjustQuantityButtons from './AdjustQuantityButtons';
+import { CartItem } from 'myTypes'
+import formatMoney from '~/lib/formatMoney'
+import AdjustQuantityButtons from './AdjustQuantityButtons'
 
 export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
   return (
@@ -9,11 +8,6 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
       <div className='mx-auto md:w-2/3'>
         <div className='flex justify-between items-center'>
           <h3 className='text-xl'>{cartItem.name}</h3>
-          {/* <div>
-            <button onClick={() => removeFromCart(cartItem)}>
-              <TrashIcon />
-            </button>
-          </div> */}
         </div>
         <div className='flex'>
           <div>
@@ -28,5 +22,5 @@ export default function CartListItem({ cartItem }: { cartItem: CartItem }) {
         <AdjustQuantityButtons cartItem={cartItem} />
       </div>
     </li>
-  );
+  )
 }

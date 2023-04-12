@@ -1,10 +1,12 @@
-import { Link } from '@remix-run/react';
-import { useCartItems, useCartUtils } from '~/context/useCart';
-import CartSummary from './CartSummary';
+import { Link } from '@remix-run/react'
+import { useCartItems, useCartUtils } from '~/context/useCart'
+import CartSummary from './CartSummary'
+import calcTotalPrice from '~/lib/calcCartTotal'
 
 export default function Cart() {
-  const { isCartOpen, toggleIsCartOpen } = useCartUtils();
-  const cartItems = useCartItems();
+  const { isCartOpen, toggleIsCartOpen } = useCartUtils()
+  const cartItems = useCartItems()
+
   return (
     <div
       className={`p-2 fixed bg-slate-100 h-screen w-11/12 max-w-[650px] min-w-[310px] top-0 right-0 z-40 transition-all duration-300 overflow-scroll shadow-2xl
@@ -21,25 +23,25 @@ export default function Cart() {
           &times;
         </button>
       </header>
-      <CartSummary />
+      <CartSummary cartItems={cartItems} />
       <div className='flex justify-evenly'>
         <button
-          className='bg-slate-600 text-slate-50 px-6 py-3 rounded'
-          // role='link'
+          className='bg-orange-700 text-slate-50 px-6 py-3 rounded'
           onClick={() => toggleIsCartOpen(false)}
-          // to='/'
         >
           keep shopping
         </button>
-        <Link
-          className='bg-amber-800 text-amber-50 px-6 py-3 rounded'
-          role='link'
-          onClick={() => toggleIsCartOpen(false)}
-          to='/reviewCart'
-        >
-          checkout
-        </Link>
+        {!!cartItems.length && (
+          <Link
+            className='bg-blue-500 text-blue-50 px-6 py-3 rounded'
+            role='link'
+            onClick={() => toggleIsCartOpen(false)}
+            to='/reviewCart'
+          >
+            checkout
+          </Link>
+        )}
       </div>
     </div>
-  );
+  )
 }

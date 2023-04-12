@@ -1,19 +1,4 @@
-import { Link } from "@remix-run/react";
-
-const NavStyles = `
-  padding: 1rem 0;
-  margin-left: auto;
-  ul {
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-  a {
-    &:hover {
-      color: dark green;
-    }
-  }
-`;
+import { Link } from '@remix-run/react'
 
 export default function Nav() {
   return (
@@ -36,5 +21,5 @@ export default function Nav() {
         </li>
       </ul>
     </nav>
-  );
+  )
 }

@@ -1,4 +1,9 @@
-import { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node';
+import {
+  LinksFunction,
+  LoaderArgs,
+  LoaderFunction,
+  MetaFunction,
+} from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -7,42 +12,90 @@ import {
   Scripts,
   useCatch,
   useLoaderData,
-} from '@remix-run/react';
-import { SiteSettings } from 'sanityTypes';
-import Header from './components/Header';
-import styles from './styles/tailwind-build.css';
-import sanity from './lib/sanity/sanity';
-import { CartProvider } from './context/useCart';
-
-const siteSettingsQuery = `*[_type == "siteSettings"][0] {
-  backgroundColor,
-  textColor
-} `;
+} from '@remix-run/react'
+import Header from './components/Header'
+import styles from './styles/tailwind.css'
+import sanity from './lib/sanity/sanity'
+import { CartProvider } from './context/useCart'
+import { ThemeProvider } from './context/ThemeContext'
+import Preview from './components/Preview'
+import { useState } from 'react'
+import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
+import Footer from './components/Footer'
+import { ContactPage, SiteSettings } from 'sanityTypes'
 
 export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: styles }];
-};
+  return [{ rel: 'stylesheet', href: styles }]
+}
 
 export const meta: MetaFunction = () => {
-  const description = `Sample Ecommerce Site`;
+  const description = `Sample Ecommerce Site`
   return {
     description,
-  };
-};
+  }
+}
 
-export const loader: LoaderFunction = async () => {
-  const data: SiteSettings = await sanity.fetch(siteSettingsQuery);
-  return data;
-};
+export interface InitialData {
+  siteSettings: SiteSettings[]
+  contactData: ContactPage[]
+}
+
+export type LoaderData = {
+  initialData: InitialData
+  siteSettings: SiteSettings
+  contactData: ContactPage
+  preview: boolean
+  query: string | null
+  queryParams: string | null
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const query = `{
+    "siteSettings": *[_type == "siteSettings"] {
+      _id,
+      backgroundColor {alpha, hsl, hex},
+      pageTextColor {alpha, hsl, hex},
+      productTileBackgroundColor {alpha, hsl, hex},
+      productTileTextColor {alpha, hsl, hex}, 
+      "backgroundImageUrl" : backgroundImage.asset->url
+  },
+  "contactData": *[_type == 'contactPage']
+} `
+  const requestUrl = new URL(request?.url)
+  const preview: boolean =
+    requestUrl?.searchParams?.get('preview') ===
+    process.env.SANITY_PREVIEW_SECRET
+
+  const initialData: InitialData = await sanity
+    .fetch(query)
+    .catch((err) => console.log(err))
+  console.log('initialData', initialData)
+
+  const siteSettings = filterDataToSingleItem(initialData.siteSettings, preview)
+
+  const data: LoaderData = {
+    initialData,
+    siteSettings,
+    contactData: initialData.contactData[0],
+    preview,
+    query: preview ? query : null,
+    queryParams: null,
+  }
+  return data
+}
 
 function Document({
   children,
   title = `Westy Remix`,
 }: {
-  children: React.ReactNode;
-  title?: string;
+  children: React.ReactNode
+  title?: string
 }) {
-  const data = useLoaderData();
+  const { siteSettings, preview, query, queryParams } =
+    useLoaderData<LoaderData>()
+  const [data, setData] = useState(siteSettings)
+
+  console.log('siteSettings', siteSettings)
   return (
     <html lang='en'>
       <head>
@@ -52,18 +105,35 @@ function Document({
         <title>{title}</title>
         <Links />
       </head>
+      {preview && (
+        <Preview
+          data={data}
+          setData={setData}
+          query={query}
+          queryParams={queryParams}
+        />
+      )}
       <body
+        className='min-h-screen m-0 flex flex-col font-HindSiliguri'
         style={{
-          backgroundColor: `${data?.backgroundColor.hex}`,
+          background: `${
+            siteSettings.backgroundImageUrl
+              ? `url(${siteSettings.backgroundImageUrl})`
+              : siteSettings?.backgroundColor?.hex
+          }`,
+
+          color: `${siteSettings?.pageTextColor?.hex}`,
           overscrollBehavior: 'none',
         }}
       >
-        <CartProvider initialCart={[]}>{children}</CartProvider>
+        <ThemeProvider siteSettings={siteSettings}>
+          <CartProvider initialCart={[]}>{children}</CartProvider>
+        </ThemeProvider>
         <Scripts />
         {process.env.NODE_ENV === 'development' ? <LiveReload /> : null}
       </body>
     </html>
-  );
+  )
 }
 
 export default function App() {
@@ -71,11 +141,12 @@ export default function App() {
     <Document>
       <Header />
       <Outlet />
+      <Footer />
     </Document>
-  );
+  )
 }
 export function CatchBoundary() {
-  const caught = useCatch();
+  const caught = useCatch()
 
   return (
     <Document title={`${caught.status} ${caught.statusText}`}>
@@ -85,13 +156,13 @@ export function CatchBoundary() {
         </h1>
       </div>
     </Document>
-  );
+  )
 }
 
 //  with remix <Scripts/>, you can accept the error prop in all your ErrorBoundary components and console.error(error); and you'll get even server-side errors logged in the browser's console.
 
 export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error);
+  console.error(error)
   return (
     <Document title='Uh-oh!'>
       <Header />
@@ -100,5 +171,5 @@ export function ErrorBoundary({ error }: { error: Error }) {
         <pre>{error.message}</pre>
       </div>
     </Document>
-  );
+  )
 }

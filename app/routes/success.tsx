@@ -1,22 +1,22 @@
-import { LoaderArgs } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
-import { retrievePaymentIntent } from '~/lib/stripePaymentIntent';
-import ContentContainer from '~/components/styledContainers/ContentContainer';
-import { OrderDetails } from 'myTypes';
-import formatMoney from '~/lib/formatMoney';
+import { LoaderArgs } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
+import { retrievePaymentIntent } from '~/lib/stripePaymentIntent'
+import ContentContainer from '~/components/styledComponents/ContentContainer'
+import { OrderDetails } from 'myTypes'
+import formatMoney from '~/lib/formatMoney'
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const url = new URL(request.url);
-  const id = url.searchParams.get('payment_intent');
-  if (!id) return null;
-  const paymentIntent = await retrievePaymentIntent(id);
-  const customerDetails = JSON.parse(paymentIntent.metadata.customerDetails);
+  const url = new URL(request.url)
+  const id = url.searchParams.get('payment_intent')
+  if (!id) return null
+  const paymentIntent = await retrievePaymentIntent(id)
+  const customerDetails = JSON.parse(paymentIntent.metadata.customerDetails)
   const fulfillmentDetails = JSON.parse(
     paymentIntent.metadata.fulfillmentDetails
-  );
-  const cartItems = JSON.parse(paymentIntent.description);
-  const orderId = paymentIntent.id;
-  const total = paymentIntent.amount_received;
+  )
+  const cartItems = JSON.parse(paymentIntent.description)
+  const orderId = paymentIntent.id
+  const total = paymentIntent.amount_received
 
   const orderDetails: OrderDetails = {
     cart: cartItems,
@@ -24,17 +24,16 @@ export const loader = async ({ request }: LoaderArgs) => {
     fulfillmentDetails,
     total,
     id: orderId,
-  };
+  }
 
-  return orderDetails;
-};
+  return orderDetails
+}
 
 export default function success() {
-  const orderDetails = useLoaderData<typeof loader>();
-  console.log('orderDetails in success', orderDetails);
-  const cartItems = orderDetails?.cart;
-  const customerDetails = orderDetails?.customerDetails;
-  const fulfillmentDetails = orderDetails?.fulfillmentDetails;
+  const orderDetails = useLoaderData<typeof loader>()
+  const cartItems = orderDetails?.cart
+  const customerDetails = orderDetails?.customerDetails
+  const fulfillmentDetails = orderDetails?.fulfillmentDetails
 
   return (
     <main>
@@ -111,5 +110,5 @@ export default function success() {
         </ul>
       </ContentContainer>
     </main>
-  );
+  )
 }

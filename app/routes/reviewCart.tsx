@@ -1,53 +1,62 @@
-import { useState } from 'react';
-import { useSearchParams, useSubmit, useTransition } from '@remix-run/react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CustomerDetails, FulfillmentDetails, OrderDetails } from 'myTypes';
-import CartSummary from '~/components/CartSummary';
-import ShippingDetailsInputs from '~/components/ShippingDetailsInputs';
-import CustomerDetailsInputs from '~/components/CustomerDetailsInputs';
-import ContentContainer from '~/components/styledContainers/ContentContainer';
-import { useCartItems } from '~/context/useCart';
-import FieldsetGroup from '~/components/styledContainers/FieldsetGroup';
-import InputRow from '~/components/styledContainers/InputRow';
-import StoreFrontIcon from '~/icons/StoreFrontIcon';
-import ShippingTruckIcon from '~/icons/ShippingTruckIcon';
-import PickupChoiceInputs from '~/components/PickupChoiceInputs';
-import styles from '~/styles/formStyles.css';
+import { useState } from 'react'
+import { useSearchParams, useSubmit, useNavigation } from '@remix-run/react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { CustomerDetails, FulfillmentDetails } from 'myTypes'
+import CartSummary from '~/components/CartSummary'
+import ShippingDetailsInputs from '~/components/ShippingDetailsInputs'
+import CustomerDetailsInputs from '~/components/CustomerDetailsInputs'
+import ContentContainer from '~/components/styledComponents/ContentContainer'
+import { useCartItems } from '~/context/useCart'
+import FieldsetGroup from '~/components/styledComponents/FieldsetGroup'
+import InputRow from '~/components/styledComponents/InputRow'
+import StoreFrontIcon from '~/icons/StoreFrontIcon'
+import ShippingTruckIcon from '~/icons/ShippingTruckIcon'
+import PickupChoiceInputs from '~/components/PickupChoiceInputs'
+import styles from '~/styles/formStyles.css'
+import calcTotalPrice from '~/lib/calcCartTotal'
 
 export function links() {
-  return [{ rel: 'stylesheet', href: styles }];
+  return [{ rel: 'stylesheet', href: styles }]
 }
 export default function CheckoutPage() {
-  const transition = useTransition();
-  const submit = useSubmit();
+  let navigation = useNavigation()
+  const submit = useSubmit()
 
-  const [customerDetails, setCustomerDetails] = useState({} as CustomerDetails);
+  const [customerDetails, setCustomerDetails] = useState({} as CustomerDetails)
   const [fulfillmentDetails, setFulfillmentDetails] = useState({
     method: 'pickup',
     pickupLocation: '',
-  } as FulfillmentDetails);
+  } as FulfillmentDetails)
 
-  const cartItems = useCartItems();
-  const [searchParams] = useSearchParams();
-  const warnings = searchParams.getAll('warnings');
+  const cartItems = useCartItems()
+  const [searchParams] = useSearchParams()
+  const warnings = searchParams.getAll('warnings')
+  const shipping = calcTotalPrice(cartItems) < 4999 ? 1000 : 0
 
   const handleSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    const formData = new FormData();
+    event.preventDefault()
+    const formData = new FormData()
     formData.set(
       'orderDetails',
       JSON.stringify({ customerDetails, fulfillmentDetails, cart: cartItems })
-    );
-    submit(formData, { method: 'post', action: '/pay' });
-  };
+    )
+    submit(formData, { method: 'post', action: '/pay' })
+  }
 
   // review cart, and on confirmation, send cart to '/pay' action handler via form submission
   // if the action finds errors of price or stock, it will redirect back to this page with warnings in the url query string
+  if (!cartItems.length) {
+    return (
+      <ContentContainer>
+        <CartSummary cartItems={cartItems} />
+      </ContentContainer>
+    )
+  }
   return (
     <div>
       <h2 className='text-center text-xl p-1'>Review Your Cart</h2>
       <ContentContainer>
-        <CartSummary />
+        <CartSummary cartItems={cartItems} />
       </ContentContainer>
       <ContentContainer>
         <form onSubmit={handleSubmit}>
@@ -60,11 +69,12 @@ export default function CheckoutPage() {
               </ul>
             </div>
           )}
-          <legend className='text-sm text-blue-800'>contact</legend>
+          <legend className=' text-blue-800 text-left'>contact</legend>
           <CustomerDetailsInputs
             customerDetails={customerDetails}
             setCustomerDetails={setCustomerDetails}
           />
+          <legend className='text-left text-blue-800'>fulfillment </legend>
           <FieldsetGroup>
             <InputRow>
               <div className='label__radio__input pr-3'>
@@ -115,7 +125,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <label
-                className={`flex flex-col cursor-pointer ${
+                className={`flex flex-col cursor-pointer items-start ${
                   fulfillmentDetails.method === 'shipping'
                     ? 'text-blue-800'
                     : 'text-gray-700'
@@ -124,14 +134,16 @@ export default function CheckoutPage() {
               >
                 <span>
                   <ShippingTruckIcon />
-                  $10 shipping
+                  {shipping === 1000 ? `shipping : $10 ` : `shipping : free  `}
                 </span>
-                <span className='text-sm'>free on orders over $50</span>
+                <span className='text-sm text-amber-800'>
+                  {shipping == 1000 ? `free on orders over $50` : ` `}
+                </span>
               </label>
             </InputRow>
           </FieldsetGroup>
 
-          <AnimatePresence exitBeforeEnter initial={false}>
+          <AnimatePresence mode='wait' initial={false}>
             {fulfillmentDetails.method === 'shipping' && (
               <motion.div
                 key={'shipping'}
@@ -155,7 +167,7 @@ export default function CheckoutPage() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <legend className='text-sm text-blue-800'>
+                <legend className='text-left text-blue-800'>
                   pickup location
                 </legend>
                 <PickupChoiceInputs
@@ -165,18 +177,21 @@ export default function CheckoutPage() {
               </motion.div>
             )}
           </AnimatePresence>
-          <button type='submit'>
+          <button
+            type='submit'
+            className='bg-green-400 px-12 py-4 rounded-lg w-full'
+          >
             <input
               name='cart'
               value={JSON.stringify(cartItems)}
               type='hidden'
             />
-            {transition.state === 'submitting'
+            {navigation.state === 'submitting'
               ? 'calculating...'
               : 'looks good!'}{' '}
           </button>
         </form>
       </ContentContainer>
     </div>
-  );
+  )
 }

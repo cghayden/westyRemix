@@ -1,29 +1,25 @@
-import { LoaderFunction } from '@remix-run/node'
+import { LoaderArgs, LoaderFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { useState } from 'react'
-import { AboutPage } from 'sanityTypes'
 import Preview from '~/components/Preview'
+import SocialLinks from '~/components/SocialLinks'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import PageHeading from '~/components/styledComponents/PageHeading'
+
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { PortableText } from '~/lib/sanity/helpers'
 import sanity from '~/lib/sanity/sanity'
 
-type LoaderData = {
-  initialData: AboutPage[]
-  preview: boolean
-  query?: string | null
-  queryParams?: { slug: string | undefined } | null
-}
+export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+  const query = `*[_type == 'contactPage']`
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const query = `*[_type == 'aboutPage']`
   const requestUrl = new URL(request?.url)
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
   const initialData = await sanity.fetch(query).catch((err) => console.log(err))
-  const data: LoaderData = {
+
+  const data = {
     initialData,
     preview,
     query,
@@ -32,13 +28,11 @@ export const loader: LoaderFunction = async ({ request }) => {
   return data
 }
 
-export default function aboutPage() {
-  const { initialData, preview, queryParams, query } =
-    useLoaderData<LoaderData>()
+export default function contactPage() {
+  const { initialData, preview, queryParams, query } = useLoaderData()
   const [data, setData] = useState(initialData)
 
-  const aboutContent = filterDataToSingleItem(initialData, preview)
-
+  const contactContent = filterDataToSingleItem(initialData, preview)
   return (
     <main>
       {preview && (
@@ -49,9 +43,10 @@ export default function aboutPage() {
           queryParams={queryParams}
         />
       )}
-      <PageHeading text={aboutContent.heading} />
+      <PageHeading text={contactContent.heading} />
       <ContentContainer>
-        <PortableText value={aboutContent.content} />
+        <PortableText value={contactContent.content} />
+        <SocialLinks contactData={contactContent} />
       </ContentContainer>
     </main>
   )
