@@ -1,4 +1,9 @@
-import { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node'
+import {
+  LinksFunction,
+  LoaderArgs,
+  LoaderFunction,
+  MetaFunction,
+} from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -17,6 +22,7 @@ import Preview from './components/Preview'
 import { useState } from 'react'
 import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
 import Footer from './components/Footer'
+import { ContactPage, SiteSettings } from 'sanityTypes'
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
@@ -29,6 +35,20 @@ export const meta: MetaFunction = () => {
   }
 }
 
+export interface InitialData {
+  siteSettings: SiteSettings[]
+  contactData: ContactPage[]
+}
+
+export type LoaderData = {
+  initialData: InitialData
+  siteSettings: SiteSettings
+  contactData: ContactPage
+  preview: boolean
+  query: string | null
+  queryParams: string | null
+}
+
 export const loader: LoaderFunction = async ({ request }) => {
   const query = `{
     "siteSettings": *[_type == "siteSettings"] {
@@ -36,7 +56,8 @@ export const loader: LoaderFunction = async ({ request }) => {
       backgroundColor {alpha, hsl, hex},
       pageTextColor {alpha, hsl, hex},
       productTileBackgroundColor {alpha, hsl, hex},
-      productTileTextColor {alpha, hsl, hex}
+      productTileTextColor {alpha, hsl, hex}, 
+      "backgroundImageUrl" : backgroundImage.asset->url
   },
   "contactData": *[_type == 'contactPage']
 } `
@@ -44,11 +65,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   const preview: boolean =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
-  const initialData = await sanity.fetch(query).catch((err) => console.log(err))
+
+  const initialData: InitialData = await sanity
+    .fetch(query)
+    .catch((err) => console.log(err))
+  console.log('initialData', initialData)
 
   const siteSettings = filterDataToSingleItem(initialData.siteSettings, preview)
 
-  const data = {
+  const data: LoaderData = {
     initialData,
     siteSettings,
     contactData: initialData.contactData[0],
@@ -67,9 +92,10 @@ function Document({
   title?: string
 }) {
   const { siteSettings, preview, query, queryParams } =
-    useLoaderData<typeof loader>()
+    useLoaderData<LoaderData>()
   const [data, setData] = useState(siteSettings)
 
+  console.log('siteSettings', siteSettings)
   return (
     <html lang='en'>
       <head>
@@ -88,10 +114,15 @@ function Document({
         />
       )}
       <body
-        className='min-h-screen m-0 flex flex-col font-HindSiliguri'
+        className='min-h-screen m-0 flex flex-col font-HindSiliguri bg-repeat'
         style={{
-          backgroundColor: `${siteSettings?.backgroundColor.hex}`,
-          color: `${siteSettings?.pageTextColor.hex}`,
+          backgroundImage: `${
+            siteSettings.backgroundImageUrl
+              ? `url(${siteSettings.backgroundImageUrl})`
+              : siteSettings?.backgroundColor?.hex
+          }`,
+
+          color: `${siteSettings?.pageTextColor?.hex}`,
           overscrollBehavior: 'none',
         }}
       >

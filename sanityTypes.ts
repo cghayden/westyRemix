@@ -397,6 +397,7 @@ export interface SiteSettings extends SanityDocument {
   pageTextColor?: SanityColor
   productTileBackgroundColor?: SanityColor
   productTileTextColor?: SanityColor
+  backgroundImageUrl: string
 }
 
 /**
@@ -782,4 +783,4 @@ export type Documents =
  */
 
 /** Sanity Color manually defined in MyTypes */
-export type SanityColor = SanityColor
+// export type SanityColor = SanityColor

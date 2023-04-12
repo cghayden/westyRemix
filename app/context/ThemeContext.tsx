@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 import { getComplement, getContrastHSLString } from '~/lib/colorFuncs'
 import { UserColors } from 'myTypes'
+import { SiteSettings } from 'sanityTypes'
 
 const initialCtx: UserColors = {
   _id: '0',
@@ -23,18 +24,27 @@ const ThemeProvider = ({
   siteSettings,
   children,
 }: {
-  siteSettings: UserColors
+  siteSettings: SiteSettings
   children: React.ReactNode
 }) => {
-  const bgComplement = getComplement(siteSettings.backgroundColor.hsl)
-  const bgContrast = getContrastHSLString(siteSettings.backgroundColor.hsl, 0.2)
-  const tileContrast = getContrastHSLString(
-    siteSettings.productTileBackgroundColor.hsl,
-    0.7
-  )
-  siteSettings.bgComplement = bgComplement
-  siteSettings.bgContrast = bgContrast
-  siteSettings.tileContrast = tileContrast
+  function calcColors(siteSettings: SiteSettings) {
+    const bgComplement = siteSettings?.backgroundColor?.hsl
+      ? getComplement(siteSettings.backgroundColor.hsl)
+      : null
+    const bgContrast = siteSettings.backgroundColor?.hsl
+      ? getContrastHSLString(siteSettings.backgroundColor.hsl, 0.2)
+      : null
+    const tileContrast = siteSettings.productTileBackgroundColor?.hsl
+      ? getContrastHSLString(siteSettings.productTileBackgroundColor.hsl, 0.7)
+      : null
+    return { bgComplement, bgContrast, tileContrast }
+  }
+  const { bgComplement, bgContrast, tileContrast } = calcColors(siteSettings)
+
+  const userColors: UserColors = { ...siteSettings }
+  userColors.bgComplement = bgComplement
+  userColors.bgContrast = bgContrast
+  userColors.tileContrast = tileContrast
 
   return (
     <ThemeContext.Provider value={siteSettings}>

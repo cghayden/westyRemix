@@ -1,3 +1,5 @@
+import { SiteSettings } from 'sanityTypes'
+
 export interface CartItem {
   _id: string
   coffeeId: string
@@ -56,7 +58,7 @@ export interface SanityOrder {
   shippingZip: string
   customerComments: string
   // shippingCost: number
-  env
+  env?: string | null | undefined
 }
 
 export type HSL_Color = {
@@ -87,13 +89,14 @@ export type SanityColor = {
   hsl: HSL_Color
 }
 
-export type UserColors = {
-  _id: string
-  backgroundColor: SanityColor
-  pageTextColor: SanityColor
-  productTileBackgroundColor: SanityColor
-  productTileTextColor: SanityColor
-  bgComplement: SanityColor
-  bgContrast: string
-  tileContrast: string
+//SET TO OPTIONAL for _rev _createdat, etc
+export type UserColors = Partial<SiteSettings> & {
+  // _id: string
+  // backgroundColor: SanityColor
+  // pageTextColor: SanityColor
+  // productTileBackgroundColor: SanityColor
+  // productTileTextColor: SanityColor
+  bgComplement?: SanityColor | null
+  bgContrast?: string | null
+  tileContrast?: string | null
 }
