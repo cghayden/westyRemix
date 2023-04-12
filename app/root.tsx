@@ -114,9 +114,9 @@ function Document({
         />
       )}
       <body
-        className='min-h-screen m-0 flex flex-col font-HindSiliguri bg-repeat'
+        className='min-h-screen m-0 flex flex-col font-HindSiliguri'
         style={{
-          backgroundImage: `${
+          background: `${
             siteSettings.backgroundImageUrl
               ? `url(${siteSettings.backgroundImageUrl})`
               : siteSettings?.backgroundColor?.hex
