@@ -4,17 +4,20 @@ import { retrievePaymentIntent } from '~/lib/stripePaymentIntent'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import { OrderDetails } from 'myTypes'
 import formatMoney from '~/lib/formatMoney'
+import CartSummary from '~/components/CartSummary'
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
   const id = url.searchParams.get('payment_intent')
   if (!id) return null
   const paymentIntent = await retrievePaymentIntent(id)
+  console.log('paymentIntent', paymentIntent)
   const customerDetails = JSON.parse(paymentIntent.metadata.customerDetails)
   const fulfillmentDetails = JSON.parse(
     paymentIntent.metadata.fulfillmentDetails
   )
   const cartItems = JSON.parse(paymentIntent.description)
+  console.log('cartItems in success page', cartItems)
   const orderId = paymentIntent.id
   const total = paymentIntent.amount_received
 
@@ -48,66 +51,75 @@ export default function success() {
               : ' ships'}
           </p>
         </div>
-        <h3 className='text-xl font-bold'>Order Summary</h3>
-        <div>
-          <div className='ml-4'>
-            <p>{customerDetails?.customerName}</p>
-            <p>{customerDetails?.customerEmail}</p>
-            <p>{customerDetails?.customerPhone}</p>
+        <div className='mt-4 max-w-xl mx-auto'>
+          <h3 className='text-xl font-bold'>your order: </h3>
+
+          <div className='p-2 grid grid-cols-orderSummary place-content-center'>
+            {cartItems?.map((cartItem) => (
+              <>
+                <p className='w-10'>{cartItem.quantity}</p>
+                <div className='flex flex-col flex-grow ml-4 text-left pr-6'>
+                  <p>{cartItem.name}</p>
+                  <p className='text-sm'>{cartItem.grind + ' bean'}</p>
+                </div>
+                <p>{`$${formatMoney(cartItem.price * cartItem.quantity)}`}</p>
+              </>
+            ))}
+            <p>{''}</p>
+            <p className='justify-self-end'>shipping:</p>
+            <p>{`$${formatMoney(fulfillmentDetails?.shippingCost)}`}</p>
+            <p>{''}</p>
+            <p className='justify-self-end font-bold text-lg'>Total:</p>
+            <p className='font-bold text-lg'>
+              ${formatMoney(orderDetails?.total)}
+            </p>
           </div>
         </div>
-        {fulfillmentDetails?.method === 'pickup' ? (
+        <div className='flex justify-evenly'>
           <div>
-            <h3 className='text-xl font-bold'>Delivery:</h3>
-            <div className='ml-4'>
-              <p>pickup at: {fulfillmentDetails.pickupLocation}</p>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <h3 className='text-xl font-bold'>ship to: </h3>
-            <div className='ml-4'>
-              <p>{fulfillmentDetails?.shippingName}</p>
-              <p>{fulfillmentDetails?.shippingAddressLine1}</p>
-              <p>{fulfillmentDetails?.shippingAddressLine2}</p>
-              <p>
-                <span>{fulfillmentDetails?.shippingCity}</span>
-                <span>{fulfillmentDetails?.shippingPostal_code}</span>
+            <h3 className='font-bold text-lg'>sold to:</h3>
+            <div className='grid place-content-center  pb-3'>
+              <p className='justify-self-start'>
+                {customerDetails?.customerName}
+              </p>
+              <p className='justify-self-start'>
+                {customerDetails?.customerEmail}
+              </p>
+              <p className='justify-self-start'>
+                {customerDetails?.customerPhone}
               </p>
             </div>
           </div>
-        )}
-
-        <ul className='w-2/3 mx-auto'>
-          {cartItems?.map((cartItem) => (
-            <li key={cartItem.name}>
-              <p className='flex'>
-                {`${cartItem.quantity} ${cartItem.name}, ${cartItem.grind}: `}
-                <span className='ml-auto'>
-                  {`$${formatMoney(cartItem.price * cartItem.quantity)}`}
-                </span>
-              </p>
-            </li>
-          ))}
-          {fulfillmentDetails?.method === 'shipping' && (
-            <li>
-              <p className='flex'>
-                Shipping:
-                <span className='ml-auto'>{`$${formatMoney(
-                  fulfillmentDetails.shippingCost
-                )}`}</span>
-              </p>
-            </li>
+          {fulfillmentDetails?.method === 'pickup' ? (
+            <div>
+              <h3 className='text-lg font-bold'>Pickup at:</h3>
+              <div className='grid place-content-center  pb-3'>
+                <p className='justify-self-start'>
+                  {fulfillmentDetails.pickupLocation}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <h3 className='text-lg font-bold'>ship to: </h3>
+              <div className='grid place-content-center pb-3 '>
+                <p className='justify-self-start'>
+                  {fulfillmentDetails?.shippingName}
+                </p>
+                <p className='justify-self-start'>
+                  {fulfillmentDetails?.shippingAddressLine1}
+                </p>
+                <p className='justify-self-start'>
+                  {fulfillmentDetails?.shippingAddressLine2}
+                </p>
+                <p className='justify-self-start'>
+                  <span>{fulfillmentDetails?.shippingCity}</span>
+                  <span>{fulfillmentDetails?.shippingPostal_code}</span>
+                </p>
+              </div>
+            </div>
           )}
-          <li>
-            <p className='flex'>
-              Total:{' '}
-              <span className='ml-auto'>
-                ${formatMoney(orderDetails?.total)}
-              </span>
-            </p>
-          </li>
-        </ul>
+        </div>
       </ContentContainer>
     </main>
   )

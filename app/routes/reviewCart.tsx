@@ -180,6 +180,7 @@ export default function CheckoutPage() {
           <button
             type='submit'
             className='bg-green-400 px-12 py-4 rounded-lg w-full'
+            disabled={navigation.state === 'submitting' ? true : false}
           >
             <input
               name='cart'
