@@ -75,41 +75,51 @@ export default function success() {
             </p>
           </div>
         </div>
-        <h3 className='font-bold text-lg'>sold to:</h3>
-        <div className='grid place-content-center  pb-3'>
-          <p className='justify-self-start'>{customerDetails?.customerName}</p>
-          <p className='justify-self-start'>{customerDetails?.customerEmail}</p>
-          <p className='justify-self-start'>{customerDetails?.customerPhone}</p>
-        </div>
-        {fulfillmentDetails?.method === 'pickup' ? (
-          <>
-            <h3 className='text-lg font-bold'>Pickup at:</h3>
+        <div className='flex justify-evenly'>
+          <div>
+            <h3 className='font-bold text-lg'>sold to:</h3>
             <div className='grid place-content-center  pb-3'>
               <p className='justify-self-start'>
-                {fulfillmentDetails.pickupLocation}
+                {customerDetails?.customerName}
+              </p>
+              <p className='justify-self-start'>
+                {customerDetails?.customerEmail}
+              </p>
+              <p className='justify-self-start'>
+                {customerDetails?.customerPhone}
               </p>
             </div>
-          </>
-        ) : (
-          <>
-            <h3 className='text-lg font-bold'>ship to: </h3>
-            <div className='grid place-content-center pb-3 '>
-              <p className='justify-self-start'>
-                {fulfillmentDetails?.shippingName}
-              </p>
-              <p className='justify-self-start'>
-                {fulfillmentDetails?.shippingAddressLine1}
-              </p>
-              <p className='justify-self-start'>
-                {fulfillmentDetails?.shippingAddressLine2}
-              </p>
-              <p className='justify-self-start'>
-                <span>{fulfillmentDetails?.shippingCity}</span>
-                <span>{fulfillmentDetails?.shippingPostal_code}</span>
-              </p>
+          </div>
+          {fulfillmentDetails?.method === 'pickup' ? (
+            <div>
+              <h3 className='text-lg font-bold'>Pickup at:</h3>
+              <div className='grid place-content-center  pb-3'>
+                <p className='justify-self-start'>
+                  {fulfillmentDetails.pickupLocation}
+                </p>
+              </div>
             </div>
-          </>
-        )}
+          ) : (
+            <div>
+              <h3 className='text-lg font-bold'>ship to: </h3>
+              <div className='grid place-content-center pb-3 '>
+                <p className='justify-self-start'>
+                  {fulfillmentDetails?.shippingName}
+                </p>
+                <p className='justify-self-start'>
+                  {fulfillmentDetails?.shippingAddressLine1}
+                </p>
+                <p className='justify-self-start'>
+                  {fulfillmentDetails?.shippingAddressLine2}
+                </p>
+                <p className='justify-self-start'>
+                  <span>{fulfillmentDetails?.shippingCity}</span>
+                  <span>{fulfillmentDetails?.shippingPostal_code}</span>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
       </ContentContainer>
     </main>
   )
