@@ -51,69 +51,65 @@ export default function success() {
               : ' ships'}
           </p>
         </div>
-        <h3 className='text-xl font-bold'>Order Summary</h3>
-        <div>
-          <div className='ml-4'>
-            <p>{customerDetails?.customerName}</p>
-            <p>{customerDetails?.customerEmail}</p>
-            <p>{customerDetails?.customerPhone}</p>
+        <div className='mt-4 max-w-xl mx-auto'>
+          <h3 className='text-xl font-bold'>your order: </h3>
+
+          <div className='p-2 grid grid-cols-orderSummary place-content-center'>
+            {cartItems?.map((cartItem) => (
+              <>
+                <p className='w-10'>{cartItem.quantity}</p>
+                <div className='flex flex-col flex-grow ml-4 text-left pr-6'>
+                  <p>{cartItem.name}</p>
+                  <p className='text-sm'>{cartItem.grind + ' bean'}</p>
+                </div>
+                <p>{`$${formatMoney(cartItem.price * cartItem.quantity)}`}</p>
+              </>
+            ))}
+            <p>{''}</p>
+            <p className='justify-self-end'>shipping:</p>
+            <p>{`$${formatMoney(fulfillmentDetails?.shippingCost)}`}</p>
+            <p>{''}</p>
+            <p className='justify-self-end font-bold text-lg'>Total:</p>
+            <p className='font-bold text-lg'>
+              ${formatMoney(orderDetails?.total)}
+            </p>
           </div>
         </div>
+        <h3 className='font-bold text-lg'>sold to:</h3>
+        <div className='grid place-content-center  pb-3'>
+          <p className='justify-self-start'>{customerDetails?.customerName}</p>
+          <p className='justify-self-start'>{customerDetails?.customerEmail}</p>
+          <p className='justify-self-start'>{customerDetails?.customerPhone}</p>
+        </div>
         {fulfillmentDetails?.method === 'pickup' ? (
-          <div>
-            <h3 className='text-xl font-bold'>Pickup at:</h3>
-            <div className='ml-4'>
-              <p>{fulfillmentDetails.pickupLocation}</p>
+          <>
+            <h3 className='text-lg font-bold'>Pickup at:</h3>
+            <div className='grid place-content-center  pb-3'>
+              <p className='justify-self-start'>
+                {fulfillmentDetails.pickupLocation}
+              </p>
             </div>
-          </div>
+          </>
         ) : (
-          <div>
-            <h3 className='text-xl font-bold'>ship to: </h3>
-            <div className='ml-4'>
-              <p>{fulfillmentDetails?.shippingName}</p>
-              <p>{fulfillmentDetails?.shippingAddressLine1}</p>
-              <p>{fulfillmentDetails?.shippingAddressLine2}</p>
-              <p>
+          <>
+            <h3 className='text-lg font-bold'>ship to: </h3>
+            <div className='grid place-content-center pb-3 '>
+              <p className='justify-self-start'>
+                {fulfillmentDetails?.shippingName}
+              </p>
+              <p className='justify-self-start'>
+                {fulfillmentDetails?.shippingAddressLine1}
+              </p>
+              <p className='justify-self-start'>
+                {fulfillmentDetails?.shippingAddressLine2}
+              </p>
+              <p className='justify-self-start'>
                 <span>{fulfillmentDetails?.shippingCity}</span>
                 <span>{fulfillmentDetails?.shippingPostal_code}</span>
               </p>
             </div>
-          </div>
+          </>
         )}
-        <div className='mt-4'>
-          <h3 className='text-xl font-bold'>your order: </h3>
-
-          <ul className='w-2/3 mx-auto'>
-            {cartItems?.map((cartItem) => (
-              <li key={cartItem.name}>
-                <p className='flex'>
-                  {`${cartItem.quantity} ${cartItem.name}, ${cartItem.grind}: `}
-                  <span className='ml-auto'>
-                    {`$${formatMoney(cartItem.price * cartItem.quantity)}`}
-                  </span>
-                </p>
-              </li>
-            ))}
-            {fulfillmentDetails?.method === 'shipping' && (
-              <li>
-                <p className='flex'>
-                  Shipping:
-                  <span className='ml-auto'>{`$${formatMoney(
-                    fulfillmentDetails.shippingCost
-                  )}`}</span>
-                </p>
-              </li>
-            )}
-            <li>
-              <p className='flex'>
-                Total:{' '}
-                <span className='ml-auto'>
-                  ${formatMoney(orderDetails?.total)}
-                </span>
-              </p>
-            </li>
-          </ul>
-        </div>
       </ContentContainer>
     </main>
   )
