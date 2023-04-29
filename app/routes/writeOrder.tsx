@@ -16,13 +16,13 @@ export const loader = async ({ request }: LoaderArgs) => {
   const orderId = paymentIntent.id
   const total = paymentIntent.amount_received
 
-  writeOrderToSanity({
+  await writeOrderToSanity({
     cart: cartItems,
     customerDetails,
     fulfillmentDetails,
     total,
     id: orderId,
-  })
+  }).catch((err) => console.error(err))
 
   return redirect(`/success?payment_intent=${id}`)
   // return redirect('/test');

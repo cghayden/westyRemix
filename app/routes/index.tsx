@@ -1,5 +1,5 @@
 import { LoaderArgs, LoaderFunction } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData, useLocation } from '@remix-run/react'
 import sanity from '~/lib/sanity/sanity'
 import HomeHero from '~/components/HomeHero'
 import FeaturedItems from '~/components/FeaturedItems'
@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import Preview from '~/components/Preview'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
+// import path from('node:path')
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const pageQuery = `{
@@ -28,6 +29,8 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
       slug{current}
     }
   }`
+  // console.log('path', path.basename)
+
   const requestUrl = new URL(request?.url)
   const previewQuery = requestUrl.search
   const referringPath = requestUrl.pathname
