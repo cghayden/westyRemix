@@ -1,8 +1,9 @@
+import { Fragment } from 'react'
 import { LoaderArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { retrievePaymentIntent } from '~/lib/stripePaymentIntent'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
-import { OrderDetails } from 'myTypes'
+import { CartItem, OrderDetails } from 'myTypes'
 import formatMoney from '~/lib/formatMoney'
 import CartSummary from '~/components/CartSummary'
 
@@ -11,13 +12,11 @@ export const loader = async ({ request }: LoaderArgs) => {
   const id = url.searchParams.get('payment_intent')
   if (!id) return null
   const paymentIntent = await retrievePaymentIntent(id)
-  console.log('paymentIntent', paymentIntent)
   const customerDetails = JSON.parse(paymentIntent.metadata.customerDetails)
   const fulfillmentDetails = JSON.parse(
     paymentIntent.metadata.fulfillmentDetails
   )
   const cartItems = JSON.parse(paymentIntent.description)
-  console.log('cartItems in success page', cartItems)
   const orderId = paymentIntent.id
   const total = paymentIntent.amount_received
 
@@ -55,15 +54,15 @@ export default function success() {
           <h3 className='text-xl font-bold'>your order: </h3>
 
           <div className='p-2 grid grid-cols-orderSummary place-content-center'>
-            {cartItems?.map((cartItem) => (
-              <>
+            {cartItems?.map((cartItem: CartItem, index: number) => (
+              <Fragment key={index}>
                 <p className='w-10'>{cartItem.quantity}</p>
                 <div className='flex flex-col flex-grow ml-4 text-left pr-6'>
                   <p>{cartItem.name}</p>
                   <p className='text-sm'>{cartItem.grind + ' bean'}</p>
                 </div>
                 <p>{`$${formatMoney(cartItem.price * cartItem.quantity)}`}</p>
-              </>
+              </Fragment>
             ))}
             <p>{''}</p>
             <p className='justify-self-end'>shipping:</p>

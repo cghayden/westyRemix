@@ -674,6 +674,16 @@ export interface Order extends SanityDocument {
   slug?: { _type: 'slug'; current: string }
 }
 
+export interface PickupLocation extends SanityDocument {
+  _type: 'pickupLocation'
+  name: 'string'
+  pickupAddressLine1: 'string'
+  pickupAddressLine2: 'string'
+  pickupCity: 'string'
+  pickupState: 'string'
+  pickupZip: 'string'
+}
+
 export type BackgroundImage = {
   _type: 'backgroundImage'
   asset: SanityReference<SanityImageAsset>

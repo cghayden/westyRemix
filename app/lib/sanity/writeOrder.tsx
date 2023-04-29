@@ -63,11 +63,7 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
   //   return;
   // }
   await SanityClient.create(doc)
-    .then((result) => console.log('write order result', result))
     .then(() => adjustSanityStock(cartItems))
-    // .then((adjustOrderRes) =>
-    //   console.log('adjust order response', adjustOrderRes)
-    // )
     .catch((err) => {
       console.error('err', err)
       throw `Error writing to sanity: ${err}`

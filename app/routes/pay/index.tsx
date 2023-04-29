@@ -1,11 +1,18 @@
-import { Form, useNavigation } from '@remix-run/react'
+import { Form, useLoaderData, useNavigation } from '@remix-run/react'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import CollapsibleCartSummary from '~/components/CollapsibleCartSummary'
 import { useCartItems } from '~/context/useCart'
 import { useState } from 'react'
+import { LoaderArgs } from '@remix-run/node'
+
+export const loader = ({ request }: LoaderArgs) => {
+  const urlOrigin = new URL(request.url).origin
+  return urlOrigin
+}
 
 export default function Index() {
+  const urlOrigin = useLoaderData()
   const cartItems = useCartItems()
   const elements = useElements()
   const stripe = useStripe()
@@ -18,7 +25,7 @@ export default function Index() {
     stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: 'http://localhost:3000/writeOrder',
+        return_url: `${urlOrigin}/writeOrder`,
       },
     })
   }

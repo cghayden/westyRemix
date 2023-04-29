@@ -69,7 +69,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   const initialData: InitialData = await sanity
     .fetch(query)
     .catch((err) => console.log(err))
-  console.log('initialData', initialData)
 
   const siteSettings = filterDataToSingleItem(initialData.siteSettings, preview)
 
@@ -95,7 +94,6 @@ function Document({
     useLoaderData<LoaderData>()
   const [data, setData] = useState(siteSettings)
 
-  console.log('siteSettings', siteSettings)
   return (
     <html lang='en'>
       <head>

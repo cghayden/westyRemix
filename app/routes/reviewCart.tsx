@@ -1,5 +1,10 @@
 import { useState } from 'react'
-import { useSearchParams, useSubmit, useNavigation } from '@remix-run/react'
+import {
+  useSearchParams,
+  useSubmit,
+  useNavigation,
+  useLoaderData,
+} from '@remix-run/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CustomerDetails, FulfillmentDetails } from 'myTypes'
 import CartSummary from '~/components/CartSummary'
@@ -14,15 +19,33 @@ import ShippingTruckIcon from '~/icons/ShippingTruckIcon'
 import PickupChoiceInputs from '~/components/PickupChoiceInputs'
 import styles from '~/styles/formStyles.css'
 import calcTotalPrice from '~/lib/calcCartTotal'
+import { LoaderArgs, LoaderFunction } from '@remix-run/node'
+import sanity from '~/lib/sanity/sanity'
+import { PickupLocation } from 'sanityTypes'
 
 export function links() {
   return [{ rel: 'stylesheet', href: styles }]
 }
+
+export const loader: LoaderFunction = async () => {
+  const query = `*[_type == "pickupLocation"]`
+  const pickupLocations: PickupLocation[] = await sanity
+    .fetch(query)
+    .catch((err) => console.log(err))
+  return pickupLocations
+}
+
 export default function CheckoutPage() {
+  const pickupLocations = useLoaderData<typeof loader>()
+
   let navigation = useNavigation()
   const submit = useSubmit()
 
-  const [customerDetails, setCustomerDetails] = useState({} as CustomerDetails)
+  const [customerDetails, setCustomerDetails] = useState({
+    customerName: '',
+    customerEmail: '',
+    customerPhone: '',
+  } as CustomerDetails)
   const [fulfillmentDetails, setFulfillmentDetails] = useState({
     method: 'pickup',
     pickupLocation: '',
@@ -173,6 +196,7 @@ export default function CheckoutPage() {
                 <PickupChoiceInputs
                   fulfillmentDetails={fulfillmentDetails}
                   setFulfillmentDetails={setFulfillmentDetails}
+                  pickupLocations={pickupLocations}
                 />
               </motion.div>
             )}
