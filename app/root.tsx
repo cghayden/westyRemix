@@ -1,18 +1,16 @@
-import {
-  LinksFunction,
-  LoaderArgs,
-  LoaderFunction,
-  MetaFunction,
-} from '@remix-run/node'
+import { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node'
 import {
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
+  isRouteErrorResponse,
   useCatch,
   useLoaderData,
+  useRouteError,
 } from '@remix-run/react'
+
 import Header from './components/Header'
 import styles from './styles/tailwind.css'
 import sanity from './lib/sanity/sanity'
@@ -83,13 +81,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   return data
 }
 
-function Document({
-  children,
-  title = `Westy Remix`,
-}: {
-  children: React.ReactNode
+type DocProps = {
+  children: React.ReactNode | undefined
   title?: string
-}) {
+}
+
+function Document({ children, title = `Westy Remix` }: DocProps) {
   const { siteSettings, preview, query, queryParams } =
     useLoaderData<LoaderData>()
   const [data, setData] = useState(siteSettings)
@@ -143,6 +140,7 @@ export default function App() {
     </Document>
   )
 }
+
 export function CatchBoundary() {
   const caught = useCatch()
 
@@ -159,14 +157,40 @@ export function CatchBoundary() {
 
 //  with remix <Scripts/>, you can accept the error prop in all your ErrorBoundary components and console.error(error); and you'll get even server-side errors logged in the browser's console.
 
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
+// export function ErrorBoundary({ error }: { error: Error }) {
+//   console.error(error)
+//   return (
+//     <Document title='Uh-oh!'>
+//       <Header />
+//       <div className='error-container'>
+//         <h1>App Error</h1>
+//         <pre>{error.message}</pre>
+//       </div>
+//     </Document>
+//   )
+// }
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  if (isRouteErrorResponse(error)) {
+    return (
+      <Document title={`${error.status} ${error.statusText}`}>
+        <div className='error-container'>
+          <h1>
+            {error.status} {error.statusText}
+          </h1>
+        </div>
+      </Document>
+    )
+  }
+  const errorMessage = error instanceof Error ? error.message : 'Unknown error'
   return (
     <Document title='Uh-oh!'>
       <Header />
-      <div className='error-container'>
+
+      <div>
         <h1>App Error</h1>
-        <pre>{error.message}</pre>
+        <pre>{errorMessage}</pre>
       </div>
     </Document>
   )

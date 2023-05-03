@@ -17,6 +17,7 @@ module.exports = {
   // devServerPort: 8002
   future: {
     unstable_tailwind: true,
+    v2_errorBoundary: true,
     // unstable_dev: true,
   },
 }

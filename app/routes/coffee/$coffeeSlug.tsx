@@ -1,5 +1,5 @@
 import type { LoaderFunction } from '@remix-run/node'
-import { useCatch, useLoaderData, useParams } from '@remix-run/react'
+import { useCatch, useLoaderData, useRouteError } from '@remix-run/react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import type { Coffee } from '../../../sanityTypes'
 import { useState } from 'react'
@@ -8,6 +8,7 @@ import { getClient } from '~/lib/sanity/getClient'
 import { PortableText, urlFor } from '~/lib/sanity/helpers'
 import AddToCartForm from '~/components/AddToCartForm'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import dayjs from 'dayjs'
 
 type LoaderData = {
@@ -34,7 +35,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     singleCoffeeQuery,
     queryParams
   )
-  if (!initialData) {
+  console.log('initialData', initialData)
+  // if (!initialData || !initialData.length) {
+  //   throw new Error('Sorry - there was an Error finding that item')
+  // }
+  if (!initialData || !initialData.length) {
     throw new Response('Oh no - that Coffee was not found!', {
       status: 404,
       statusText: 'That coffee was not found',
@@ -178,44 +183,23 @@ export default function CoffeeRoute() {
   )
 }
 
-export function CatchBoundary() {
-  const caught = useCatch()
-  const params = useParams()
-  switch (caught.status) {
-    case 404: {
-      return (
-        <div className='error-container'>
-          Huh? What the heck is {params.coffeeSlug}?
-        </div>
-      )
-    }
-    default: {
-      throw new Error(`Unhandled error: ${caught.status}`)
-    }
-  }
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
-  const { coffeeSlug } = useParams()
-  return (
-    <div className='error-container'>{`There was an error loading coffee ${coffeeSlug}. Sorry.`}</div>
-  )
-}
-
-// export const meta: MetaFunction = ({
-//   data,
-// }: {
-//   data: LoaderData | undefined;
-// }) => {
-//   if (!data) {
-//     return {
-//       title: 'No coffee',
-//       description: 'No coffee found',
-//     };
+// export function CatchBoundary() {
+//   const caught = useCatch()
+//   const params = useParams()
+//   switch (caught.status) {
+//     case 404: {
+//       return (
+//         <div className='error-container'>
+//           Huh? What the heck is {params.coffeeSlug}?
+//         </div>
+//       )
+//     }
+//     default: {
+//       throw new Error(`Unhandled error: ${caught.status}`)
+//     }
 //   }
-//   return {
-//     title: `${data.coffee.name}`,
-//     description: `Enjoy a hot cup of  "${data.coffee.name}" coffee`,
-//   };
-// };
+// }
