@@ -1,13 +1,12 @@
-import { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node'
+import { LinksFunction, LoaderFunction, V2_MetaFunction } from '@remix-run/node'
 import {
   Links,
   LiveReload,
-  Meta,
   Outlet,
   Scripts,
-  isRouteErrorResponse,
   useLoaderData,
   useRouteError,
+  Meta,
 } from '@remix-run/react'
 
 import Header from './components/Header'
@@ -26,12 +25,7 @@ export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
 }
 
-export const meta: MetaFunction = () => {
-  const description = `Sample Ecommerce Site`
-  return {
-    description,
-  }
-}
+export const meta: V2_MetaFunction = () => [{ title: 'Westy Remix' }]
 
 export interface InitialData {
   siteSettings: SiteSettings[]

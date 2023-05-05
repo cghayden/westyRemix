@@ -63,7 +63,7 @@ export default function CheckoutPage() {
       'orderDetails',
       JSON.stringify({ customerDetails, fulfillmentDetails, cart: cartItems })
     )
-    submit(formData, { method: 'post', action: '/pay' })
+    submit(formData, { method: 'POST', action: '/pay' })
   }
 
   // review cart, and on confirmation, send cart to '/pay' action handler via form submission
