@@ -11,7 +11,7 @@ import {
 } from '@remix-run/react'
 
 import Header from './components/Header'
-import styles from './styles/tailwind.css'
+import styles from './tailwind.css'
 import sanity from './lib/sanity/sanity'
 import { CartProvider } from './context/useCart'
 import { ThemeProvider } from './context/ThemeContext'
