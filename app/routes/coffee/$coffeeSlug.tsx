@@ -1,5 +1,5 @@
 import type { LoaderFunction } from '@remix-run/node'
-import { useCatch, useLoaderData, useRouteError } from '@remix-run/react'
+import { useLoaderData, useRouteError } from '@remix-run/react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import type { Coffee } from '../../../sanityTypes'
 import { useState } from 'react'
@@ -35,7 +35,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     singleCoffeeQuery,
     queryParams
   )
-  console.log('initialData', initialData)
   // if (!initialData || !initialData.length) {
   //   throw new Error('Sorry - there was an Error finding that item')
   // }
@@ -187,19 +186,3 @@ export function ErrorBoundary() {
   const error = useRouteError()
   return <ErrorContainer error={error} />
 }
-// export function CatchBoundary() {
-//   const caught = useCatch()
-//   const params = useParams()
-//   switch (caught.status) {
-//     case 404: {
-//       return (
-//         <div className='error-container'>
-//           Huh? What the heck is {params.coffeeSlug}?
-//         </div>
-//       )
-//     }
-//     default: {
-//       throw new Error(`Unhandled error: ${caught.status}`)
-//     }
-//   }
-// }

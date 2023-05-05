@@ -1,4 +1,3 @@
-import { isRouteErrorResponse } from '@remix-run/react'
 import { formatErrorMessage } from '~/lib/formatError'
 
 export const ErrorContainer = ({ error }: { error: unknown }) => {

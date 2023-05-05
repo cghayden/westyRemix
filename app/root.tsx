@@ -6,7 +6,6 @@ import {
   Outlet,
   Scripts,
   isRouteErrorResponse,
-  useCatch,
   useLoaderData,
   useRouteError,
 } from '@remix-run/react'
@@ -21,6 +20,7 @@ import { useState } from 'react'
 import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
 import Footer from './components/Footer'
 import { ContactPage, SiteSettings } from 'sanityTypes'
+import { ErrorContainer } from './components/styledComponents/ErrorContainer'
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
@@ -141,57 +141,15 @@ export default function App() {
   )
 }
 
-export function CatchBoundary() {
-  const caught = useCatch()
-
-  return (
-    <Document title={`${caught.status} ${caught.statusText}`}>
-      <div className='error-container'>
-        <h1>
-          {caught.status} {caught.statusText}
-        </h1>
-      </div>
-    </Document>
-  )
-}
-
 //  with remix <Scripts/>, you can accept the error prop in all your ErrorBoundary components and console.error(error); and you'll get even server-side errors logged in the browser's console.
 
-// export function ErrorBoundary({ error }: { error: Error }) {
-//   console.error(error)
-//   return (
-//     <Document title='Uh-oh!'>
-//       <Header />
-//       <div className='error-container'>
-//         <h1>App Error</h1>
-//         <pre>{error.message}</pre>
-//       </div>
-//     </Document>
-//   )
-// }
-
+// this ErrorBoundary at the root level must render the <html> tag, in this case, <Document>
 export function ErrorBoundary() {
   const error = useRouteError()
-  if (isRouteErrorResponse(error)) {
-    return (
-      <Document title={`${error.status} ${error.statusText}`}>
-        <div className='error-container'>
-          <h1>
-            {error.status} {error.statusText}
-          </h1>
-        </div>
-      </Document>
-    )
-  }
-  const errorMessage = error instanceof Error ? error.message : 'Unknown error'
   return (
     <Document title='Uh-oh!'>
       <Header />
-
-      <div>
-        <h1>App Error</h1>
-        <pre>{errorMessage}</pre>
-      </div>
+      <ErrorContainer error={error} />
     </Document>
   )
 }
