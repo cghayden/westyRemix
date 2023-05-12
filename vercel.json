@@ -1,8 +1,0 @@
-{
-  "build": {
-    "env": {
-      "ENABLE_FILE_SYSTEM_API": "1",
-      "VERCEL_CLI_VERSION": "28.12.7"
-    }
-  }
-}
