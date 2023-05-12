@@ -1,5 +1,5 @@
 import { ActionArgs, redirect } from '@remix-run/node'
-import { Outlet, useActionData } from '@remix-run/react'
+import { Outlet, useActionData, useRouteError } from '@remix-run/react'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import invariant from 'tiny-invariant'
@@ -11,6 +11,7 @@ import reduceCartByName from '~/lib/reduceCartByName'
 import { createPaymentIntent } from '~/lib/stripePaymentIntent'
 import { OrderDetails } from 'myTypes'
 import calcShipping from '~/lib/calcShipping'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8')
 
@@ -69,15 +70,15 @@ export const action = async ({ request }: ActionArgs) => {
   }
   return await createPaymentIntent(typedOrderDetails).catch((err) => {
     console.log(err)
-    return err
+    throw Error(err)
   })
 }
 
 export default function Pay() {
   const paymentIntent = useActionData<typeof action>()
 
-  if (!paymentIntent.client_secret) {
-    return <p>error</p>
+  if (!paymentIntent || !paymentIntent.client_secret) {
+    throw Error('there was an Error connecting to stripe')
   }
 
   return (
@@ -88,4 +89,8 @@ export default function Pay() {
       <Outlet />
     </Elements>
   )
+}
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }

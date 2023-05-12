@@ -1,10 +1,11 @@
 import { Fragment } from 'react'
 import { LoaderArgs } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData, useRouteError } from '@remix-run/react'
 import { retrievePaymentIntent } from '~/lib/stripePaymentIntent'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import { CartItem, OrderDetails } from 'myTypes'
 import formatMoney from '~/lib/formatMoney'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
@@ -121,4 +122,9 @@ export default function success() {
       </ContentContainer>
     </main>
   )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }

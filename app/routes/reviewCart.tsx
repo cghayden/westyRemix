@@ -4,6 +4,7 @@ import {
   useSubmit,
   useNavigation,
   useLoaderData,
+  useRouteError,
 } from '@remix-run/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CustomerDetails, FulfillmentDetails } from 'myTypes'
@@ -22,6 +23,7 @@ import calcTotalPrice from '~/lib/calcCartTotal'
 import { LoaderFunction } from '@remix-run/node'
 import sanity from '~/lib/sanity/sanity'
 import { PickupLocation } from 'sanityTypes'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 export function links() {
   return [{ rel: 'stylesheet', href: styles }]
@@ -219,4 +221,9 @@ export default function CheckoutPage() {
       </ContentContainer>
     </div>
   )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }

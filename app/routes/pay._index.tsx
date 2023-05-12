@@ -1,10 +1,11 @@
-import { Form, useLoaderData } from '@remix-run/react'
+import { Form, useLoaderData, useRouteError } from '@remix-run/react'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import CollapsibleCartSummary from '~/components/CollapsibleCartSummary'
 import { useCartItems } from '~/context/useCart'
 import { useState } from 'react'
 import { LoaderArgs } from '@remix-run/node'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 export const loader = ({ request }: LoaderArgs) => {
   const urlOrigin = new URL(request.url).origin
@@ -53,4 +54,9 @@ export default function Index() {
       </Form>
     </ContentContainer>
   )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }
