@@ -4,7 +4,7 @@ import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import invariant from 'tiny-invariant'
 import { Coffee } from 'sanityTypes'
-import sanityClient from '~/lib/sanity/sanity'
+import { getClient } from '~/lib/sanity/getClient'
 import checkAvailability from '~/lib/checkAvailability'
 import calcVerifiedTotal from '~/lib/calcVerifiedTotal'
 import reduceCartByName from '~/lib/reduceCartByName'
@@ -35,7 +35,7 @@ export const action = async ({ request }: ActionArgs) => {
     coffeeInCart
   )} && !(_id in path("drafts.**"))] {name, price, stock}
     `
-  const sanityResponse: Coffee[] = await sanityClient.fetch(sanityQuery)
+  const sanityResponse: Coffee[] = await getClient().fetch(sanityQuery)
   // is product still in db?, and if so, does available stock satisfy what is quantity in the cart?
 
   const availableCoffee = sanityResponse.map((item) => item.name)

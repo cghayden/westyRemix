@@ -1,4 +1,4 @@
-import { Form, useLoaderData, useNavigation } from '@remix-run/react'
+import { Form, useLoaderData } from '@remix-run/react'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import CollapsibleCartSummary from '~/components/CollapsibleCartSummary'

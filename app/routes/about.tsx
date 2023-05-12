@@ -8,7 +8,7 @@ import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import PageHeading from '~/components/styledComponents/PageHeading'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { PortableText } from '~/lib/sanity/helpers'
-import sanity from '~/lib/sanity/sanity'
+import { getClient } from '~/lib/sanity/getClient'
 
 type LoaderData = {
   initialData: AboutPage[]
@@ -18,12 +18,12 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const query = `*[_type == 'abouPage']`
+  const query = `*[_type == 'aboutPage']`
   const requestUrl = new URL(request?.url)
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
-  const initialData = await sanity.fetch(query)
+  const initialData = await getClient(preview).fetch(query)
   // .catch((err) => {
   //   console.log('error connecting to Sanity', err)
   //   throw new Error(err)
@@ -43,7 +43,6 @@ export default function aboutPage() {
   const [data, setData] = useState(initialData)
 
   const aboutContent = filterDataToSingleItem(initialData, preview)
-  console.log('aboutContent', aboutContent)
 
   if (!aboutContent)
     return (
@@ -62,14 +61,14 @@ export default function aboutPage() {
           queryParams={queryParams}
         />
       )}
-      {/* <PageHeading
-        text={aboutContent?.heading ? aboutContent?.heading : 'about'}
+      <PageHeading
+        text={aboutContent.heading ? aboutContent.heading : 'about'}
       />
       {aboutContent.content && (
         <ContentContainer>
           <PortableText value={aboutContent.content} />
         </ContentContainer>
-      )} */}
+      )}
     </main>
   )
 }

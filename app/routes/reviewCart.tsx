@@ -19,7 +19,7 @@ import ShippingTruckIcon from '~/icons/ShippingTruckIcon'
 import PickupChoiceInputs from '~/components/PickupChoiceInputs'
 import styles from '~/styles/formStyles.css'
 import calcTotalPrice from '~/lib/calcCartTotal'
-import { LoaderArgs, LoaderFunction } from '@remix-run/node'
+import { LoaderFunction } from '@remix-run/node'
 import sanity from '~/lib/sanity/sanity'
 import { PickupLocation } from 'sanityTypes'
 

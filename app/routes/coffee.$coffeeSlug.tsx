@@ -4,6 +4,7 @@ import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import type { Coffee } from '../../sanityTypes'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
+// import sanity from '~/lib/sanity/sanity'
 import { getClient } from '~/lib/sanity/getClient'
 import { PortableText, urlFor } from '~/lib/sanity/helpers'
 import AddToCartForm from '~/components/AddToCartForm'
@@ -27,16 +28,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // Query for _all_ documents with this slug
   // There could be two: Draft and Published!
 
-  //in this query, '$' character before 'slug' denotes that slug will is a string template, provided in second argument of the fetch function call
+  //in this query, '$' character before 'slug' denotes that slug is a string template, provided in second argument of the fetch function call
   const singleCoffeeQuery = `*[_type == "coffee" && slug.current == $slug]`
   const queryParams = { slug: params.coffeeSlug }
   const initialData = await getClient(preview).fetch(
     singleCoffeeQuery,
     queryParams
   )
-  // if (!initialData || !initialData.length) {
-  //   throw new Error('Sorry - there was an Error finding that item')
-  // }
+  console.log('initialData', initialData)
+
   if (!initialData || !initialData.length) {
     throw new Response('Oh no - that Coffee was not found!', {
       status: 404,

@@ -1,16 +1,12 @@
 import { LoaderArgs, LoaderFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import dayjs from 'dayjs'
 import { useState } from 'react'
 import { TwoColContainer } from '~/components/styledComponents/TwoColContainer'
 import Preview from '~/components/Preview'
-import ContentContainer from '~/components/styledComponents/ContentContainer'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
-import { PortableText, urlFor } from '~/lib/sanity/helpers'
-import sanity from '~/lib/sanity/sanity'
-import { Event } from 'sanityTypes'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import PageHeading from '~/components/styledComponents/PageHeading'
+import { getClient } from '~/lib/sanity/getClient'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const query = `{
@@ -21,7 +17,9 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
-  const initialData = await sanity.fetch(query).catch((err) => console.log(err))
+  const initialData = await getClient(preview)
+    .fetch(query)
+    .catch((err) => console.log(err))
 
   const events = filterDataToDrafts(initialData.events, preview)
 

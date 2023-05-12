@@ -8,3 +8,5 @@ export function ErrorBoundary() {
   const error = useRouteError()
   return <ErrorContainer error={error} />
 }
+
+export default BlogRoot

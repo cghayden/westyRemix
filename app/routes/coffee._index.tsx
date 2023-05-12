@@ -1,6 +1,6 @@
 import { LoaderArgs, LoaderFunction } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
-import sanity from '~/lib/sanity/sanity'
+import { getClient } from '~/lib/sanity/getClient'
 import AllCoffee from '~/components/AllCoffee'
 import Preview from '~/components/Preview'
 import { useState } from 'react'
@@ -30,10 +30,13 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
-  const initialData = await sanity.fetch(query).catch((err) => {
-    console.log('err', err)
-    throw Error('there was an error loading the items')
-  })
+  const initialData = await getClient(preview)
+    .fetch(query)
+    .catch((err) => {
+      console.log('err', err)
+      throw Error('there was an error loading the items')
+    })
+  console.log('initialData', initialData)
 
   //  A helper function checks the returned documents
   // To show drafts if in preview mode, otherwise Published

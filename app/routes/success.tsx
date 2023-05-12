@@ -5,7 +5,6 @@ import { retrievePaymentIntent } from '~/lib/stripePaymentIntent'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import { CartItem, OrderDetails } from 'myTypes'
 import formatMoney from '~/lib/formatMoney'
-import CartSummary from '~/components/CartSummary'
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)

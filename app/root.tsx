@@ -153,10 +153,8 @@ export function ErrorBoundary() {
         <title>Uh - Oh!</title>
         <Links />
       </head>
-      {/* <Header /> */}
+      <Header />
       <div className='bg-red-200 text-slate-800 p-4 rounded max-w-[800px] min-w-[316px] w-11/12 my-6 mx-auto shadow-lg text-center'>
-        {/* <Scripts /> */}
-
         {formattedError}
       </div>
     </html>

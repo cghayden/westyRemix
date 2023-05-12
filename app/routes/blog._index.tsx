@@ -1,6 +1,6 @@
 import { LoaderArgs, LoaderFunction } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import sanity from '~/lib/sanity/sanity'
+import { getClient } from '~/lib/sanity/getClient'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
@@ -26,7 +26,9 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const preview =
     requestUrl.searchParams.get('preview') === process.env.SANITY_PREVIEW_SECRET
 
-  const initialData = await sanity.fetch(query).catch((err) => console.log(err))
+  const initialData = await getClient(preview)
+    .fetch(query)
+    .catch((err) => console.log(err))
 
   const allPosts = filterDataToDrafts(initialData, preview)
   return {
