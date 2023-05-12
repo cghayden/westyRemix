@@ -4,7 +4,8 @@
     "**/*.ts",
     "**/*.tsx",
     "app/lib/sanity/usePreviewSubscription.tsx",
-    "app/lib/sanity/helpers.js"
+    "app/lib/sanity/helpers.js",
+    "app/lib/sanity/getClient.js"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2019"],

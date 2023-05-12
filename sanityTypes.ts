@@ -487,7 +487,7 @@ export interface AboutPage extends SanityDocument {
    *
    * Optional
    */
-  text?: BodyPortableText
+  content?: BodyPortableText
 }
 
 /**

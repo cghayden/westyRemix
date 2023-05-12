@@ -1,18 +1,16 @@
 import type { LoaderFunction } from '@remix-run/node'
-import { useLoaderData, useParams, useRouteError } from '@remix-run/react'
+import { useLoaderData, useRouteError } from '@remix-run/react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
-import type { Post } from '../../../sanityTypes'
+import type { Post } from '../../sanityTypes'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
 import { getClient } from '~/lib/sanity/getClient'
 import { PortableText, urlFor } from '~/lib/sanity/helpers'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
-import { ImageUrlBuilder } from '@sanity/image-url/lib/types/builder'
+
 import dayjs from 'dayjs'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
-// interface ImageProps extends Omit<React.HTMLProps<HTMLImageElement>, 'src'> {
-//   src: string | ImageUrlBuilder;
-// }
+
 type LoaderData = {
   initialData: Post[]
   preview: boolean
@@ -22,6 +20,7 @@ type LoaderData = {
 
 //Route params are passed to your loader.
 export const loader: LoaderFunction = async ({ request, params }) => {
+  // throw new Error('testing error boundary')
   const requestUrl = new URL(request?.url)
   const preview: boolean =
     requestUrl?.searchParams?.get('preview') ===
@@ -33,10 +32,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   //in this query, '$' character before 'slug' denotes that slug is a string template, provided in second argument of the fetch function call
   const singlePostQuery = `*[_type == "post" && slug.current == $slug]`
   const queryParams = { slug: params.slug }
-  const initialData = await getClient(preview).fetch(
-    singlePostQuery,
-    queryParams
-  )
+  const initialData = await getClient(preview)
+    .fetch(singlePostQuery, queryParams)
+    .catch((err) => {
+      throw new Error(err)
+    })
   if (!initialData || !initialData.length) {
     throw new Response('Oh no - that Post was not found!', {
       status: 404,
@@ -101,7 +101,6 @@ export default function CoffeeRoute() {
 }
 
 export function ErrorBoundary() {
-  // const { postSlug } = useParams()
   const error = useRouteError()
   return <ErrorContainer error={error} />
 }

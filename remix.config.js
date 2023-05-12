@@ -17,7 +17,7 @@ module.exports = {
   // end vercel specific
 
   server: process.env.NODE_ENV === 'development' ? undefined : './server.js',
-  ignoredRouteFiles: ['.*'],
+  ignoredRouteFiles: ['**/.*'],
   tailwind: true,
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
@@ -28,7 +28,7 @@ module.exports = {
     v2_errorBoundary: true,
     v2_meta: true,
     v2_normalizeFormMethod: true,
-
+    v2_routeConvention: true,
     // unstable_dev: true,
   },
 }

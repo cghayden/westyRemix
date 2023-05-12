@@ -1,9 +1,10 @@
 import { LoaderFunction } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData, useRouteError } from '@remix-run/react'
 import { useState } from 'react'
 import { AboutPage } from 'sanityTypes'
 import Preview from '~/components/Preview'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import PageHeading from '~/components/styledComponents/PageHeading'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { PortableText } from '~/lib/sanity/helpers'
@@ -17,12 +18,16 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const query = `*[_type == 'aboutPage']`
+  const query = `*[_type == 'abouPage']`
   const requestUrl = new URL(request?.url)
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
-  const initialData = await sanity.fetch(query).catch((err) => console.log(err))
+  const initialData = await sanity.fetch(query)
+  // .catch((err) => {
+  //   console.log('error connecting to Sanity', err)
+  //   throw new Error(err)
+  // })
   const data: LoaderData = {
     initialData,
     preview,
@@ -38,6 +43,14 @@ export default function aboutPage() {
   const [data, setData] = useState(initialData)
 
   const aboutContent = filterDataToSingleItem(initialData, preview)
+  console.log('aboutContent', aboutContent)
+
+  if (!aboutContent)
+    return (
+      <ErrorContainer
+        error={'There was an error retrieving the content for this page'}
+      />
+    )
 
   return (
     <main>
@@ -49,10 +62,18 @@ export default function aboutPage() {
           queryParams={queryParams}
         />
       )}
-      <PageHeading text={aboutContent.heading} />
-      <ContentContainer>
-        <PortableText value={aboutContent.content} />
-      </ContentContainer>
+      {/* <PageHeading
+        text={aboutContent?.heading ? aboutContent?.heading : 'about'}
+      />
+      {aboutContent.content && (
+        <ContentContainer>
+          <PortableText value={aboutContent.content} />
+        </ContentContainer>
+      )} */}
     </main>
   )
+}
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }

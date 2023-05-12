@@ -19,6 +19,7 @@
     "@sanity/image-url": "^1.0.1",
     "@stripe/react-stripe-js": "^1.10.0",
     "@stripe/stripe-js": "^1.36.0",
+    "@vercel/node": "^2.14.1",
     "dayjs": "^1.10.8",
     "dotenv": "^16.0.0",
     "framer-motion": "^7.6.1",

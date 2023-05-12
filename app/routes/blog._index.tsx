@@ -1,12 +1,11 @@
 import { LoaderArgs, LoaderFunction } from '@remix-run/node'
-import { Link, useLoaderData, useRouteError } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import sanity from '~/lib/sanity/sanity'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
 import { TwoColContainer } from '~/components/styledComponents/TwoColContainer'
 import { Post } from 'sanityTypes'
-import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 const query = `*[_type == "post"] | order(publishedAt desc){
   _id,
@@ -18,7 +17,7 @@ const query = `*[_type == "post"] | order(publishedAt desc){
 }`
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
-  // throw new Error('Testing Error Boundary')
+  // throw new Error('Testing Error Boundary, blog_index')
   // Put site in preview mode if the right query param is used
   const requestUrl = new URL(request?.url)
   const referringPath = requestUrl.pathname
@@ -77,11 +76,6 @@ function blogIndex() {
       </ul>
     </main>
   )
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError()
-  return <ErrorContainer error={error} />
 }
 
 export default blogIndex

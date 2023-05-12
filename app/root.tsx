@@ -20,6 +20,7 @@ import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
 import Footer from './components/Footer'
 import { ContactPage, SiteSettings } from 'sanityTypes'
 import { ErrorContainer } from './components/styledComponents/ErrorContainer'
+import { formatErrorMessage } from './lib/formatError'
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
@@ -140,10 +141,24 @@ export default function App() {
 // this ErrorBoundary at the root level must render the <html> tag, in this case, <Document>
 export function ErrorBoundary() {
   const error = useRouteError()
+  console.log('error', error)
+  const formattedError = formatErrorMessage(error)
+
   return (
-    <Document title='Uh-oh!'>
-      <Header />
-      <ErrorContainer error={error} />
-    </Document>
+    <html>
+      <head>
+        <meta charSet='utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <Meta />
+        <title>Uh - Oh!</title>
+        <Links />
+      </head>
+      {/* <Header /> */}
+      <div className='bg-red-200 text-slate-800 p-4 rounded max-w-[800px] min-w-[316px] w-11/12 my-6 mx-auto shadow-lg text-center'>
+        {/* <Scripts /> */}
+
+        {formattedError}
+      </div>
+    </html>
   )
 }

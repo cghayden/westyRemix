@@ -1,14 +1,13 @@
 import type { LoaderFunction } from '@remix-run/node'
-import { useLoaderData, useRouteError } from '@remix-run/react'
+import { useLoaderData } from '@remix-run/react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
-import type { Coffee } from '../../../sanityTypes'
+import type { Coffee } from '../../sanityTypes'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
 import { getClient } from '~/lib/sanity/getClient'
 import { PortableText, urlFor } from '~/lib/sanity/helpers'
 import AddToCartForm from '~/components/AddToCartForm'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
-import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import dayjs from 'dayjs'
 
 type LoaderData = {
@@ -180,9 +179,4 @@ export default function CoffeeRoute() {
       </ContentContainer>
     </main>
   )
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError()
-  return <ErrorContainer error={error} />
 }
