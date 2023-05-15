@@ -4,9 +4,9 @@ import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import type { Coffee } from '../../sanityTypes'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
-// import sanity from '~/lib/sanity/sanity'
 import { getClient } from '~/lib/sanity/getClient'
-import { PortableText, urlFor } from '~/lib/sanity/helpers'
+import { urlFor } from '~/lib/sanity/helpers'
+import { PortableText } from '@portabletext/react'
 import AddToCartForm from '~/components/AddToCartForm'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import dayjs from 'dayjs'
@@ -63,7 +63,8 @@ export default function CoffeeRoute() {
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
   const coffee = filterDataToSingleItem(data, preview)
-
+  console.log('coffee', coffee)
+  const imageSrc = urlFor(coffee.image).width(400).height(200)
   return (
     <main>
       {preview && (
@@ -74,7 +75,6 @@ export default function CoffeeRoute() {
           queryParams={queryParams}
         />
       )}
-      {/* When working with draft content, optional chain _everything_ */}
       <ContentContainer>
         {coffee?.name && (
           <h2 className='p-4 text-3xl text-center'>{coffee.name}</h2>
@@ -85,7 +85,7 @@ export default function CoffeeRoute() {
         {coffee?.image && (
           <img
             loading='lazy'
-            src={urlFor(coffee.image).width(400).height(200)}
+            src={imageSrc}
             width='400'
             height='200'
             alt={coffee?.name ?? ``}
@@ -99,7 +99,6 @@ export default function CoffeeRoute() {
             </div>
           )}
           <div className='label__detailListAndForm grid place-items-center place-content-center grid-cols-autoFit2 w-full max-w-[700px] mx-auto'>
-            {/* grid-repeat(auto-fit, minmax(250px, 50%) */}
             <dl className='label__coffeeDetailsList p-3 self-start'>
               {coffee?.roastDate && (
                 <div className='flex flex-row items-baseline'>

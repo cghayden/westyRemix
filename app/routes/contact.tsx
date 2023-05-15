@@ -8,7 +8,7 @@ import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import PageHeading from '~/components/styledComponents/PageHeading'
 
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
-import { PortableText } from '~/lib/sanity/helpers'
+import { PortableText } from '@portabletext/react'
 import { getClient } from '~/lib/sanity/getClient'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {

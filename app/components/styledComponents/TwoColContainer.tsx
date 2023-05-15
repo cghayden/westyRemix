@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { BodyPortableText, MainImage } from 'sanityTypes'
-import { PortableText, urlFor } from '~/lib/sanity/helpers'
+import { urlFor } from '~/lib/sanity/helpers'
+import { PortableText } from '@portabletext/react'
 
 function TwoColContainer({
   heading,

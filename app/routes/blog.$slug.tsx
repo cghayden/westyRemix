@@ -5,7 +5,9 @@ import type { Post } from '../../sanityTypes'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
 import { getClient } from '~/lib/sanity/getClient'
-import { PortableText, urlFor } from '~/lib/sanity/helpers'
+import { urlFor } from '~/lib/sanity/helpers'
+import { PortableText } from '@portabletext/react'
+
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 
 import dayjs from 'dayjs'
