@@ -35,7 +35,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     singleCoffeeQuery,
     queryParams
   )
-  console.log('initialData', initialData)
 
   if (!initialData || !initialData.length) {
     throw new Response('Oh no - that Coffee was not found!', {

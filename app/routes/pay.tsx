@@ -69,7 +69,6 @@ export const action = async ({ request }: ActionArgs) => {
     id: null,
   }
   return await createPaymentIntent(typedOrderDetails).catch((err) => {
-    console.log(err)
     throw Error(err)
   })
 }
