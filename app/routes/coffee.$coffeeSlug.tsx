@@ -63,7 +63,6 @@ export default function CoffeeRoute() {
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
   const coffee = filterDataToSingleItem(data, preview)
-  console.log('coffee', coffee)
   const imageSrc = urlFor(coffee.image).width(400).height(200)
   return (
     <main>
