@@ -19,8 +19,8 @@ module.exports = {
     unstable_dev: true,
   },
   // default values:
-  // serverMainFields: ['main', 'module'],
-  // serverModuleFormat: 'cjs',
+  serverMainFields: ['main', 'module'],
+  serverModuleFormat: 'cjs',
   // commented out = default value
   // serverPlatform: 'node',
   // serverMinify: false,

@@ -60,22 +60,21 @@ const myCartReducerFunction = (
         return [...cartItemsState, action.cartItem]
       }
       if (cartItemIndex > -1) {
-        const updatedCart = [...cartItemsState]
         //quantity will be positive to increase, or -1 to decrease number in cart
-        cartItemsState[cartItemIndex].quantity += action.cartItem.quantity
+        const updatedCart = [...cartItemsState]
+
+        const updatedItem = {
+          ...updatedCart[cartItemIndex],
+          quantity:
+            updatedCart[cartItemIndex].quantity + action.cartItem.quantity,
+        }
+        updatedCart[cartItemIndex] = updatedItem
         return updatedCart
       }
     case 'REMOVE_FROM_CART':
       const cartCopy = [...cartItemsState]
       cartCopy.splice(cartItemIndex, 1)
       return cartCopy
-    // case 'UPDATE_PRICE':
-    //   console.log('UPDATE_PRICE', payload);
-
-    //   return {
-    //     ...state,
-    //     total: payload.total,
-    //   };
     default:
       throw new Error(`No case for action type found in cartReducer.`)
   }

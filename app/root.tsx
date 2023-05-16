@@ -19,7 +19,6 @@ import { useState } from 'react'
 import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
 import Footer from './components/Footer'
 import { ContactPage, SiteSettings } from 'sanityTypes'
-import { ErrorContainer } from './components/styledComponents/ErrorContainer'
 import { formatErrorMessage } from './lib/formatError'
 
 export const links: LinksFunction = () => {
@@ -141,7 +140,6 @@ export default function App() {
 // this ErrorBoundary at the root level must render the <html> tag, in this case, <Document>
 export function ErrorBoundary() {
   const error = useRouteError()
-  console.log('error', error)
   const formattedError = formatErrorMessage(error)
 
   return (
