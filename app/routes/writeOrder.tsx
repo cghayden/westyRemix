@@ -1,4 +1,6 @@
 import { LoaderArgs, redirect } from '@remix-run/node'
+import { useRouteError } from '@remix-run/react'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import { writeOrderToSanity } from '~/lib/sanity/writeOrder'
 import { retrievePaymentIntent } from '~/lib/stripePaymentIntent'
 
@@ -22,8 +24,16 @@ export const loader = async ({ request }: LoaderArgs) => {
     fulfillmentDetails,
     total,
     id: orderId,
-  }).catch((err) => console.error(err))
+  }).catch((err) => {
+    console.error(err)
+    throw Error(err)
+  })
 
   return redirect(`/success?payment_intent=${id}`)
   // return redirect('/test');
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }

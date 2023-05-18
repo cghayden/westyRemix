@@ -13,6 +13,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const [alert, setAlert] = useState<string | null>()
   const [grind, setGrind] = useState('whole')
   const [desiredQuantity, setDesiredQuantity] = useState<number>(1)
+  console.log('desiredQuantity', desiredQuantity)
   const cartItems = useCartItems()
   const changeCartItemQuantity = useChangeCartItemQuantity()
   const { toggleIsCartOpen } = useCartUtils()
@@ -95,7 +96,6 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             className='text-lg bg-slate-600 text-slate-50 rounded-full px-5 py-2 mt-2 disabled:bg-slate-300 disabled:text-slate:100'
             onClick={(e) => {
               e.preventDefault()
-              setDesiredQuantity(1)
               changeCartItemQuantity({
                 name: `${coffee.name}`,
                 coffeeId: `${coffee._id}`,

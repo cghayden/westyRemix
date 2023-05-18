@@ -38,6 +38,7 @@ export default function AdjustQuantityButtons({
                 }
 
                 changeCartItemQuantity({
+                  _id: cartItem._id,
                   name: cartItem.name,
                   coffeeId: cartItem.coffeeId,
                   quantity: -1,
@@ -66,6 +67,7 @@ export default function AdjustQuantityButtons({
                   }, 2000)
                 } else {
                   changeCartItemQuantity({
+                    _id: cartItem._id,
                     name: cartItem.name,
                     coffeeId: cartItem.coffeeId,
                     quantity: 1,

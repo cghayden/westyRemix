@@ -1,20 +1,16 @@
-import {
-  LinksFunction,
-  LoaderArgs,
-  LoaderFunction,
-  MetaFunction,
-} from '@remix-run/node'
+import { LinksFunction, LoaderFunction, V2_MetaFunction } from '@remix-run/node'
 import {
   Links,
   LiveReload,
-  Meta,
   Outlet,
   Scripts,
-  useCatch,
   useLoaderData,
+  useRouteError,
+  Meta,
 } from '@remix-run/react'
+
 import Header from './components/Header'
-import styles from './styles/tailwind.css'
+import styles from './tailwind.css'
 import sanity from './lib/sanity/sanity'
 import { CartProvider } from './context/useCart'
 import { ThemeProvider } from './context/ThemeContext'
@@ -23,17 +19,13 @@ import { useState } from 'react'
 import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
 import Footer from './components/Footer'
 import { ContactPage, SiteSettings } from 'sanityTypes'
+import { formatErrorMessage } from './lib/formatError'
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
 }
 
-export const meta: MetaFunction = () => {
-  const description = `Sample Ecommerce Site`
-  return {
-    description,
-  }
-}
+export const meta: V2_MetaFunction = () => [{ title: 'Westy Remix' }]
 
 export interface InitialData {
   siteSettings: SiteSettings[]
@@ -83,13 +75,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   return data
 }
 
-function Document({
-  children,
-  title = `Westy Remix`,
-}: {
-  children: React.ReactNode
+type DocProps = {
+  children: React.ReactNode | undefined
   title?: string
-}) {
+}
+
+function Document({ children, title = `Westy Remix` }: DocProps) {
   const { siteSettings, preview, query, queryParams } =
     useLoaderData<LoaderData>()
   const [data, setData] = useState(siteSettings)
@@ -143,31 +134,27 @@ export default function App() {
     </Document>
   )
 }
-export function CatchBoundary() {
-  const caught = useCatch()
-
-  return (
-    <Document title={`${caught.status} ${caught.statusText}`}>
-      <div className='error-container'>
-        <h1>
-          {caught.status} {caught.statusText}
-        </h1>
-      </div>
-    </Document>
-  )
-}
 
 //  with remix <Scripts/>, you can accept the error prop in all your ErrorBoundary components and console.error(error); and you'll get even server-side errors logged in the browser's console.
 
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
+// this ErrorBoundary at the root level must render the <html> tag, in this case, <Document>
+export function ErrorBoundary() {
+  const error = useRouteError()
+  const formattedError = formatErrorMessage(error)
+
   return (
-    <Document title='Uh-oh!'>
+    <html>
+      <head>
+        <meta charSet='utf-8' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <Meta />
+        <title>Uh - Oh!</title>
+        <Links />
+      </head>
       <Header />
-      <div className='error-container'>
-        <h1>App Error</h1>
-        <pre>{error.message}</pre>
+      <div className='bg-red-200 text-slate-800 p-4 rounded max-w-[800px] min-w-[316px] w-11/12 my-6 mx-auto shadow-lg text-center'>
+        {formattedError}
       </div>
-    </Document>
+    </html>
   )
 }

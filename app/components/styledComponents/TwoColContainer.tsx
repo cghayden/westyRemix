@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { BodyPortableText, MainImage } from 'sanityTypes'
-import { PortableText, urlFor } from '~/lib/sanity/helpers'
+import { urlFor } from '~/lib/sanity/helpers'
+import { PortableText } from '@portabletext/react'
 
 function TwoColContainer({
   heading,
@@ -8,10 +9,10 @@ function TwoColContainer({
   date,
   content,
 }: {
-  heading: string
-  image: MainImage
-  date: string
-  content: BodyPortableText
+  heading?: string
+  image?: MainImage
+  date?: string
+  content?: BodyPortableText
 }) {
   return (
     <div className='h-full grid sm:grid-cols-autoFit2 place-items-center gap-3 bg-slate-50 text-slate-800 p-4 rounded max-w-[900px] sm:min-w-[316px] w-11/12 my-6 mx-auto shadow-lg'>

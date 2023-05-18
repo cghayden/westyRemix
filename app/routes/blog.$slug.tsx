@@ -1,17 +1,18 @@
 import type { LoaderFunction } from '@remix-run/node'
-import { useCatch, useLoaderData, useParams } from '@remix-run/react'
+import { useLoaderData, useRouteError } from '@remix-run/react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
-import type { Post } from '../../../sanityTypes'
+import type { Post } from '../../sanityTypes'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
 import { getClient } from '~/lib/sanity/getClient'
-import { PortableText, urlFor } from '~/lib/sanity/helpers'
+import { urlFor } from '~/lib/sanity/helpers'
+import { PortableText } from '@portabletext/react'
+
 import ContentContainer from '~/components/styledComponents/ContentContainer'
-import { ImageUrlBuilder } from '@sanity/image-url/lib/types/builder'
+
 import dayjs from 'dayjs'
-// interface ImageProps extends Omit<React.HTMLProps<HTMLImageElement>, 'src'> {
-//   src: string | ImageUrlBuilder;
-// }
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
+
 type LoaderData = {
   initialData: Post[]
   preview: boolean
@@ -21,6 +22,7 @@ type LoaderData = {
 
 //Route params are passed to your loader.
 export const loader: LoaderFunction = async ({ request, params }) => {
+  // throw new Error('testing error boundary')
   const requestUrl = new URL(request?.url)
   const preview: boolean =
     requestUrl?.searchParams?.get('preview') ===
@@ -32,11 +34,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   //in this query, '$' character before 'slug' denotes that slug is a string template, provided in second argument of the fetch function call
   const singlePostQuery = `*[_type == "post" && slug.current == $slug]`
   const queryParams = { slug: params.slug }
-  const initialData = await getClient(preview).fetch(
-    singlePostQuery,
-    queryParams
-  )
-  if (!initialData) {
+  const initialData = await getClient(preview)
+    .fetch(singlePostQuery, queryParams)
+    .catch((err) => {
+      throw new Error(err)
+    })
+  if (!initialData || !initialData.length) {
     throw new Response('Oh no - that Post was not found!', {
       status: 404,
       statusText: 'That post was not found',
@@ -64,6 +67,7 @@ export default function CoffeeRoute() {
   //  A helper function checks the returned documents
   // To show Draft if in preview mode, otherwise Published
   const post: Post = filterDataToSingleItem(data, preview)
+
   return (
     <main>
       {preview && (
@@ -98,44 +102,7 @@ export default function CoffeeRoute() {
   )
 }
 
-export function CatchBoundary() {
-  const caught = useCatch()
-  const params = useParams()
-  switch (caught.status) {
-    case 404: {
-      return (
-        <div className='error-container'>
-          Huh? What the heck is {params.postSlug}?
-        </div>
-      )
-    }
-    default: {
-      throw new Error(`Unhandled error: ${caught.status}`)
-    }
-  }
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.error(error)
-  const { postSlug } = useParams()
-  return (
-    <div className='error-container'>{`There was an error loading post ${postSlug}. Sorry.`}</div>
-  )
-}
-
-// export const meta: MetaFunction = ({
-//   data,
-// }: {
-//   data: LoaderData | undefined;
-// }) => {
-//   if (!data) {
-//     return {
-//       title: 'No post',
-//       description: 'No post found',
-//     };
-//   }
-//   return {
-//     title: `${data.post.name}`,
-//     description: `Enjoy a hot cup of  "${data.post.name}" post`,
-//   };
-// };

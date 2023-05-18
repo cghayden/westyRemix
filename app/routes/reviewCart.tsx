@@ -4,6 +4,7 @@ import {
   useSubmit,
   useNavigation,
   useLoaderData,
+  useRouteError,
 } from '@remix-run/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CustomerDetails, FulfillmentDetails } from 'myTypes'
@@ -19,9 +20,10 @@ import ShippingTruckIcon from '~/icons/ShippingTruckIcon'
 import PickupChoiceInputs from '~/components/PickupChoiceInputs'
 import styles from '~/styles/formStyles.css'
 import calcTotalPrice from '~/lib/calcCartTotal'
-import { LoaderArgs, LoaderFunction } from '@remix-run/node'
+import { LoaderFunction } from '@remix-run/node'
 import sanity from '~/lib/sanity/sanity'
 import { PickupLocation } from 'sanityTypes'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 export function links() {
   return [{ rel: 'stylesheet', href: styles }]
@@ -63,7 +65,7 @@ export default function CheckoutPage() {
       'orderDetails',
       JSON.stringify({ customerDetails, fulfillmentDetails, cart: cartItems })
     )
-    submit(formData, { method: 'post', action: '/pay' })
+    submit(formData, { method: 'POST', action: '/pay' })
   }
 
   // review cart, and on confirmation, send cart to '/pay' action handler via form submission
@@ -203,7 +205,9 @@ export default function CheckoutPage() {
           </AnimatePresence>
           <button
             type='submit'
-            className='bg-green-400 px-12 py-4 rounded-lg w-full'
+            className={`${
+              navigation.state === 'submitting' ? 'bg-gray-400' : 'bg-green-400'
+            } px-12 py-4 rounded-lg w-full`}
             disabled={navigation.state === 'submitting' ? true : false}
           >
             <input
@@ -219,4 +223,9 @@ export default function CheckoutPage() {
       </ContentContainer>
     </div>
   )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }

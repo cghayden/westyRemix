@@ -48,7 +48,7 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     shippingCity,
     shippingState,
     shippingZip: shippingPostal_code,
-    // customerComments,
+    // !customerComments,
     shipped: false,
     stripe_id: orderDetails.id,
   }
@@ -66,8 +66,8 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     .then(() => adjustSanityStock(cartItems))
     .catch((err) => {
       console.error('err', err)
-      throw `Error writing to sanity: ${err}`
-      // notify neighborly of error writing to sanity orders
+      throw `Error creating order / writing to sanity: ${err}`
+      // !notify website owner of error writing the order
     })
 }
 

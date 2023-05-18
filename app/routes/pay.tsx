@@ -1,16 +1,17 @@
 import { ActionArgs, redirect } from '@remix-run/node'
-import { Outlet, useActionData } from '@remix-run/react'
+import { Outlet, useActionData, useRouteError } from '@remix-run/react'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import invariant from 'tiny-invariant'
 import { Coffee } from 'sanityTypes'
-import sanityClient from '~/lib/sanity/sanity'
+import { getClient } from '~/lib/sanity/getClient'
 import checkAvailability from '~/lib/checkAvailability'
 import calcVerifiedTotal from '~/lib/calcVerifiedTotal'
 import reduceCartByName from '~/lib/reduceCartByName'
 import { createPaymentIntent } from '~/lib/stripePaymentIntent'
 import { OrderDetails } from 'myTypes'
 import calcShipping from '~/lib/calcShipping'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8')
 
@@ -26,29 +27,28 @@ export const action = async ({ request }: ActionArgs) => {
   const orderDetails: OrderDetails = JSON.parse(orderDetailsBody)
   const cart = orderDetails.cart
 
-  //create an OBJ of cart Items keyed by price and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
+  //create an OBJ of cart Items keyed by name and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
   const cartKeyedByName = reduceCartByName(cart)
-  // create array of coffeeNames that need to be queried in Sanity
+  // rather than fetching all of the products, query for an only what is in the cart -> coffeeNames that need to be queried in Sanity
   const coffeeInCart: string[] = Object.keys(cartKeyedByName)
-  // query Sanity to verify prices and stock
+  // query Sanity to get valid inventory and prices
   const sanityQuery = `*[_type == "coffee" && name in ${JSON.stringify(
     coffeeInCart
   )} && !(_id in path("drafts.**"))] {name, price, stock}
     `
-  const sanityResponse: Coffee[] = await sanityClient.fetch(sanityQuery)
-  // is product still in db?, and if so, does available stock satisfy what is quantity in the cart?
+  const inventory: Coffee[] = await getClient().fetch(sanityQuery)
 
-  const availableCoffee = sanityResponse.map((item) => item.name)
+  // is product still in db?, and if so, does available stock satisfy what is quantity in the cart?
+  const availableCoffee = inventory.map((item) => item.name)
   // set current prices and inStock onto each CartItem
-  sanityResponse.forEach((coffee) => {
+  inventory.forEach((coffee) => {
     let key: string = coffee.name
     cartKeyedByName[key].price = coffee.price
     cartKeyedByName[key].inStock = coffee.stock
   })
-  //separate function to check response availability against order
 
+  // function to check verified availability against desired order
   const warningMessages = checkAvailability(cartKeyedByName, availableCoffee)
-  //calculate total with shipping based on verified prices
 
   // if any insufficientStock or unavailable, return to reviewCart page with message to client in url query string
   if (warningMessages.length > 0) {
@@ -57,8 +57,10 @@ export const action = async ({ request }: ActionArgs) => {
     )
   }
 
+  //calculate total with shipping based on verified prices
   const total = calcVerifiedTotal(cartKeyedByName)
   const shippingCost = calcShipping(total)
+
   orderDetails.fulfillmentDetails.shippingCost = shippingCost
   const typedOrderDetails: OrderDetails = {
     cart,
@@ -67,25 +69,29 @@ export const action = async ({ request }: ActionArgs) => {
     fulfillmentDetails: orderDetails.fulfillmentDetails,
     id: null,
   }
+
   return await createPaymentIntent(typedOrderDetails).catch((err) => {
-    console.log(err)
-    return err
+    throw Error(err)
   })
 }
 
 export default function Pay() {
   const paymentIntent = useActionData<typeof action>()
 
-  if (!paymentIntent.client_secret) {
-    return <p>error</p>
+  if (!paymentIntent || !paymentIntent.client_secret) {
+    throw Error('there was an Error connecting to stripe')
+  }
+  const options = {
+    clientSecret: paymentIntent.client_secret,
   }
 
   return (
-    <Elements
-      stripe={stripePromise}
-      options={{ clientSecret: paymentIntent.client_secret }}
-    >
+    <Elements stripe={stripePromise} options={options}>
       <Outlet />
     </Elements>
   )
+}
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }

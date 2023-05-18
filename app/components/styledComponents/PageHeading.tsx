@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { ThemeContext } from '~/context/ThemeContext'
 
-export default function PageHeading({ text }: { text: string }) {
+export default function PageHeading({ text = '' }: { text: string }) {
   const { pageTextColor } = useContext(ThemeContext)
 
   return (

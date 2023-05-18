@@ -1,5 +1,5 @@
 import { LoaderArgs, LoaderFunction } from '@remix-run/node'
-import { useLoaderData, useLocation } from '@remix-run/react'
+import { useLoaderData, useRouteError } from '@remix-run/react'
 import sanity from '~/lib/sanity/sanity'
 import HomeHero from '~/components/HomeHero'
 import FeaturedItems from '~/components/FeaturedItems'
@@ -7,9 +7,10 @@ import { useState } from 'react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import Preview from '~/components/Preview'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
-// import path from('node:path')
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+  console.log('root loader ')
   const pageQuery = `{
     "heroContent": *[_type == "landingPage" ] {
       _id,
@@ -29,7 +30,6 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
       slug{current}
     }
   }`
-  // console.log('path', path.basename)
 
   const requestUrl = new URL(request?.url)
   const previewQuery = requestUrl.search
@@ -87,4 +87,8 @@ export default function Index() {
       />
     </main>
   )
+}
+export function ErrorBoundary() {
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }

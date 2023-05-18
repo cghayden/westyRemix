@@ -1,12 +1,12 @@
 import { LoaderArgs, LoaderFunction } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
-import sanity from '~/lib/sanity/sanity'
+import { useLoaderData, useRouteError } from '@remix-run/react'
+import { getClient } from '~/lib/sanity/getClient'
 import AllCoffee from '~/components/AllCoffee'
-import { Coffee } from 'sanityTypes'
 import Preview from '~/components/Preview'
 import { useState } from 'react'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
+import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 const query = `{
 "coffee":  *[_type == "coffee"] {
@@ -22,7 +22,6 @@ price
 "coffeePageContent": *[_type == "coffeePage"]
 }
 `
-
 export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const requestUrl = new URL(request?.url)
   const referringPath = requestUrl.pathname
@@ -31,7 +30,13 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
-  const initialData = await sanity.fetch(query).catch((err) => console.log(err))
+  const initialData = await getClient(preview)
+    .fetch(query)
+    .catch((err) => {
+      console.log('err', err)
+      throw Error('there was an error loading the items')
+    })
+  console.log('initialData', initialData)
 
   //  A helper function checks the returned documents
   // To show drafts if in preview mode, otherwise Published
@@ -86,6 +91,12 @@ function coffeeIndex() {
       />
     </main>
   )
+}
+
+export function ErrorBoundary() {
+  // const { postSlug } = useParams()
+  const error = useRouteError()
+  return <ErrorContainer error={error} />
 }
 
 export default coffeeIndex
