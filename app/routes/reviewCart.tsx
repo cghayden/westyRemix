@@ -205,7 +205,9 @@ export default function CheckoutPage() {
           </AnimatePresence>
           <button
             type='submit'
-            className='bg-green-400 px-12 py-4 rounded-lg w-full'
+            className={`${
+              navigation.state === 'submitting' ? 'bg-gray-400' : 'bg-green-400'
+            } px-12 py-4 rounded-lg w-full`}
             disabled={navigation.state === 'submitting' ? true : false}
           >
             <input

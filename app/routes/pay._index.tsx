@@ -15,11 +15,11 @@ export const loader = ({ request }: LoaderArgs) => {
 export default function PayIndex() {
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [submitting, setSubmitting] = useState(false)
   const urlOrigin = useLoaderData()
   const cartItems = useCartItems()
   const elements = useElements()
   const stripe = useStripe()
-  const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()

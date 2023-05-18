@@ -29,19 +29,19 @@ export const action = async ({ request }: ActionArgs) => {
 
   //create an OBJ of cart Items keyed by name and quantity, regardless of whole bean or ground, to query sanity and calculate total cost
   const cartKeyedByName = reduceCartByName(cart)
-  // create array of coffeeNames that need to be queried in Sanity
+  // rather than fetching all of the products, query for an only what is in the cart -> coffeeNames that need to be queried in Sanity
   const coffeeInCart: string[] = Object.keys(cartKeyedByName)
-  // query Sanity to verify prices and stock
+  // query Sanity to get valid inventory and prices
   const sanityQuery = `*[_type == "coffee" && name in ${JSON.stringify(
     coffeeInCart
   )} && !(_id in path("drafts.**"))] {name, price, stock}
     `
-  const sanityResponse: Coffee[] = await getClient().fetch(sanityQuery)
-  // is product still in db?, and if so, does available stock satisfy what is quantity in the cart?
+  const inventory: Coffee[] = await getClient().fetch(sanityQuery)
 
-  const availableCoffee = sanityResponse.map((item) => item.name)
+  // is product still in db?, and if so, does available stock satisfy what is quantity in the cart?
+  const availableCoffee = inventory.map((item) => item.name)
   // set current prices and inStock onto each CartItem
-  sanityResponse.forEach((coffee) => {
+  inventory.forEach((coffee) => {
     let key: string = coffee.name
     cartKeyedByName[key].price = coffee.price
     cartKeyedByName[key].inStock = coffee.stock
