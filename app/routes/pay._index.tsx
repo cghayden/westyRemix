@@ -20,12 +20,20 @@ export default function PayIndex() {
   const elements = useElements()
   const stripe = useStripe()
   const [submitting, setSubmitting] = useState(false)
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     setSubmitting(true)
     setError(false)
     if (!stripe || !elements) return null
 
+    // Trigger form validation and wallet collection
+    // const {error: submitError} = await elements.submit();
+    // if (submitError) {
+    //   // Show error to your customer
+    //   setErrorMessage(submitError.message);
+    //   return;
+    // }
     stripe
       .confirmPayment({
         elements,
