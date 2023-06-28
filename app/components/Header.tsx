@@ -15,7 +15,7 @@ function Header() {
   return (
     <header className='flex text-slate-800 bg-slate-50 items-center p-4'>
       <p className='text-2xl'>
-        <Link to='/'>neighborly coffee</Link>
+        <Link to='/'>westy coffee</Link>
       </p>
       <MobileNav
         showMobileNav={showMobileNav}

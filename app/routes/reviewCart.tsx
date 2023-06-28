@@ -67,7 +67,7 @@ export default function ReviewCart() {
       'orderDetails',
       JSON.stringify({ customerDetails, fulfillmentDetails, cart: cartItems })
     )
-    // it's best to make any JSON object submissions explicit with either encType: "application/x-www-form-urlencoded" or encType: "application/json" to ease your eventual v7 migration path: see notes at bottom of file
+
     submit(formData, { method: 'POST', action: '/pay' })
   }
 
