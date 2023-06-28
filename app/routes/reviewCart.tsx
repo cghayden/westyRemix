@@ -67,6 +67,7 @@ export default function ReviewCart() {
       'orderDetails',
       JSON.stringify({ customerDetails, fulfillmentDetails, cart: cartItems })
     )
+    // it's best to make any JSON object submissions explicit with either encType: "application/x-www-form-urlencoded" or encType: "application/json" to ease your eventual v7 migration path: see notes at bottom of file
     submit(formData, { method: 'POST', action: '/pay' })
   }
 
@@ -238,3 +239,27 @@ export function ErrorBoundary() {
   const error = useRouteError()
   return <ErrorContainer error={error} />
 }
+
+//
+// Remix 1.18.0 release notes: https://github.com/remix-run/remix/releases
+//
+// JSON/Text Submissions
+// If you're not a huge fan of FormData, Remix 1.18.0 updates to react-router-dom@6.14.0 which brings along support for opt-in application/json or text/plain encoding in useSubmit/fetcher.submit, and adds corresponding navigation.json/navigation.text and fetcher.json/fetcher.text fields containing the respective submissions. For details please check out the React Router release notes or the useSubmit docs. (#6570)
+
+//  Submit to your action using JSON
+// submit({ key: "value" }, { method: "post", encType: "application/json" });
+//  available in components via useNavigation().json and actions via request.json()
+// Submit to your action using text
+// submit("plain text", { method: "post", encType: "text/plain" });
+//  available in components via useNavigation().text and actions via request.text()
+// Warning
+// Please be aware that useSubmit() and fetcher.submit() are not suitable for Progressive Enhancement, so switching to these to leverage JSON or Text submissions will break your app when JS is unable to load/execute. It's recommended to stick with normal FormData submissions for critical aspects of your application.
+
+// Default Behavior
+
+// Please also note that to avoid a breaking change, the default behavior will still encode a simple key/value JSON object into a FormData instance:
+
+// submit({ key: "value" }, { method: "post" });
+// available in components via useNavigation().formData and actions via request.formData()
+// }
+// This behavior will likely change in the future when React Router releases v7, so it's best to make any JSON object submissions explicit with either encType: "application/x-www-form-urlencoded" or encType: "application/json" to ease your eventual v7 migration path.

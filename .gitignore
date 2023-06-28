@@ -1,16 +1,15 @@
 node_modules
 
 .cache
+.env
 .vercel
 .output
+
 /build/
 /public/build
 /api/index.js
-.env
+/api/_assets/
 .DS_Store
 
 .vscode
 /.vscode
-
-/app/styles/tailwind-build.css
-/api/_assets/
