@@ -1,4 +1,4 @@
-import { CartItem } from 'myTypes'
+import type { CartItem } from 'myTypes'
 
 export default function checkAvailability(
   cartKeyedByName: Record<string, CartItem>,

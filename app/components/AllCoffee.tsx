@@ -5,12 +5,10 @@ import PageHeading from './styledComponents/PageHeading'
 function AllCoffee({
   allCoffee,
   pageContent,
-  referringPath,
   previewQuery,
 }: {
   allCoffee: Coffee[]
   pageContent: CoffeePage
-  referringPath: string
   previewQuery: string
 }) {
   return (
@@ -26,7 +24,6 @@ function AllCoffee({
             <CoffeeCard
               key={coffee.name}
               coffee={coffee}
-              referringPath={referringPath}
               previewQuery={previewQuery}
             />
           ))}

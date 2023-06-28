@@ -1,4 +1,4 @@
-import { LoaderArgs, LoaderFunction } from '@remix-run/node'
+import type { LoaderArgs } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
@@ -10,20 +10,31 @@ import PageHeading from '~/components/styledComponents/PageHeading'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { PortableText } from '@portabletext/react'
 import { getClient } from '~/lib/sanity/getClient'
+import type { ContactPage } from 'sanityTypes'
 
-export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+type LoaderData = {
+  contactContent: ContactPage
+  preview: boolean
+  query?: string | null
+  queryParams?: { slug: string | undefined } | null
+}
+
+export const loader = async ({ request }: LoaderArgs) => {
   const query = `*[_type == 'contactPage']`
 
   const requestUrl = new URL(request?.url)
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
-  const initialData = await getClient(preview)
-    .fetch(query)
-    .catch((err) => console.log(err))
+  const initialData = await getClient(preview).fetch(query)
+
+  const contactContent: ContactPage = filterDataToSingleItem(
+    initialData,
+    preview
+  )
 
   const data = {
-    initialData,
+    contactContent,
     preview,
     query,
     queryParams: null,
@@ -31,11 +42,10 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   return data
 }
 
-export default function contactPage() {
-  const { initialData, preview, queryParams, query } = useLoaderData()
-  const [data, setData] = useState(initialData)
-
-  const contactContent = filterDataToSingleItem(initialData, preview)
+export default function Contact() {
+  const { contactContent, preview, queryParams, query } =
+    useLoaderData<LoaderData>()
+  const [data, setData] = useState(contactContent)
 
   if (!contactContent)
     return (
@@ -54,10 +64,16 @@ export default function contactPage() {
           queryParams={queryParams}
         />
       )}
-      <PageHeading text={contactContent.heading} />
+      {contactContent?.heading && (
+        <PageHeading text={contactContent?.heading} />
+      )}
       <ContentContainer>
-        <PortableText value={contactContent.content} />
-        <SocialLinks contactData={contactContent} />
+        <PortableText value={contactContent?.content} />
+        <SocialLinks
+          instagramHandle={contactContent?.instagramHandle}
+          twitterHandle={contactContent?.twitterHandle}
+          facebookId={contactContent?.facebookId}
+        />
       </ContentContainer>
     </main>
   )

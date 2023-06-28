@@ -1,32 +1,27 @@
-/**
- * @type {import('@remix-run/dev').AppConfig}
- */
+/** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
-  // project specific dependency
   serverDependenciesToBundle: ['nanoid'],
 
   ignoredRouteFiles: ['**/.*'],
+  server:
+    process.env.NETLIFY || process.env.NETLIFY_LOCAL
+      ? './server.ts'
+      : undefined,
+  serverBuildPath: '.netlify/functions-internal/server.js',
 
-  // When running locally in development mode, we use the built in remix server. This does not understand the vercel lambda module format, so we default back to the standard build output.
-  server: process.env.NODE_ENV === 'development' ? undefined : './server.js',
-
+  //REMIX FUTURE CHANGE: The `serverModuleFormat` config default option will be changing in v2 from `cjs` to `esm`. You can prepare for this change by explicitly specifying `serverModuleFormat: 'cjs'`. For instructions on making this change see https://remix.run/docs/en/v1.16.0/pages/v2#servermoduleformat
+  serverModuleFormat: 'cjs',
   tailwind: true,
+
+  // defaults:
+  // appDirectory: "app",
+  // assetsBuildDirectory: "public/build",
+  // publicPath: "/build/",
+
   future: {
     v2_errorBoundary: true,
     v2_meta: true,
     v2_normalizeFormMethod: true,
     v2_routeConvention: true,
-    unstable_dev: true,
   },
-  // default values:
-  serverMainFields: ['main', 'module'],
-  serverModuleFormat: 'cjs',
-  // commented out = default value
-  // serverPlatform: 'node',
-  // serverMinify: false,
-  // appDirectory: "app",
-  // assetsBuildDirectory: "public/build",
-  // serverBuildPath: "api/index.js",
-  // publicPath: "/build/",
-  // devServerPort: 8002
 }

@@ -1,4 +1,4 @@
-import { CartItem } from 'myTypes';
+import type { CartItem } from 'myTypes'
 
 export default function getTotalQuantityInCart(
   coffeeId: string,
@@ -6,8 +6,8 @@ export default function getTotalQuantityInCart(
 ) {
   const totalQ = cartItems.reduce((tally, cartItem) => {
     if (coffeeId === cartItem.coffeeId) {
-      return tally + cartItem.quantity;
-    } else return tally;
-  }, 0);
-  return totalQ;
+      return tally + cartItem.quantity
+    } else return tally
+  }, 0)
+  return totalQ
 }

@@ -1,4 +1,4 @@
-import { CartItem } from 'myTypes'
+import type { CartItem } from 'myTypes'
 import { useState } from 'react'
 
 import {

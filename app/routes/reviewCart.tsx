@@ -1,3 +1,5 @@
+import type { PickupLocation } from 'sanityTypes'
+import type { CustomerDetails, FulfillmentDetails } from 'myTypes'
 import { useState } from 'react'
 import {
   useSearchParams,
@@ -7,7 +9,6 @@ import {
   useRouteError,
 } from '@remix-run/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CustomerDetails, FulfillmentDetails } from 'myTypes'
 import CartSummary from '~/components/CartSummary'
 import ShippingDetailsInputs from '~/components/ShippingDetailsInputs'
 import CustomerDetailsInputs from '~/components/CustomerDetailsInputs'
@@ -20,24 +21,21 @@ import ShippingTruckIcon from '~/icons/ShippingTruckIcon'
 import PickupChoiceInputs from '~/components/PickupChoiceInputs'
 import styles from '~/styles/formStyles.css'
 import calcTotalPrice from '~/lib/calcCartTotal'
-import { LoaderFunction } from '@remix-run/node'
 import sanity from '~/lib/sanity/sanity'
-import { PickupLocation } from 'sanityTypes'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
+import PageHeading from '~/components/styledComponents/PageHeading'
 
 export function links() {
   return [{ rel: 'stylesheet', href: styles }]
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader = async () => {
   const query = `*[_type == "pickupLocation"]`
-  const pickupLocations: PickupLocation[] = await sanity
-    .fetch(query)
-    .catch((err) => console.log(err))
+  const pickupLocations: PickupLocation[] = await sanity.fetch(query)
   return pickupLocations
 }
 
-export default function CheckoutPage() {
+export default function ReviewCart() {
   const pickupLocations = useLoaderData<typeof loader>()
 
   let navigation = useNavigation()
@@ -54,9 +52,13 @@ export default function CheckoutPage() {
   } as FulfillmentDetails)
 
   const cartItems = useCartItems()
+  const shippingCost = calcTotalPrice(cartItems) < 4999 ? 1000 : 0
+
+  // review cart, collect customer info, and post that info and cart to /pay for validation of stock and prices on the backend, in  '/pay' action handler
+
+  // if the /pay finds errors of price or stock, it will redirect back to this page with warnings in the url query string
   const [searchParams] = useSearchParams()
   const warnings = searchParams.getAll('warnings')
-  const shipping = calcTotalPrice(cartItems) < 4999 ? 1000 : 0
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault()
@@ -65,23 +67,28 @@ export default function CheckoutPage() {
       'orderDetails',
       JSON.stringify({ customerDetails, fulfillmentDetails, cart: cartItems })
     )
+    // it's best to make any JSON object submissions explicit with either encType: "application/x-www-form-urlencoded" or encType: "application/json" to ease your eventual v7 migration path: see notes at bottom of file
     submit(formData, { method: 'POST', action: '/pay' })
   }
 
-  // review cart, and on confirmation, send cart to '/pay' action handler via form submission
-  // if the action finds errors of price or stock, it will redirect back to this page with warnings in the url query string
   if (!cartItems.length) {
     return (
       <ContentContainer>
-        <CartSummary cartItems={cartItems} />
+        <div className='my-12 text-center text-lg'>
+          <p>You're cart is empty!!</p>
+        </div>
       </ContentContainer>
     )
   }
   return (
     <div>
-      <h2 className='text-center text-xl p-1'>Review Your Cart</h2>
+      <PageHeading text='Review Your Cart' />
       <ContentContainer>
-        <CartSummary cartItems={cartItems} />
+        <CartSummary
+          cartItems={cartItems}
+          shipping={fulfillmentDetails.method === 'shipping'}
+          shippingCost={shippingCost}
+        />
       </ContentContainer>
       <ContentContainer>
         <form onSubmit={handleSubmit}>
@@ -159,10 +166,12 @@ export default function CheckoutPage() {
               >
                 <span>
                   <ShippingTruckIcon />
-                  {shipping === 1000 ? `shipping : $10 ` : `shipping : free  `}
+                  {shippingCost === 1000
+                    ? `shipping : $10 `
+                    : `shipping : free  `}
                 </span>
                 <span className='text-sm text-amber-800'>
-                  {shipping == 1000 ? `free on orders over $50` : ` `}
+                  {shippingCost == 1000 ? `free on orders over $50` : ` `}
                 </span>
               </label>
             </InputRow>
@@ -177,7 +186,7 @@ export default function CheckoutPage() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <legend className='text-sm text-blue-800'>ship to:</legend>
+                <legend className='text-left text-blue-800'>ship to:</legend>
                 <ShippingDetailsInputs
                   fulfillmentDetails={fulfillmentDetails}
                   setFulfillmentDetails={setFulfillmentDetails}
@@ -203,6 +212,7 @@ export default function CheckoutPage() {
               </motion.div>
             )}
           </AnimatePresence>
+
           <button
             type='submit'
             className={`${
@@ -229,3 +239,27 @@ export function ErrorBoundary() {
   const error = useRouteError()
   return <ErrorContainer error={error} />
 }
+
+//
+// Remix 1.18.0 release notes: https://github.com/remix-run/remix/releases
+//
+// JSON/Text Submissions
+// If you're not a huge fan of FormData, Remix 1.18.0 updates to react-router-dom@6.14.0 which brings along support for opt-in application/json or text/plain encoding in useSubmit/fetcher.submit, and adds corresponding navigation.json/navigation.text and fetcher.json/fetcher.text fields containing the respective submissions. For details please check out the React Router release notes or the useSubmit docs. (#6570)
+
+//  Submit to your action using JSON
+// submit({ key: "value" }, { method: "post", encType: "application/json" });
+//  available in components via useNavigation().json and actions via request.json()
+// Submit to your action using text
+// submit("plain text", { method: "post", encType: "text/plain" });
+//  available in components via useNavigation().text and actions via request.text()
+// Warning
+// Please be aware that useSubmit() and fetcher.submit() are not suitable for Progressive Enhancement, so switching to these to leverage JSON or Text submissions will break your app when JS is unable to load/execute. It's recommended to stick with normal FormData submissions for critical aspects of your application.
+
+// Default Behavior
+
+// Please also note that to avoid a breaking change, the default behavior will still encode a simple key/value JSON object into a FormData instance:
+
+// submit({ key: "value" }, { method: "post" });
+// available in components via useNavigation().formData and actions via request.formData()
+// }
+// This behavior will likely change in the future when React Router releases v7, so it's best to make any JSON object submissions explicit with either encType: "application/x-www-form-urlencoded" or encType: "application/json" to ease your eventual v7 migration path.

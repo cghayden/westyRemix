@@ -1,4 +1,4 @@
-import { CustomerDetails } from 'myTypes'
+import type { CustomerDetails } from 'myTypes'
 import CheckoutFormField from './CheckoutFormField'
 import FieldsetGroup from './styledComponents/FieldsetGroup'
 

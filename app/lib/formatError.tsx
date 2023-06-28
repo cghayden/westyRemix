@@ -7,7 +7,6 @@ function formatErrorMessage(error: unknown): React.ReactNode {
         <h1>
           {error.status} {error.statusText}
         </h1>
-        {/* <p>{error.data}</p> */}
       </div>
     )
   } else if (error instanceof Error) {

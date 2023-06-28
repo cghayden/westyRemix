@@ -1,6 +1,6 @@
-import { FulfillmentDetails } from 'myTypes'
 import CheckoutFormField from './CheckoutFormField'
 import FieldsetGroup from './styledComponents/FieldsetGroup'
+import type { FulfillmentDetails } from 'myTypes'
 
 export default function ShippingDetailsInputs({
   fulfillmentDetails,

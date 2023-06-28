@@ -1,7 +1,6 @@
 import { Link } from '@remix-run/react'
 import { useCartItems, useCartUtils } from '~/context/useCart'
 import CartSummary from './CartSummary'
-import calcTotalPrice from '~/lib/calcCartTotal'
 
 export default function Cart() {
   const { isCartOpen, toggleIsCartOpen } = useCartUtils()
@@ -26,14 +25,14 @@ export default function Cart() {
       <CartSummary cartItems={cartItems} />
       <div className='flex justify-evenly'>
         <button
-          className='bg-orange-700 text-slate-50 px-6 py-3 rounded'
+          className='bg-rose-800 text-rose-50 px-6 py-3 rounded'
           onClick={() => toggleIsCartOpen(false)}
         >
           keep shopping
         </button>
         {!!cartItems.length && (
           <Link
-            className='bg-blue-500 text-blue-50 px-6 py-3 rounded'
+            className='bg-blue-700 text-blue-50 px-6 py-3 rounded'
             role='link'
             onClick={() => toggleIsCartOpen(false)}
             to='/reviewCart'

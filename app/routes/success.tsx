@@ -1,11 +1,11 @@
 import { Fragment } from 'react'
-import { LoaderArgs } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
 import { retrievePaymentIntent } from '~/lib/stripePaymentIntent'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
-import { CartItem, OrderDetails } from 'myTypes'
 import formatMoney from '~/lib/formatMoney'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
+import type { CartItem, OrderDetails } from 'myTypes'
+import type { LoaderArgs } from '@remix-run/node'
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
@@ -16,7 +16,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const fulfillmentDetails = JSON.parse(
     paymentIntent.metadata.fulfillmentDetails
   )
-  const cartItems = JSON.parse(paymentIntent.description)
+  const cartItems = JSON.parse(paymentIntent.description!)
   const orderId = paymentIntent.id
   const total = paymentIntent.amount_received
 
@@ -31,7 +31,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   return orderDetails
 }
 
-export default function success() {
+export default function Success() {
   const orderDetails = useLoaderData<typeof loader>()
   const cartItems = orderDetails?.cart
   const customerDetails = orderDetails?.customerDetails
@@ -40,8 +40,8 @@ export default function success() {
   return (
     <main>
       <ContentContainer>
-        <h2 className='text-xl font-bold'>Thank You For Your Order!</h2>
-        <div className='ml-4'>
+        <h2 className='text-xl font-bold pb-2'>Thank You For Your Order!</h2>
+        <div className='pb-4'>
           <p>Check your email for a receipt of your order</p>
           <p>
             We'll contact you when your order
@@ -50,13 +50,15 @@ export default function success() {
               : ' ships'}
           </p>
         </div>
-        <div className='mt-4 max-w-xl mx-auto'>
+        <div className='py-4 max-w-xl mx-auto border-t-2 border-b-2 border-gray-300'>
           <h3 className='text-xl font-bold'>your order: </h3>
 
           <div className='p-2 grid grid-cols-orderSummary place-content-center'>
-            {cartItems?.map((cartItem: CartItem, index: number) => (
-              <Fragment key={index}>
-                <p className='w-10'>{cartItem.quantity}</p>
+            {cartItems?.map((cartItem: CartItem) => (
+              <Fragment key={cartItem.variant_id}>
+                <p className='w-10 justify-self-end self-center text-xl'>
+                  {cartItem.quantity}
+                </p>
                 <div className='flex flex-col flex-grow ml-4 text-left pr-6'>
                   <p>{cartItem.name}</p>
                   <p className='text-sm'>{cartItem.grind + ' bean'}</p>
@@ -74,9 +76,9 @@ export default function success() {
             </p>
           </div>
         </div>
-        <div className='flex justify-evenly'>
+        <div className='flex justify-evenly pt-4'>
           <div>
-            <h3 className='font-bold text-lg'>sold to:</h3>
+            <h3 className='font-bold text-lg pb-2'>sold to:</h3>
             <div className='grid place-content-center  pb-3'>
               <p className='justify-self-start'>
                 {customerDetails?.customerName}
@@ -91,7 +93,7 @@ export default function success() {
           </div>
           {fulfillmentDetails?.method === 'pickup' ? (
             <div>
-              <h3 className='text-lg font-bold'>Pickup at:</h3>
+              <h3 className='text-lg font-bold pb-2'>Pickup at:</h3>
               <div className='grid place-content-center  pb-3'>
                 <p className='justify-self-start'>
                   {fulfillmentDetails.pickupLocation}
@@ -100,7 +102,7 @@ export default function success() {
             </div>
           ) : (
             <div>
-              <h3 className='text-lg font-bold'>ship to: </h3>
+              <h3 className='text-lg font-bold pb-2'>ship to: </h3>
               <div className='grid place-content-center pb-3 '>
                 <p className='justify-self-start'>
                   {fulfillmentDetails?.shippingName}

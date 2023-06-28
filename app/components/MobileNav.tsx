@@ -15,8 +15,9 @@ export default function MobileNav({
 }: ComponentProps) {
   return (
     <div
-      className={`bg-slate-50 text-slate-800 p-4 w-3/4 max-w-md fixed top-0 right-0 h-screen z-20 transition-all hideOnDesktop
-        ${showMobileNav ? 'translate-x-0 ' : 'translate-x-full'}`}
+      className={`md:hidden bg-slate-50 text-slate-800 p-4 w-3/4 max-w-md fixed top-0 right-0 h-screen z-20 transition-all
+        ${showMobileNav ? 'translate-x-0 ' : 'translate-x-full'}
+        `}
     >
       <header className='flex items-center justify-end'>
         <button

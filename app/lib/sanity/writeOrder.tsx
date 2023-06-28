@@ -1,14 +1,13 @@
-import { OrderDetails } from 'myTypes'
 import SanityClient from '~/lib/sanity/sanity'
 import { customAlphabet } from 'nanoid'
 import { adjustSanityStock } from './adjustSanityStock'
+import type { OrderDetails } from 'myTypes'
+
 const nanoid = customAlphabet('1234567890abcdef', 10)
 
 async function writeOrderToSanity(orderDetails: OrderDetails) {
   const orderDate = new Date().toISOString()
   const orderNumber = nanoid()
-  // ?? is it ok to assign an object to a var like this , or make a copy {...}
-  const cartItems = orderDetails.cart
   const { customerName, customerEmail, customerPhone } =
     orderDetails.customerDetails
   const {
@@ -22,7 +21,7 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     shippingState,
   } = orderDetails.fulfillmentDetails
 
-  const configuredOrderItems = cartItems.map((cartItem) => {
+  const configuredOrderItems = orderDetails.cart.map((cartItem) => {
     return {
       name: cartItem.name,
       grind: cartItem.grind,
@@ -41,7 +40,7 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     orderItems: configuredOrderItems,
     orderDate,
     deliveryMethod: method,
-    pickupLocation: method === 'shipping' ? 'NA' : pickupLocation,
+    pickupLocation: method === 'shipping' ? '--' : pickupLocation,
     shippingName,
     shippingAddressLine1,
     shippingAddressLine2,
@@ -52,18 +51,9 @@ async function writeOrderToSanity(orderDetails: OrderDetails) {
     shipped: false,
     stripe_id: orderDetails.id,
   }
-  // if (env !== 'production') {
-  //   await SanityDevelopment.create(doc)
-  //     .then((res) => {
-  //       console.log('order written to sanity dev db', res);
-  //     })
-  //     .catch((err) => {
-  //       console.error('error writing order to Sanity:', err);
-  //     });
-  //   return;
-  // }
+
   await SanityClient.create(doc)
-    .then(() => adjustSanityStock(cartItems))
+    .then(() => adjustSanityStock(orderDetails.cart))
     .catch((err) => {
       console.error('err', err)
       throw `Error creating order / writing to sanity: ${err}`

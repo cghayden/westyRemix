@@ -1,7 +1,7 @@
-import { CartItem } from 'myTypes'
+import type { CartItem } from 'myTypes'
 
 async function adjustSanityStock(cartItems: CartItem[]) {
-  const sanityApi = `https://${process.env.SANITY_API_TOKEN}.api.sanity.io/v2023-05-15/data/mutate/production`
+  const sanityApi = `https://${process.env.SANITY_PROJECT_ID}.api.sanity.io/v2023-05-15/data/mutate/production`
   // const sanityApi =
   //   process.env.NODE_ENV === 'development'
   //     ? `https://${process.env.GATSBY_SANITY_PROJECT_ID}.api.sanity.io/v1/data/mutate/dev`

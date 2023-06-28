@@ -13,7 +13,6 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
   const [alert, setAlert] = useState<string | null>()
   const [grind, setGrind] = useState('whole')
   const [desiredQuantity, setDesiredQuantity] = useState<number>(1)
-  console.log('desiredQuantity', desiredQuantity)
   const cartItems = useCartItems()
   const changeCartItemQuantity = useChangeCartItemQuantity()
   const { toggleIsCartOpen } = useCartUtils()
@@ -25,7 +24,7 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
 
   return (
     <>
-      <div className=' label__Formcontainer p-3 flex flex-col justify-evenly items-center'>
+      <div className=' label__Formcontainer p-3 pt-0 flex flex-col justify-evenly items-center'>
         <div className='grindRadio flex flex-col items-start'>
           <label htmlFor='whole' className='py-2'>
             <input
@@ -52,6 +51,11 @@ export default function AddToCartForm({ coffee }: { coffee: Coffee }) {
             Ground
           </label>
         </div>
+        {/* coffee size is sourced from sanity, currently the only options are '12 oz.' or '1 pound'.  
+        The client currently sells 1 pound bags but is considering switching to 12 oz bags, so I set this up to be a dynamic value, set in sanity by the client, with a default value of 1 pound.
+        All coffee offerings are currently only available in one size, and all are offered only in that chosen size, so sizes do not need to be accounted for in the shopping cart. 
+        This p tag is currently the only use of coffee.size, as display to the consumer of what size bags the coffee is packaged in.
+        */}
 
         <div className='flex place-content-center my-2'>
           <div className='flex flex-col'>

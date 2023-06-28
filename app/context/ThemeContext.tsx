@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import { getComplement, getContrastHSLString } from '~/lib/colorFuncs'
-import { UserColors } from 'myTypes'
-import { SiteSettings } from 'sanityTypes'
+import type { UserColors } from 'myTypes'
+import type { SiteSettings } from 'sanityTypes'
 
 const initialCtx: UserColors = {
   _id: '0',

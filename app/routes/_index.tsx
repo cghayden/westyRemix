@@ -1,4 +1,4 @@
-import { LoaderArgs, LoaderFunction } from '@remix-run/node'
+import type { LoaderArgs } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
 import sanity from '~/lib/sanity/sanity'
 import HomeHero from '~/components/HomeHero'
@@ -8,11 +8,18 @@ import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import Preview from '~/components/Preview'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
-
-export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
-  console.log('root loader ')
-  const pageQuery = `{
-    "heroContent": *[_type == "landingPage" ] {
+import type { Coffee, LandingPage } from 'sanityTypes'
+type LoaderData = {
+  initialData: { coffee: Coffee[]; pageContent: LandingPage }
+  preview: boolean
+  query?: string | null
+  queryParams?: { slug: string | undefined } | null
+  referringPath: string
+  previewQuery: string
+}
+export const loader = async ({ request }: LoaderArgs) => {
+  const query = `{
+    "pageContent": *[_id == "homePage" ] {
       _id,
     "imageUrl": bgImage1.asset->url,
     overlayText1,
@@ -20,14 +27,15 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
     coffeeText,
     transitionText1
     },
-    "coffee": *[_type == "coffee"] {
+    "coffee": *[_type == "coffee" && stock > 0] {
       _id,
-      name, 
+      name,
       roastLevel,
       description,
       roastDate,
       stock, 
-      slug{current}
+      slug{current},
+      price
     }
   }`
 
@@ -38,17 +46,20 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
 
-  const initialData = await sanity.fetch(pageQuery)
+  const initialData = await sanity.fetch(query)
 
-  const heroContent = filterDataToSingleItem(initialData.heroContent, preview)
-  const coffee = filterDataToDrafts(initialData.coffee, preview)
+  const pageContent: LandingPage = filterDataToSingleItem(
+    initialData.pageContent,
+    preview
+  )
+  const coffee: Coffee[] = filterDataToDrafts(initialData.coffee, preview)
 
-  const data = {
-    initialData: { coffee, heroContent },
-    referringPath: referringPath,
+  const data: LoaderData = {
+    initialData: { coffee, pageContent },
+    referringPath,
     preview,
     previewQuery,
-    pageQuery,
+    query,
     queryParams: null,
   }
   return data
@@ -58,11 +69,11 @@ export default function Index() {
   const {
     initialData,
     preview,
-    pageQuery,
+    query,
     previewQuery,
     queryParams,
     referringPath,
-  } = useLoaderData<typeof loader>()
+  } = useLoaderData<LoaderData>()
 
   // If `preview` mode is active, its component update this state for us
   const [data, setData] = useState(initialData)
@@ -73,15 +84,15 @@ export default function Index() {
         <Preview
           data={data}
           setData={setData}
-          query={pageQuery}
+          query={query}
           queryParams={queryParams}
         />
       )}
 
-      <HomeHero heroContent={initialData.heroContent} />
+      <HomeHero pageContent={initialData?.pageContent} />
       <FeaturedItems
-        featureHeading={initialData.heroContent.coffeeSectionHeading}
-        allCoffee={initialData?.coffee}
+        featureHeading={initialData?.pageContent?.coffeeSectionHeading}
+        allCoffee={initialData.coffee}
         referringPath={referringPath + 'coffee/'}
         previewQuery={previewQuery}
       />

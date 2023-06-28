@@ -24,9 +24,3 @@ export const previewClient = new PicoSanity({
 export const getClient = (usePreview = false) => {
   return usePreview ? previewClient : sanityClient
 }
-
-// Quick client for querying community posts
-// export const communityClient = new PicoSanity({
-//   ...config,
-//   projectId: `t9guxb1x`,
-// })

@@ -1,4 +1,4 @@
-import { CartItem } from 'myTypes'
+import type { CartItem } from 'myTypes'
 
 export default function reduceCartByName(cart: CartItem[]) {
   const keyedCart = cart.reduce((acc, cartItem) => {
