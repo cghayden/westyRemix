@@ -1,4 +1,8 @@
-import { LinksFunction, LoaderFunction, V2_MetaFunction } from '@remix-run/node'
+import type {
+  LinksFunction,
+  LoaderArgs,
+  V2_MetaFunction,
+} from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -18,30 +22,30 @@ import Preview from './components/Preview'
 import { useState } from 'react'
 import { filterDataToSingleItem } from './lib/sanity/filterDataToSingleItem'
 import Footer from './components/Footer'
-import { ContactPage, SiteSettings } from 'sanityTypes'
+import type { ContactPage, SiteSettings } from 'sanityTypes'
 import { formatErrorMessage } from './lib/formatError'
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
 }
 
-export const meta: V2_MetaFunction = () => [{ title: 'Westy Remix' }]
+export const meta: V2_MetaFunction = () => [{ title: 'neighborly coffee' }]
 
 export interface InitialData {
   siteSettings: SiteSettings[]
-  contactData: ContactPage[]
+  contactContent: ContactPage[]
 }
 
 export type LoaderData = {
   initialData: InitialData
   siteSettings: SiteSettings
-  contactData: ContactPage
+  contactContent: ContactPage
   preview: boolean
   query: string | null
   queryParams: string | null
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const query = `{
     "siteSettings": *[_type == "siteSettings"] {
       _id,
@@ -51,7 +55,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       productTileTextColor {alpha, hsl, hex}, 
       "backgroundImageUrl" : backgroundImage.asset->url
   },
-  "contactData": *[_type == 'contactPage']
+  "contactContent": *[_type == 'contactPage']
 } `
   const requestUrl = new URL(request?.url)
   const preview: boolean =
@@ -67,7 +71,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const data: LoaderData = {
     initialData,
     siteSettings,
-    contactData: initialData.contactData[0],
+    contactContent: initialData.contactContent[0],
     preview,
     query: preview ? query : null,
     queryParams: null,
@@ -75,12 +79,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   return data
 }
 
-type DocProps = {
+type DocumentProps = {
   children: React.ReactNode | undefined
   title?: string
 }
 
-function Document({ children, title = `Westy Remix` }: DocProps) {
+function Document({ children, title = `Neighborly Coffee` }: DocumentProps) {
   const { siteSettings, preview, query, queryParams } =
     useLoaderData<LoaderData>()
   const [data, setData] = useState(siteSettings)

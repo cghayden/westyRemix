@@ -1,10 +1,15 @@
-import { Form, useLoaderData, useRouteError } from '@remix-run/react'
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useRouteError,
+} from '@remix-run/react'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import CollapsibleCartSummary from '~/components/CollapsibleCartSummary'
 import { useCartItems } from '~/context/useCart'
 import { useState } from 'react'
-import { LoaderArgs } from '@remix-run/node'
+import type { LoaderArgs } from '@remix-run/node'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
 export const loader = ({ request }: LoaderArgs) => {
@@ -21,19 +26,14 @@ export default function PayIndex() {
   const elements = useElements()
   const stripe = useStripe()
 
+  const { orderDetails, shippingCost } = useActionData()
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     setSubmitting(true)
     setError(false)
     if (!stripe || !elements) return null
 
-    // Trigger form validation and wallet collection
-    // const {error: submitError} = await elements.submit();
-    // if (submitError) {
-    //   // Show error to your customer
-    //   setErrorMessage(submitError.message);
-    //   return;
-    // }
     stripe
       .confirmPayment({
         elements,
@@ -58,19 +58,23 @@ export default function PayIndex() {
     )
   }
 
-  // TODO - pending UI
   return (
     <>
       {error && <ErrorContainer error={errorMessage} />}
       <ContentContainer>
-        <CollapsibleCartSummary />
+        <CollapsibleCartSummary
+          orderDetails={orderDetails}
+          shippingCost={shippingCost}
+        />
         <Form onSubmit={handleSubmit}>
           <PaymentElement />
           <button
-            className='bg-amber-700 text-amber-50 px-8 py-3 mt-5 rounded-xl'
+            className={`${
+              submitting === true ? 'bg-amber-900' : 'bg-amber-800'
+            } text-amber-50 px-8 py-3 mt-5 rounded-xl`}
             disabled={submitting}
           >
-            {submitting === true ? 'confirming' : 'confirm'}
+            {submitting === true ? 'confirming...' : 'confirm'}
           </button>
         </Form>
       </ContentContainer>

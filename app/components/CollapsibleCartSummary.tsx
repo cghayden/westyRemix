@@ -1,14 +1,19 @@
+import type { OrderDetails } from 'myTypes'
 import { useState } from 'react'
-import { useCartItems } from '~/context/useCart'
 import PlaySvg from '~/icons/PlaySvg'
 import calcTotalPrice from '~/lib/calcCartTotal'
 import formatMoney from '~/lib/formatMoney'
 
-export default function CollapsibleCartSummary() {
+export default function CollapsibleCartSummary({
+  orderDetails,
+  shippingCost,
+}: {
+  orderDetails: OrderDetails
+  shippingCost: number
+}) {
   const [showSummary, toggleShowSummary] = useState(false)
-  const cartItems = useCartItems()
+  const cartItems = orderDetails.cart
   const subtotal = calcTotalPrice(cartItems)
-  const shipping = subtotal < 4999 ? 1000 : 0
   if (!cartItems.length) return <div>Your cart is empty</div>
   return (
     <>
@@ -24,24 +29,26 @@ export default function CollapsibleCartSummary() {
         <p>{showSummary ? `Hide Order Summary` : `Show Order Summary`}</p>
         <div className='flex items-end ml-auto font-semibold text-xl'>
           <p>Total Cost:</p>
-          <p className='w-20'>{`$${formatMoney(subtotal + shipping)}`}</p>
+          <p className='w-20'>{`$${formatMoney(subtotal + shippingCost)}`}</p>
         </div>
       </div>
       <div className=''>
         {showSummary ? (
           <ul className='p-2 flex flex-col items-end'>
             {cartItems.map((cartItem) => (
-              <li className='flex' key={cartItem.name}>
+              <li className='flex' key={cartItem.variant_id}>
                 {`${cartItem.quantity} ${cartItem.name}, ${cartItem.grind}: `}
                 <p className='w-20'>
                   {`$${formatMoney(cartItem.price * cartItem.quantity)}`}
                 </p>
               </li>
             ))}
-            <li className='flex'>
-              Shipping:
-              <p className='w-20'>{`$${formatMoney(shipping)}`}</p>
-            </li>
+            {orderDetails?.fulfillmentDetails?.method === 'shipping' && (
+              <li className='flex'>
+                Shipping:
+                <p className='w-20'>{`$${formatMoney(shippingCost)}`}</p>
+              </li>
+            )}
           </ul>
         ) : null}
       </div>

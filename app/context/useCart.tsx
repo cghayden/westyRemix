@@ -1,4 +1,4 @@
-import { CartItem } from 'myTypes'
+import type { CartItem } from 'myTypes'
 import {
   createContext,
   useCallback,
@@ -20,7 +20,6 @@ export const CartContext = createContext<UseCartManagerResult>({
 type ActionType =
   | { type: 'CHANGE_CART_QUANTITY'; cartItem: CartItem }
   | { type: 'REMOVE_FROM_CART'; cartItem: CartItem }
-// | { type: 'UPDATE_PRICE'; payload: State };
 
 function useCartManager(initialCart: CartItem[]): {
   cartItems: CartItem[]
@@ -50,7 +49,6 @@ const myCartReducerFunction = (
   cartItemsState: CartItem[],
   action: ActionType
 ) => {
-  console.log('action', action)
   const cartItemIndex = cartItemsState.findIndex(
     (cartItem) => cartItem.variant_id === action.cartItem.variant_id
   )

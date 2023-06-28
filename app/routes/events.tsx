@@ -1,4 +1,5 @@
-import { LoaderArgs, LoaderFunction } from '@remix-run/node'
+import type { LoaderArgs, LoaderFunction } from '@remix-run/node'
+import type { Event, EventsPage } from 'sanityTypes'
 import { useLoaderData } from '@remix-run/react'
 import { useState } from 'react'
 import { TwoColContainer } from '~/components/styledComponents/TwoColContainer'
@@ -8,7 +9,7 @@ import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import PageHeading from '~/components/styledComponents/PageHeading'
 import { getClient } from '~/lib/sanity/getClient'
 
-export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const query = `{
     "pageData": *[_type == 'eventsPage'],
     "events": *[_type == 'event']
@@ -17,13 +18,10 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
-  const initialData = await getClient(preview)
-    .fetch(query)
-    .catch((err) => console.log(err))
+  const initialData = await getClient(preview).fetch(query)
 
   const events = filterDataToDrafts(initialData.events, preview)
 
-  // const pageData = initialData.pageData
   const data = {
     initialData: { events, pageData: initialData.pageData },
     preview,
@@ -33,12 +31,12 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   return data
 }
 
-export default function eventsPage() {
+export default function Events() {
   const { initialData, preview, query, queryParams } =
     useLoaderData<typeof loader>()
 
   const [data, setData] = useState(initialData)
-  const pageData = filterDataToSingleItem(data.pageData, preview)
+  const pageData: EventsPage = filterDataToSingleItem(data.pageData, preview)
 
   // const pageData = filterDataToSingleItem(initialData.pageData, preview)
   return (
@@ -51,12 +49,13 @@ export default function eventsPage() {
           queryParams={queryParams}
         />
       )}
-      <PageHeading text={pageData?.heading} />
+
+      {pageData?.heading && <PageHeading text={pageData?.heading} />}
 
       <ul className='flex flex-col mx-auto mt-6'>
         {data.events?.length > 0 &&
-          data.events?.map((event) => (
-            <li>
+          data.events?.map((event: Event) => (
+            <li key={event._id}>
               <TwoColContainer
                 heading={event.title}
                 image={event.mainImage}

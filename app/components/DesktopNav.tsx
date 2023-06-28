@@ -1,24 +1,16 @@
 import { Link } from '@remix-run/react'
 
-export default function Nav() {
+const links = ['coffee', 'events', 'blog', 'about', 'contact']
+
+export default function DesktopNav() {
   return (
-    <nav className='hidden'>
-      <ul>
-        <li>
-          <Link to='/coffee'>coffee</Link>
-        </li>
-        <li>
-          <Link to='/events'>events</Link>
-        </li>
-        <li>
-          <Link to='/blog'>blog</Link>
-        </li>
-        <li>
-          <Link to='/about'>about</Link>
-        </li>
-        <li>
-          <Link to='/contact'>contact</Link>
-        </li>
+    <nav className='hidden md:block self-center'>
+      <ul className='flex text-xl'>
+        {links.map((link) => (
+          <li key={link} className='px-3'>
+            <Link to={`./${link}`}>{link}</Link>
+          </li>
+        ))}
       </ul>
     </nav>
   )

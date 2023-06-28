@@ -1,4 +1,4 @@
-import { LoaderArgs, LoaderFunction } from '@remix-run/node'
+import type { LoaderArgs } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
 import { getClient } from '~/lib/sanity/getClient'
 import AllCoffee from '~/components/AllCoffee'
@@ -7,9 +7,10 @@ import { useState } from 'react'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
+import type { Coffee, CoffeePage } from 'sanityTypes'
 
 const query = `{
-"coffee":  *[_type == "coffee"] {
+"coffee":  *[_type == "coffee" && stock > 0] {
   _id,
   name,
   stock,
@@ -17,14 +18,13 @@ const query = `{
   roastDate,
   description,
 slug{current},
-price
+price,
 },
 "coffeePageContent": *[_type == "coffeePage"]
 }
 `
-export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const requestUrl = new URL(request?.url)
-  const referringPath = requestUrl.pathname
   const previewQuery = requestUrl.search
 
   const preview =
@@ -36,19 +36,17 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
       console.log('err', err)
       throw Error('there was an error loading the items')
     })
-  console.log('initialData', initialData)
 
   //  A helper function checks the returned documents
   // To show drafts if in preview mode, otherwise Published
-  const coffee = filterDataToDrafts(initialData.coffee, preview)
-  const coffeePageContent = filterDataToSingleItem(
+  const coffee: Coffee[] = filterDataToDrafts(initialData.coffee, preview)
+  const coffeePageContent: CoffeePage = filterDataToSingleItem(
     initialData.coffeePageContent,
     preview
   )
   const data = {
     coffee,
     coffeePageContent,
-    referringPath,
     preview,
     previewQuery,
     query,
@@ -57,11 +55,10 @@ export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
   return data
 }
 
-function coffeeIndex() {
+export default function CoffeeIndex() {
   const {
     coffee,
     coffeePageContent,
-    referringPath,
     preview,
     previewQuery,
     query,
@@ -71,7 +68,7 @@ function coffeeIndex() {
   // If `preview` mode is active, its component updates this state for us
   const [data, setData] = useState(coffee)
 
-  // !! moved filterDataToDrafts to the server, because while in preview mode, groq store subscription causes a re-render with draft status stripped from _id, causing the sort order of the coffees to change, resulting in a UI-Jump when the coffee tiles reorder.
+  //  moved filterDataToDrafts to the server, because while in preview mode, groq store subscription causes a re-render with draft status stripped from _id, causing the sort order of the coffees to change, resulting in a UI-Jump when the coffee tiles reorder.
 
   return (
     <main>
@@ -86,7 +83,6 @@ function coffeeIndex() {
       <AllCoffee
         allCoffee={coffee}
         pageContent={coffeePageContent}
-        referringPath={referringPath + '/'}
         previewQuery={previewQuery}
       />
     </main>
@@ -94,9 +90,6 @@ function coffeeIndex() {
 }
 
 export function ErrorBoundary() {
-  // const { postSlug } = useParams()
   const error = useRouteError()
   return <ErrorContainer error={error} />
 }
-
-export default coffeeIndex

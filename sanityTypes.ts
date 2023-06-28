@@ -1,10 +1,7 @@
-import { SanityColor } from 'myTypes'
+import type { SanityColor } from 'myTypes'
 import type {
   SanityReference,
   SanityKeyedReference,
-  SanityAsset,
-  SanityImage,
-  SanityFile,
   SanityGeoPoint,
   SanityBlock,
   SanityDocument,
@@ -21,9 +18,6 @@ import type {
 export type {
   SanityReference,
   SanityKeyedReference,
-  SanityAsset,
-  SanityImage,
-  SanityFile,
   SanityGeoPoint,
   SanityBlock,
   SanityDocument,
@@ -35,6 +29,12 @@ export type {
   SanityImageDimensions,
   SanityImagePalette,
   SanityImagePaletteSwatch,
+}
+export interface SanityImage {
+  _type: 'image'
+  asset: SanityReference<SanityImageAsset>
+  crop?: SanityImageCrop
+  hotspot?: SanityImageHotspot
 }
 
 /**
@@ -149,25 +149,14 @@ export interface Coffee extends SanityDocument {
    * Price of the coffee in cents
    */
   price: number
+  size: string
 
   /**
    * Image — `image`
    *
    *
    */
-  image?: {
-    _type: 'image'
-    asset: SanityReference<SanityImageAsset>
-    crop?: SanityImageCrop
-    hotspot?: SanityImageHotspot
-  }
-}
-
-export interface SanityImageType {
-  _type: 'image'
-  asset: SanityReference<SanityImageAsset>
-  crop?: SanityImageCrop
-  hotspot?: SanityImageHotspot
+  image?: SanityImage
 }
 
 /**
@@ -183,21 +172,21 @@ export interface Post extends SanityDocument {
    *
    * Titles should be catchy, descriptive, and not too long
    */
-  title?: string
+  title: string
 
   /**
    * Slug — `slug`
    *
    * A slug is used to set the URL for the post
    */
-  slug?: { _type: 'slug'; current: string }
+  slug: { _type: 'slug'; current: string }
 
   /**
    * Published at — `datetime`
    *
    * This can be used to schedule post for publishing (can be a future date)
    */
-  publishedAt?: string
+  publishedAt: string
 
   /**
    * Main image — `mainImage`
@@ -211,14 +200,14 @@ export interface Post extends SanityDocument {
    *
    * This text is used for a descriptive summary for links to the post, on Google, and when people share your post in social media.
    */
-  excerpt?: ExcerptPortableText
+  excerpt: ExcerptPortableText
 
   /**
    * Body — `bodyPortableText`
    *
    *
    */
-  body?: BodyPortableText
+  body: BodyPortableText
 }
 
 /**
@@ -248,7 +237,7 @@ export interface Event extends SanityDocument {
    *
    *
    */
-  description?: BodyPortableText
+  description: BodyPortableText
 
   /**
    * Event Main Image — `mainImage`
@@ -328,7 +317,7 @@ export interface LandingPage extends SanityDocument {
    *
    * Optional Text that will overlay the main landing page background image
    */
-  overlayText1?: BodyPortableText[]
+  overlayText1?: BodyPortableText
 
   /**
    * Transition Text Block 1 (optional) — `bodyPortableText`
@@ -517,12 +506,12 @@ export interface ContactPage extends SanityDocument {
    *
    *
    */
-  text?: BodyPortableText
+  content: BodyPortableText
   /** Social Links Hard Coded, not from sanity-codegen
    */
-  instagramLink?: string
-  facebookLink?: string
-  twitterLink?: string
+  instagramHandle?: string
+  facebookId?: string
+  twitterHandle?: string
 }
 
 /**

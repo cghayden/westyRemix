@@ -1,4 +1,4 @@
-import { HSL_Color, SanityColor } from 'myTypes'
+import type { HSL_Color, SanityColor } from 'myTypes'
 
 function darken(hex: string) {
   const hsl = hexToHSL(hex)

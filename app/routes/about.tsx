@@ -1,7 +1,6 @@
-import { LoaderFunction } from '@remix-run/node'
+import type { AboutPage } from 'sanityTypes'
 import { useLoaderData, useRouteError } from '@remix-run/react'
 import { useState } from 'react'
-import { AboutPage } from 'sanityTypes'
 import Preview from '~/components/Preview'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
@@ -9,6 +8,7 @@ import PageHeading from '~/components/styledComponents/PageHeading'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { PortableText } from '@portabletext/react'
 import { getClient } from '~/lib/sanity/getClient'
+import type { LoaderArgs } from '@remix-run/node'
 
 type LoaderData = {
   initialData: AboutPage[]
@@ -17,17 +17,14 @@ type LoaderData = {
   queryParams?: { slug: string | undefined } | null
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const query = `*[_type == 'aboutPage']`
   const requestUrl = new URL(request?.url)
   const preview =
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
   const initialData = await getClient(preview).fetch(query)
-  // .catch((err) => {
-  //   console.log('error connecting to Sanity', err)
-  //   throw new Error(err)
-  // })
+
   const data: LoaderData = {
     initialData,
     preview,
@@ -37,7 +34,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return data
 }
 
-export default function aboutPage() {
+export default function About() {
   const { initialData, preview, queryParams, query } =
     useLoaderData<LoaderData>()
   const [data, setData] = useState(initialData)

@@ -1,45 +1,45 @@
-import { SanityDocument } from '@sanity/client';
+import type { SanityDocument } from '@sanity/client'
 
-export function filterDataToDrafts(
-  incomingData: SanityDocument[],
+export function filterDataToDrafts<T extends SanityDocument>(
+  incomingData: T[],
   preview = false
-) {
+): T[] {
   if (!Array.isArray(incomingData)) {
-    return incomingData;
+    return incomingData
   }
 
   if (incomingData.length === 1) {
-    return incomingData;
+    return incomingData
   }
 
   if (preview) {
     //if there are 2, show the draft version
 
-    const finalData: SanityDocument[] = [];
+    const finalData = []
 
     for (const incomingItem of incomingData) {
       //if it's not a draft, put it in final array
       if (!incomingItem._id.startsWith('drafts')) {
-        finalData.push(incomingItem);
+        finalData.push(incomingItem)
       }
       // if it starts with drafts, look in the finalData array for a matching id stripped of drafts prefix, and replace
       if (incomingItem._id.startsWith('drafts')) {
         // incomingItem._id = incomingItem._id.slice(7);
-        const draft_id = incomingItem._id.slice(7);
+        const draft_id = incomingItem._id.slice(7)
 
         const matchIndex = finalData.findIndex(
           (finalDataItem) => finalDataItem._id === draft_id
-        );
+        )
         if (matchIndex == -1) {
-          finalData.push(incomingItem);
-          continue;
+          finalData.push(incomingItem)
+          continue
         }
-        finalData.splice(matchIndex, 1, incomingItem);
+        finalData.splice(matchIndex, 1, incomingItem)
       }
     }
-    return finalData;
+    return finalData
   }
 
   // not in preview mode? remove all draft versions
-  return incomingData.filter((item) => !item._id.startsWith(`drafts.`));
+  return incomingData.filter((item) => !item._id.startsWith(`drafts.`))
 }

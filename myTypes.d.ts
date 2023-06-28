@@ -1,4 +1,4 @@
-import { SiteSettings } from 'sanityTypes'
+import type { SiteSettings } from 'sanityTypes'
 
 export interface CartItem {
   _id: string
@@ -16,7 +16,7 @@ export interface CartItem {
 
 export interface FulfillmentDetails {
   method: 'pickup' | 'shipping'
-  pickupLocation?: string
+  pickupLocation: string
   shippingName: string
   shippingAddressLine1: string
   shippingAddressLine2?: string

@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-import { usePreviewSubscription } from '~/lib/sanity/usePreviewSubscription';
+import { usePreviewSubscription } from '~/lib/sanity/usePreviewSubscription'
 
 export default function Preview({
   data,
@@ -8,18 +8,18 @@ export default function Preview({
   query,
   queryParams,
 }: {
-  data: any;
-  setData: any;
-  query: any;
-  queryParams: any;
+  data: any
+  setData: any
+  query: any
+  queryParams: any
 }) {
   const { data: previewData } = usePreviewSubscription(query, {
     params: queryParams,
     initialData: data,
     enabled: true,
-  });
+  })
 
-  useEffect(() => setData(previewData), [previewData]);
+  useEffect(() => setData(previewData), [previewData, setData])
 
   return (
     <div className='pointer-events-none fixed inset-0 z-50 flex items-start justify-center p-2'>
@@ -27,5 +27,5 @@ export default function Preview({
         <span className='inline-block p-2'>Preview Mode</span>
       </div>
     </div>
-  );
+  )
 }

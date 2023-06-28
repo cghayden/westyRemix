@@ -6,20 +6,24 @@ import SocialLinks from './SocialLinks'
 // To get data from any active route on the page, see useRouteLoaderData.
 
 export default function Footer() {
-  const { contactData } = useLoaderData()
+  const { contactContent } = useLoaderData()
 
   return (
-    <div className='bg-slate-50 text-slate-800 mt-auto w-full flex flex-col px-8 py-4'>
-      <div className='flex justify-between'>
+    <div className='bg-slate-50 text-slate-800 mt-auto w-full flex flex-col pt-4 pb-2 px-4'>
+      <div className='flex justify-between w-full max-w-2xl mx-auto'>
         <div>
-          <PortableText value={contactData.content} />
+          <PortableText value={contactContent?.content} />
         </div>
-        <SocialLinks contactData={contactData} />
+        <SocialLinks
+          instagramHandle={contactContent?.instagramHandle}
+          twitterHandle={contactContent?.twitterHandle}
+          facebookId={contactContent?.facebookId}
+        />
       </div>
-      <p className='text-center text-sm pt-4'>
-        website by Corey Hayden{' '}
+      <div className='text-sm text-center '>
+        <p>website by Corey Hayden</p>
         <a href='mailto:cghayden@gmail.com'>cghayden@gmail.com</a>
-      </p>
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import type { LoaderFunction } from '@remix-run/node'
+import type { LoaderArgs } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import type { Post } from '../../sanityTypes'
@@ -7,9 +7,7 @@ import Preview from '~/components/Preview'
 import { getClient } from '~/lib/sanity/getClient'
 import { urlFor } from '~/lib/sanity/helpers'
 import { PortableText } from '@portabletext/react'
-
 import ContentContainer from '~/components/styledComponents/ContentContainer'
-
 import dayjs from 'dayjs'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
@@ -21,7 +19,7 @@ type LoaderData = {
 }
 
 //Route params are passed to your loader.
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader = async ({ request, params }: LoaderArgs) => {
   // throw new Error('testing error boundary')
   const requestUrl = new URL(request?.url)
   const preview: boolean =
@@ -57,7 +55,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return data
 }
 
-export default function CoffeeRoute() {
+export default function BlogPost() {
   let { initialData, preview, singlePostQuery, queryParams } =
     useLoaderData<LoaderData>()
 
@@ -96,7 +94,7 @@ export default function CoffeeRoute() {
             className='m-auto py-7 max-w-lg w-full'
           />
         )}
-        <PortableText value={post.body} />
+        <PortableText value={post.body!} />
       </ContentContainer>
     </main>
   )
