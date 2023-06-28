@@ -3,8 +3,6 @@ module.exports = {
   serverDependenciesToBundle: ['nanoid'],
 
   ignoredRouteFiles: ['**/.*'],
-  server: process.env.NODE_ENV === 'development' ? undefined : './server.ts',
-  serverBuildPath: 'api/index.js',
 
   //REMIX FUTURE CHANGE: The `serverModuleFormat` config default option will be changing in v2 from `cjs` to `esm`. You can prepare for this change by explicitly specifying `serverModuleFormat: 'cjs'`. For instructions on making this change see https://remix.run/docs/en/v1.16.0/pages/v2#servermoduleformat
   serverModuleFormat: 'cjs',
