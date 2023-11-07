@@ -1,4 +1,4 @@
-import SanityClient from '~/lib/sanity/sanity'
+import SanityClient from '~/lib/sanity/sanity.server'
 import { customAlphabet } from 'nanoid'
 import { adjustSanityStock } from './adjustSanityStock'
 import type { OrderDetails } from 'myTypes'

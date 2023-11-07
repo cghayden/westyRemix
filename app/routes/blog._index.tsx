@@ -1,7 +1,7 @@
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import type { Post } from 'sanityTypes'
 import { Link, useLoaderData } from '@remix-run/react'
-import { getClient } from '~/lib/sanity/getClient'
+import { getClient } from '~/lib/sanity/getClient.server'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
@@ -16,7 +16,7 @@ const query = `*[_type == "post"] | order(publishedAt desc){
   slug
 }`
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Put site in preview mode if the right query param is used
   const requestUrl = new URL(request?.url)
   const previewQuery = requestUrl.search
@@ -26,7 +26,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   const initialData: Post[] = await getClient(preview)
     .fetch(query)
-    .catch((err) => console.log(err))
+    .catch((err: unknown) => console.log(err))
 
   const allPosts = filterDataToDrafts(initialData, preview)
   return {

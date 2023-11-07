@@ -1,5 +1,5 @@
-import type { LoaderArgs, LoaderFunction } from '@remix-run/node'
-import type { Event, EventsPage } from 'sanityTypes'
+import type { LoaderFunctionArgs } from '@remix-run/node'
+import type { EventsPage } from 'sanityTypes'
 import { useLoaderData } from '@remix-run/react'
 import { useState } from 'react'
 import { TwoColContainer } from '~/components/styledComponents/TwoColContainer'
@@ -7,9 +7,9 @@ import Preview from '~/components/Preview'
 import { filterDataToDrafts } from '~/lib/sanity/filterDataToDrafts'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import PageHeading from '~/components/styledComponents/PageHeading'
-import { getClient } from '~/lib/sanity/getClient'
+import { getClient } from '~/lib/sanity/getClient.server'
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const query = `{
     "pageData": *[_type == 'eventsPage'],
     "events": *[_type == 'event']
@@ -54,7 +54,7 @@ export default function Events() {
 
       <ul className='flex flex-col mx-auto mt-6'>
         {data.events?.length > 0 &&
-          data.events?.map((event: Event) => (
+          data.events?.map((event) => (
             <li key={event._id}>
               <TwoColContainer
                 heading={event.title}

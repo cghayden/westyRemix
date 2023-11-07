@@ -5,7 +5,7 @@ import Stripe from 'stripe'
 // https://github.com/stripe/stripe-node#usage-with-typescript
 /*@ts-ignore*/
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2022-08-01',
+  apiVersion: '2022-11-15',
 })
 
 export async function createPaymentIntent(orderDetails: OrderDetails) {

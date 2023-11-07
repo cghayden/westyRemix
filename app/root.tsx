@@ -1,7 +1,7 @@
 import type {
   LinksFunction,
-  LoaderArgs,
-  V2_MetaFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
 } from '@remix-run/node'
 import {
   Links,
@@ -15,7 +15,7 @@ import {
 
 import Header from './components/Header'
 import styles from './tailwind.css'
-import sanity from './lib/sanity/sanity'
+import sanity from './lib/sanity/sanity.server'
 import { CartProvider } from './context/useCart'
 import { ThemeProvider } from './context/ThemeContext'
 import Preview from './components/Preview'
@@ -29,7 +29,7 @@ export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
 }
 
-export const meta: V2_MetaFunction = () => [{ title: 'neighborly coffee' }]
+export const meta: MetaFunction = () => [{ title: 'neighborly coffee' }]
 
 export interface InitialData {
   siteSettings: SiteSettings[]
@@ -45,7 +45,7 @@ export type LoaderData = {
   queryParams: string | null
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const query = `{
     "siteSettings": *[_type == "siteSettings"] {
       _id,
@@ -62,9 +62,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     requestUrl?.searchParams?.get('preview') ===
     process.env.SANITY_PREVIEW_SECRET
 
-  const initialData: InitialData = await sanity
-    .fetch(query)
-    .catch((err) => console.log(err))
+  const initialData: InitialData = await sanity.fetch(query)
 
   const siteSettings = filterDataToSingleItem(initialData.siteSettings, preview)
 

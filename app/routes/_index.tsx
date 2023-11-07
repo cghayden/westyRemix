@@ -1,6 +1,6 @@
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
-import sanity from '~/lib/sanity/sanity'
+import sanity from '~/lib/sanity/sanity.server'
 import HomeHero from '~/components/HomeHero'
 import FeaturedItems from '~/components/FeaturedItems'
 import { useState } from 'react'
@@ -17,7 +17,7 @@ type LoaderData = {
   referringPath: string
   previewQuery: string
 }
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const query = `{
     "pageContent": *[_id == "homePage" ] {
       _id,

@@ -1,6 +1,6 @@
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
-import { getClient } from '~/lib/sanity/getClient'
+import { getClient } from '~/lib/sanity/getClient.server'
 import AllCoffee from '~/components/AllCoffee'
 import Preview from '~/components/Preview'
 import { useState } from 'react'
@@ -23,7 +23,7 @@ price,
 "coffeePageContent": *[_type == "coffeePage"]
 }
 `
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const requestUrl = new URL(request?.url)
   const previewQuery = requestUrl.search
 
@@ -32,7 +32,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     process.env.SANITY_PREVIEW_SECRET
   const initialData = await getClient(preview)
     .fetch(query)
-    .catch((err) => {
+    .catch((err: unknown) => {
       console.log('err', err)
       throw Error('there was an error loading the items')
     })

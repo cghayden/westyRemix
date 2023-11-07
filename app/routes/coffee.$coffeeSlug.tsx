@@ -1,10 +1,10 @@
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import type { Coffee } from '../../sanityTypes'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
-import { getClient } from '~/lib/sanity/getClient'
+import { getClient } from '~/lib/sanity/getClient.server'
 import { urlFor } from '~/lib/sanity/helpers'
 import { PortableText } from '@portabletext/react'
 import AddToCartForm from '~/components/AddToCartForm'
@@ -13,14 +13,14 @@ import dayjs from 'dayjs'
 import formatMoney from '~/lib/formatMoney'
 
 type LoaderData = {
-  initialData: Coffee[]
+  coffee: Coffee
   preview: boolean
   singleCoffeeQuery?: string | null
   queryParams?: { slug: string | undefined } | null
 }
 
 //Route params are passed to your loader.
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const requestUrl = new URL(request?.url)
   const preview =
     requestUrl?.searchParams?.get('preview') ===
@@ -40,8 +40,9 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     })
   }
 
+  const coffee = filterDataToSingleItem(initialData, preview)
   const data: LoaderData = {
-    initialData,
+    coffee,
     preview,
     singleCoffeeQuery: preview ? singleCoffeeQuery : null,
     queryParams: preview ? queryParams : null,
@@ -51,12 +52,11 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 }
 
 export default function CoffeePage() {
-  let { initialData, preview, singleCoffeeQuery, queryParams } =
+  let { coffee, preview, singleCoffeeQuery, queryParams } =
     useLoaderData<LoaderData>()
 
-  const [data, setData] = useState(initialData)
-
-  const coffee = filterDataToSingleItem(data, preview)
+  console.log('coffee', coffee)
+  const [data, setData] = useState(coffee)
 
   return (
     <main>
@@ -77,7 +77,7 @@ export default function CoffeePage() {
         )}
         {coffee?.image && (
           <img
-            loading='lazy'
+            // loading='lazy'
             src={urlFor(coffee?.image).width(400).height(200).url()}
             width='400'
             height='200'
