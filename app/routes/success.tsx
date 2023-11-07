@@ -5,9 +5,9 @@ import ContentContainer from '~/components/styledComponents/ContentContainer'
 import formatMoney from '~/lib/formatMoney'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import type { CartItem, OrderDetails } from 'myTypes'
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const id = url.searchParams.get('payment_intent')
   if (!id) return null

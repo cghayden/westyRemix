@@ -1,14 +1,14 @@
 //this is a remix resource route.
 // upon successful payment processing, stripe will redirect to this route, where we can now write the order to sanity and update the stock of the product sold, then redirect to 'success' page
 
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
 import { useRouteError } from '@remix-run/react'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import { writeOrderToSanity } from '~/lib/sanity/writeOrder'
 import { retrievePaymentIntent } from '~/lib/stripePaymentIntent'
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const id = url.searchParams.get('payment_intent')
   if (!id) return null

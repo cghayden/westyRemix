@@ -1,10 +1,10 @@
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import type { Post } from '../../sanityTypes'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
-import { getClient } from '~/lib/sanity/getClient'
+import { getClient } from '~/lib/sanity/getClient.server'
 import { urlFor } from '~/lib/sanity/helpers'
 import { PortableText } from '@portabletext/react'
 import ContentContainer from '~/components/styledComponents/ContentContainer'
@@ -19,7 +19,7 @@ type LoaderData = {
 }
 
 //Route params are passed to your loader.
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   // throw new Error('testing error boundary')
   const requestUrl = new URL(request?.url)
   const preview: boolean =
@@ -32,11 +32,10 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   //in this query, '$' character before 'slug' denotes that slug is a string template, provided in second argument of the fetch function call
   const singlePostQuery = `*[_type == "post" && slug.current == $slug]`
   const queryParams = { slug: params.slug }
-  const initialData = await getClient(preview)
-    .fetch(singlePostQuery, queryParams)
-    .catch((err) => {
-      throw new Error(err)
-    })
+  const initialData = await getClient(preview).fetch(
+    singlePostQuery,
+    queryParams
+  )
   if (!initialData || !initialData.length) {
     throw new Response('Oh no - that Post was not found!', {
       status: 404,

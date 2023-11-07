@@ -7,8 +7,8 @@ import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import PageHeading from '~/components/styledComponents/PageHeading'
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { PortableText } from '@portabletext/react'
-import { getClient } from '~/lib/sanity/getClient'
-import type { LoaderArgs } from '@remix-run/node'
+import { getClient } from '~/lib/sanity/getClient.server'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 
 type LoaderData = {
   initialData: AboutPage[]
@@ -17,7 +17,7 @@ type LoaderData = {
   queryParams?: { slug: string | undefined } | null
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const query = `*[_type == 'aboutPage']`
   const requestUrl = new URL(request?.url)
   const preview =

@@ -1,7 +1,5 @@
 - make shipping cost dynamic, sourced from sanity
 
-- delivery method 'shipping' not writing to sanity on order write
+- use only 1 sanity client?
 
-- in reviewCart, move warnings check to loader, from react component
-
-- use only 1 sanity client
+- set up zod to construct types from sanity queries

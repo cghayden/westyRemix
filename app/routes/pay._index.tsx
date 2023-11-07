@@ -9,10 +9,10 @@ import ContentContainer from '~/components/styledComponents/ContentContainer'
 import CollapsibleCartSummary from '~/components/CollapsibleCartSummary'
 import { useCartItems } from '~/context/useCart'
 import { useState } from 'react'
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 
-export const loader = ({ request }: LoaderArgs) => {
+export const loader = ({ request }: LoaderFunctionArgs) => {
   const urlOrigin = new URL(request.url).origin
   return urlOrigin
 }

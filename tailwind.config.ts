@@ -1,3 +1,5 @@
+import type { Config } from 'tailwindcss'
+
 module.exports = {
   content: ['./app/**/*.{js,ts,jsx,tsx}'],
   theme: {
@@ -14,4 +16,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+} satisfies Config

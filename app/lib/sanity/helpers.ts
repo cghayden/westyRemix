@@ -1,8 +1,9 @@
 import imageUrlBuilder from '@sanity/image-url'
 import type { BackgroundImage, MainImage, SanityImage } from 'sanityTypes'
-import sanityClient from '~/lib/sanity/sanity'
+import { createClient } from '@sanity/client'
+import { readClient } from './readClient'
 
-const builder = imageUrlBuilder(sanityClient)
+const builder = imageUrlBuilder(readClient)
 
 function urlFor(source: SanityImage | MainImage | BackgroundImage) {
   return builder.image(source)

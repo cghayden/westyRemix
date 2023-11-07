@@ -1,4 +1,4 @@
-WestyRemix is a simple ecommerce site with blog, built using Remix for the front end and server, Stripe for payments, Tailwind CSS for styling, and a customized Sanity headless CMS for content and data store for orders.
+WestyRemix is a simple ecommerce site with blog, built using Remix for the front end and server, Stripe for payments, Tailwind CSS for styling, and a customized Sanity headless CMS with data store for orders and draft previews.
 
 This site is a rebuild of a similar site built with Gatsby, Netlify serverless functions, and Styled Components, and which uses the same Sanity project, and is used in production for a friend of mine who was in need of a simple, free way to sell his micro-roasted coffee beans.
 
@@ -9,12 +9,6 @@ My end goal for this site is to have a simple, all-purpose ecommerce and blog fr
 This repository can be used with the accompanying Sanity Studio to quickly have a simple ecommerce site up and ready to
 
 My goal is to have a script that can deploy an instance of this site for anyone who has a stripe and sanity account, and and place to deploy to.
-
-> **Warning**  
-> The `@remix-run/vercel` runtime adapter has been deprecated in favor of out of
-> the box Vercel functionality and will be removed in Remix v2.  
-> This means you don't have to use the Vercel template & can just use the Remix
-> template instead.
 
 # Welcome to Remix!
 

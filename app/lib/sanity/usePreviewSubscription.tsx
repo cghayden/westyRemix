@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { groqStore } from '@sanity/groq-store'
 import type { GroqStore } from '@sanity/groq-store'
 
-import { config } from './config'
+import { config } from './config.server'
 
 interface SubscriptionOptions<R = any> {
   enabled?: boolean

@@ -3,7 +3,7 @@
 // (Also, @sanity/client was giving me drama)
 import PicoSanity from 'picosanity'
 
-import { config } from './config'
+import { config } from './config.server'
 
 // Set up the client for fetching data in the getProps page functions
 export const sanityClient = new PicoSanity(config)

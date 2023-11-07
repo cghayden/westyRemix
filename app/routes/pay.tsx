@@ -3,7 +3,7 @@ import { Outlet, useActionData, useRouteError } from '@remix-run/react'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import invariant from 'tiny-invariant'
-import { getClient } from '~/lib/sanity/getClient'
+import { getClient } from '~/lib/sanity/getClient.server'
 import checkAvailability from '~/lib/checkAvailability'
 import calcVerifiedTotal from '~/lib/calcVerifiedTotal'
 import reduceCartByName from '~/lib/reduceCartByName'
@@ -12,11 +12,11 @@ import calcShipping from '~/lib/calcShipping'
 import { ErrorContainer } from '~/components/styledComponents/ErrorContainer'
 import type { Coffee } from 'sanityTypes'
 import type { OrderDetails } from 'myTypes'
-import type { ActionArgs } from '@remix-run/node'
+import type { ActionFunctionArgs } from '@remix-run/node'
 
 const stripePromise = loadStripe('pk_test_CkfBPTwVc1IMB6BXSDsSytR8')
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const form = await request.formData()
   const orderDetailsBody = form.get('orderDetails')
 
@@ -39,6 +39,7 @@ export const action = async ({ request }: ActionArgs) => {
   )} && !(_id in path("drafts.**"))] {name, price, stock}`
 
   const inventory: Coffee[] = await getClient().fetch(sanityQuery)
+  console.log('inventory', inventory)
 
   // is product still in db?, and if so, does available stock satisfy what quantity is in the cart?
   const availableCoffee = inventory.map((item) => item.name)
@@ -51,6 +52,7 @@ export const action = async ({ request }: ActionArgs) => {
 
   // function to check verified availability against desired order
   const warningMessages = checkAvailability(cartKeyedByName, availableCoffee)
+  console.log('warningMessages', warningMessages)
 
   // if any insufficientStock or unavailable, return to reviewCart page with message to client in url query string
   if (warningMessages.length > 0) {
@@ -77,12 +79,14 @@ export const action = async ({ request }: ActionArgs) => {
       throw Error(err)
     }
   )
+  console.log('paymentIntent', paymentIntent)
 
   return { paymentIntent, orderDetails, shippingCost }
 }
 
 export default function Pay() {
-  const { paymentIntent } = useActionData()
+  const { paymentIntent } = useActionData<typeof action>()
+  console.log('paymentIntent', paymentIntent)
 
   if (!paymentIntent || !paymentIntent.client_secret) {
     throw Error('there was an Error connecting to stripe')

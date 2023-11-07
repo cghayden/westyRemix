@@ -1,4 +1,4 @@
-import type { LoaderArgs } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData, useRouteError } from '@remix-run/react'
 import { useState } from 'react'
 import Preview from '~/components/Preview'
@@ -9,7 +9,7 @@ import PageHeading from '~/components/styledComponents/PageHeading'
 
 import { filterDataToSingleItem } from '~/lib/sanity/filterDataToSingleItem'
 import { PortableText } from '@portabletext/react'
-import { getClient } from '~/lib/sanity/getClient'
+import { getClient } from '~/lib/sanity/getClient.server'
 import type { ContactPage } from 'sanityTypes'
 
 type LoaderData = {
@@ -19,7 +19,7 @@ type LoaderData = {
   queryParams?: { slug: string | undefined } | null
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const query = `*[_type == 'contactPage']`
 
   const requestUrl = new URL(request?.url)
