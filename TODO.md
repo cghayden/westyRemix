@@ -7,3 +7,4 @@
 - Dynamic elements:
   title in header
   sanity project id
+  title

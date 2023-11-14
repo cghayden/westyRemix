@@ -38,15 +38,15 @@ export default function MobileNav({
               </Link>
             </li>
           ))}
-          <li className='p-3'>
+          {/* <li className='p-3'>
             <a
-              href='https://www.instagram.com/neighborlycoffee'
+              href='https://www.instagram.com'
               rel='noopener noreferrer'
               target='_blank'
             >
               <InstagramSvg w={'24'} h={'24'} />
             </a>
-          </li>
+          </li> */}
         </ul>
       </nav>
     </div>

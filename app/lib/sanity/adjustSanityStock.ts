@@ -28,7 +28,7 @@ async function adjustSanityStock(cartItems: CartItem[]) {
     .then((result) => result)
     .catch((error) => {
       console.error('ERROR ADJUSTING PRODUCT STOCK', error)
-      // send error to neighborly that stock could not be adjusted
+      // send error that stock could not be adjusted
     })
   return result
 }
