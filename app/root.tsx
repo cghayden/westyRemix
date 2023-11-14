@@ -29,7 +29,7 @@ export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: styles }]
 }
 
-export const meta: MetaFunction = () => [{ title: 'neighborly coffee' }]
+export const meta: MetaFunction = () => [{ title: "Westy's coffee" }]
 
 export interface InitialData {
   siteSettings: SiteSettings[]
@@ -82,7 +82,7 @@ type DocumentProps = {
   title?: string
 }
 
-function Document({ children, title = `Neighborly Coffee` }: DocumentProps) {
+function Document({ children, title = `Westy's Coffee` }: DocumentProps) {
   const { siteSettings, preview, query, queryParams } =
     useLoaderData<LoaderData>()
   const [data, setData] = useState(siteSettings)
